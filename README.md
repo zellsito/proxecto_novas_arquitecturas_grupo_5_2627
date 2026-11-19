@@ -53,7 +53,12 @@ El principio rector del sistema es la **autonomía local con degradación elegan
 
 ---
 
-## 3. Matriz de Resiliencia y Tolerancia a Fallos
+## 3. Diagrama de Arquitectura
+
+![Arquitectura](lucianosalgado/arq.svg)
+
+---
+## 4. Matriz de Resiliencia y Tolerancia a Fallos
 
 | Escenario de Fallo | Impacto en la Nube | Impacto en los ESP32 Subterráneos | Comportamiento del Sistema |
 | :--- | :--- | :--- | :--- |
@@ -63,7 +68,7 @@ El principio rector del sistema es la **autonomía local con degradación elegan
 
 ---
 
-## 4. Justificación Técnica para Defensa de Proyecto
+## 5. Justificación Técnica para Defensa de Proyecto
 
 1. **¿Por qué Broker MQTT en la Nube y no en el Edge?**  
    Los microcontroladores ESP32 están optimizados para control en tiempo real, no para gestionar múltiples sockets concurrentes, colas de retención de mensajes ni bases de datos de series temporales. Delegar el broker y la BBDD a la nube ahorra RAM y evita problemas de seguridad como redirección de puertos (NAT traversal).
