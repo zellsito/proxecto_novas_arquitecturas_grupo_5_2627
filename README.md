@@ -23,54 +23,65 @@ El principio rector del sistema es la **autonomía local con degradación elegan
 
 ## 2. Diagrama Completo de Arquitectura
 
-```mermaid
-flowchart TD
-    subgraph EXTERNOS["🌍 Servicios Externos"]
-        API["API Meteorológica (Open-Meteo)<br/>• Pronóstico de lluvias y tormentas"]
-    end
+```text
+========================================================================================================================
+                                                  🌍 SERVICIOS EXTERNOS
+                                           [ API Clima: Open-Meteo ]
+========================================================================================================================
+                                                       │
+                                                       │ HTTPS GET (Pronóstico de lluvia/tormentas)
+                                                       ▼
+========================================================================================================================
+                                                 ☁️ CAPA CLOUD (Nube)
+  ┌─────────────────────────┐     ┌─────────────────────────┐     ┌──────────────────────┐     ┌─────────────────────┐
+  │     Broker MQTT         │◄───►│ Base de Datos Histórica │◄───►│ Servidor Web / API   │◄───►│ Celular / Dashboard │
+  │ (Ingesta Telemetría/Cmd)│     │     (Time-Series DB)    │     │   (Dashboard REST/WS)│     │  (Blynk / Adafruit) │
+  └────────────┬────────────┘     └─────────────────────────┘     └──────────────────────┘     └─────────────────────┘
+               │                                                             ▲
+               │                                                             │ Notificaciones Push de Emergencia
+               │                                                             └───────────────────────────┐
+               │                                                                                         │
+               │ MQTT sobre TLS / Internet (Telemetría / Comandos)                                       │
+               ▼                                                                                         │
+======================================================================================================== │ =============
+                                           🏠 RED LOCAL (Superficie)                                     │
+                                         [ Router WiFi / AP Doméstico ]                                  │
+                                                (Canal 6 fijo)                                           │
+=======================================================┬================================================ │ =============
+                                                       │ WiFi 802.11 b/g/n (Canal 6)                     │
+                                                       ▼                                                 ▼
+========================================================================================================================
+                               CAPA GATEWAY & EDGE DE SUPERFICIE (Garita Exterior)
+                                       [ ESP32-S3 / C3 #3: NODO GATEWAY HMI ]
+                           • Pantalla LCD 16x2 I2C ──── Muestra estado general y alertas a humanos
+                           • Buzzer Activo (Sirena) ─── Alarma sonora exterior ante peligro
+                           • Modo Mixto ─────────────── WiFi STA (Internet) + ESP-NOW (Subterráneo)
+=======================================================┬================================================================
+                                                       │
+                                  ┌────────────────────┴────────────────────┐
+                                  │   ESP-NOW P2P (Radio 2.4GHz / Canal 6)  │
+                                  │   (Sin router / Sin IP / Latencia ~4ms) │
+                                  ▼                                         ▼
+========================================================================================================================
+                                 CAPA EDGE DISTRIBUIDA Y DESCENTRALIZADA (Bajo Tierra)
+                  (Autonomía total: se coordinan entre sí directamente sin depender de la superficie)
 
-    subgraph CLIENTES["📱 Clientes de Usuario"]
-        APP["Smartphone / Web Dashboard<br/>(Adafruit IO / Blynk App)<br/>• Telemetría gráfica en tiempo real<br/>• Control manual remoto<br/>• Notificaciones Push"]
-    end
+    [ ESP32 #1: AMBIENTE Y ACCESO ]                                   [ ESP32 #2: GESTIÓN HÍDRICA ]
+    (Sector Habitabilidad)                                            (Sector Sala de Máquinas)
+    ──────────────────────────────────────────                        ──────────────────────────────────────────
+    • Sensor DHT11       ➔ Temp / Humedad                             • HC-SR04           ➔ Nivel tanque agua
+    • Reed Switch        ➔ Estado Escotilla                           • Sensor Agua       ➔ Fuga en piso
+    • Relé               ➔ Extractor / Fan                            • Servomotor SG90   ➔ Válvula de corte
+    
+    [ Lógica Edge Local ]:                                            [ Lógica Edge Local ]:
+    Si Humedad > 75% ➔ Prende extractor.                              Si Agua en piso ➔ Corta válvula en 5ms.
+    Si Escotilla abierta ➔ Alerta intrusión.                          Si Tanque < 15% ➔ Alerta nivel crítico.
 
-    subgraph CLOUD["☁️ Capa Cloud (Backend IoT)"]
-        BROKER["Broker MQTT (Ingesta pub/sub)"]
-        TSDB["Base de Datos Histórica (Time-Series DB)"]
-        ALERTAS["Motor de Reglas y Notificaciones Push"]
-        DASH_SRV["Servidor Web / API REST & WebSockets"]
-
-        BROKER <--> TSDB
-        BROKER --> ALERTAS
-        TSDB <--> DASH_SRV
-    end
-
-    subgraph RED_LOCAL["🏠 Infraestructura de Red Local"]
-        ROUTER["Router WiFi / AP Local (192.168.1.1)<br/>• Canal RF fijo (ej. Canal 6)"]
-    end
-
-    subgraph GATEWAY_TIER["🛡️ Capa Gateway de Frontera / Edge Exterior (Superficie)"]
-        ESP3["ESP32-S3 / C3 #3: Gateway HMI & Supervisor<br/>• Pantalla LCD 16x2 I2C (Estado y alertas visuales locales)<br/>• Buzzer Activo (Sirena acústica de emergencia)<br/>• Modo Mixto: WiFi STA + ESP-NOW en Canal Fijo"]
-    end
-
-    subgraph SUBTERRANEO["🧱 Capa Edge Distribuida & Descentralizada (Bajo Tierra)"]
-        direction LR
-        ESP1["ESP32 #1: Ambiente y Acceso<br/>(Sector Habitabilidad)<br/>──────────────────────<br/>• Sensor DHT11 (Temp/Humedad)<br/>• Reed Switch (Escotilla)<br/>• Relé (Extractor / Ventilador)<br/>──────────────────────<br/>Lógica Local: Humedad > 75% ➔ Fan ON"]
-        
-        ESP2["ESP32 #2: Gestión Hídrica<br/>(Sector Sala de Máquinas)<br/>──────────────────────<br/>• HC-SR04 (Ultrasonido Tanque)<br/>• Sensor Resistivo (Fuga Suelo)<br/>• Servomotor SG90 (Válvula Corte)<br/>──────────────────────<br/>Lógica Local: Fuga ➔ Válvula OFF (5ms)"]
-    end
-
-    %% Enlaces Cloud y Externos
-    CLOUD <--"HTTPS GET (Cron / Webhook)"--> API
-    CLIENTES <--"HTTPS / WebSockets / Push"--> CLOUD
-
-    %% Enlace Gateway a Internet
-    ROUTER <--"WiFi 802.11 b/g/n (Canal 6)"--> ESP3
-    ESP3 <--"MQTT sobre TCP/TLS (Pub telemetría / Sub comandos)"--> BROKER
-
-    %% Enlaces de Red Local de Campo (ESP-NOW)
-    ESP1 <--"ESP-NOW P2P (Frames 802.11 crudos / 2.4 GHz)"--> ESP3
-    ESP2 <--"ESP-NOW P2P (Frames 802.11 crudos / 2.4 GHz)"--> ESP3
-    ESP1 <--"ESP-NOW Directo P2P (Mensajería cruzada sin Gateway)"--> ESP2
+                          ▲                                                 ▲
+                          └─────────────── ESP-NOW DIRECTO P2P ─────────────┘
+                                   (Mensajería instantánea de seguridad:
+                                  ej. Fuga detectada ➔ Apaga relé del Nodo 1)
+========================================================================================================================
 ```
 
 ---
