@@ -21,72 +21,7 @@ El principio rector del sistema es la **autonomía local con degradación elegan
 
 ---
 
-## 2. Diagrama Completo de Arquitectura
-
-```text
-========================================================================================================================
-                                                  🌍 SERVICIOS EXTERNOS
-                                           [ API Clima: Open-Meteo ]
-========================================================================================================================
-                                                       │
-                                                       │ HTTPS GET (Pronóstico de lluvia/tormentas)
-                                                       ▼
-========================================================================================================================
-                                                 ☁️ CAPA CLOUD (Nube)
-  ┌─────────────────────────┐     ┌─────────────────────────┐     ┌──────────────────────┐     ┌─────────────────────┐
-  │     Broker MQTT         │◄───►│ Base de Datos Histórica │◄───►│ Servidor Web / API   │◄───►│ Celular / Dashboard │
-  │ (Ingesta Telemetría/Cmd)│     │     (Time-Series DB)    │     │   (Dashboard REST/WS)│     │  (Blynk / Adafruit) │
-  └────────────┬────────────┘     └─────────────────────────┘     └──────────────────────┘     └─────────────────────┘
-               │                                                             ▲
-               │                                                             │ Notificaciones Push de Emergencia
-               │                                                             └───────────────────────────┐
-               │                                                                                         │
-               │ MQTT sobre TLS / Internet (Telemetría / Comandos)                                       │
-               ▼                                                                                         │
-======================================================================================================== │ =============
-                                           🏠 RED LOCAL (Superficie)                                     │
-                                         [ Router WiFi / AP Doméstico ]                                  │
-                                                (Canal 6 fijo)                                           │
-=======================================================┬================================================ │ =============
-                                                       │ WiFi 802.11 b/g/n (Canal 6)                     │
-                                                       ▼                                                 ▼
-========================================================================================================================
-                               CAPA GATEWAY & EDGE DE SUPERFICIE (Garita Exterior)
-                                       [ ESP32-S3 / C3 #3: NODO GATEWAY HMI ]
-                           • Pantalla LCD 16x2 I2C ──── Muestra estado general y alertas a humanos
-                           • Buzzer Activo (Sirena) ─── Alarma sonora exterior ante peligro
-                           • Modo Mixto ─────────────── WiFi STA (Internet) + ESP-NOW (Subterráneo)
-=======================================================┬================================================================
-                                                       │
-                                  ┌────────────────────┴────────────────────┐
-                                  │   ESP-NOW P2P (Radio 2.4GHz / Canal 6)  │
-                                  │   (Sin router / Sin IP / Latencia ~4ms) │
-                                  ▼                                         ▼
-========================================================================================================================
-                                 CAPA EDGE DISTRIBUIDA Y DESCENTRALIZADA (Bajo Tierra)
-                  (Autonomía total: se coordinan entre sí directamente sin depender de la superficie)
-
-    [ ESP32 #1: AMBIENTE Y ACCESO ]                                   [ ESP32 #2: GESTIÓN HÍDRICA ]
-    (Sector Habitabilidad)                                            (Sector Sala de Máquinas)
-    ──────────────────────────────────────────                        ──────────────────────────────────────────
-    • Sensor DHT11       ➔ Temp / Humedad                             • HC-SR04           ➔ Nivel tanque agua
-    • Reed Switch        ➔ Estado Escotilla                           • Sensor Agua       ➔ Fuga en piso
-    • Relé               ➔ Extractor / Fan                            • Servomotor SG90   ➔ Válvula de corte
-    
-    [ Lógica Edge Local ]:                                            [ Lógica Edge Local ]:
-    Si Humedad > 75% ➔ Prende extractor.                              Si Agua en piso ➔ Corta válvula en 5ms.
-    Si Escotilla abierta ➔ Alerta intrusión.                          Si Tanque < 15% ➔ Alerta nivel crítico.
-
-                          ▲                                                 ▲
-                          └─────────────── ESP-NOW DIRECTO P2P ─────────────┘
-                                   (Mensajería instantánea de seguridad:
-                                  ej. Fuga detectada ➔ Apaga relé del Nodo 1)
-========================================================================================================================
-```
-
----
-
-## 3. Desglose de Capas y Protocolos
+## 2. Desglose de Capas y Protocolos
 
 ### A. Capa Cloud (Nube)
 * **Broker MQTT:** Punto central de enlace con el Gateway. Maneja tópicos como:
@@ -118,7 +53,7 @@ El principio rector del sistema es la **autonomía local con degradación elegan
 
 ---
 
-## 4. Matriz de Resiliencia y Tolerancia a Fallos
+## 3. Matriz de Resiliencia y Tolerancia a Fallos
 
 | Escenario de Fallo | Impacto en la Nube | Impacto en los ESP32 Subterráneos | Comportamiento del Sistema |
 | :--- | :--- | :--- | :--- |
@@ -128,7 +63,7 @@ El principio rector del sistema es la **autonomía local con degradación elegan
 
 ---
 
-## 5. Justificación Técnica para Defensa de Proyecto
+## 4. Justificación Técnica para Defensa de Proyecto
 
 1. **¿Por qué Broker MQTT en la Nube y no en el Edge?**  
    Los microcontroladores ESP32 están optimizados para control en tiempo real, no para gestionar múltiples sockets concurrentes, colas de retención de mensajes ni bases de datos de series temporales. Delegar el broker y la BBDD a la nube ahorra RAM y evita problemas de seguridad como redirección de puertos (NAT traversal).
