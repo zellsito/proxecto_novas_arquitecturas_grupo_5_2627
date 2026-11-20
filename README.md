@@ -1,78 +1,60 @@
-# BunkerOS: Arquitectura IoT Resiliente (Edge-to-Cloud)
-> **Proxecto Novas Arquitecturas - Grupo 5 (Curso 26/27)**  
-> Sistema de soporte vital y monitorización de misión crítica para búnker subterráneo con tolerancia a fallos, comunicación descentralizada P2P y sincronización con la nube.
+# 🛡️ BunkerOS: Arquitectura IoT Resiliente (Edge-to-Cloud)
+
+> **Materia:** Novas Arquitecturas e Paradigmas IoT  
+> **Curso Académico:** 2026 / 2027  
+> **Grupo de Trabajo:** Grupo 5  
+
+Sistema de soporte vital, supervisión ambiental preventiva y gestión automática de incidencias para refugios subterráneos de emergencia. Implementa un modelo de degradación elegante y tolerancia a fallos conectando el Edge local (ESP32) con la Nube (**Node-RED en Nube**).
 
 ---
 
-## 1. Filosofía Arquitectónica: Edge Computing vs. Cloud
+## 👥 Integrantes del Equipo
 
-El principio rector del sistema es la **autonomía local con degradación elegante**:
-> *La médula espinal (Edge) actúa sin esperar al cerebro (Cloud). Si tocas una sartén caliente, retiras la mano en milisegundos sin esperar que la orden viaje al cerebro y regrese. Tu cerebro se entera después.*
-
-### Principios Fundamentales del Edge (ESP32):
-1. **Cero Latencia ante Emergencias:**  
-   Si se detecta agua en el suelo, el microcontrolador corta la válvula mediante servomotor en **< 5 milisegundos**. No se consulta a servidores remotos ni se espera respuesta de internet.
-2. **Supervivencia sin Conectividad (Offline First):**  
-   Si se corta la fibra óptica, falla el Punto de Acceso (AP) o cae un rayo, **el búnker sigue 100% operativo**. Los sensores y actuadores se comunican directamente por radiofrecuencia (ESP-NOW) a nivel de capa de enlace.
-3. **Minimización de Superficie de Ataque y Aislamiento:**  
-   Los nodos subterráneos (sensores y actuadores de soporte vital) no tienen IP, no tienen conexión a internet ni credenciales WiFi. Son inaccesibles e inhackeables desde el exterior.
-4. **Filtrado y Procesamiento Local:**  
-   El Edge filtra el ruido de los sensores físicos (promedios móviles e histéresis) y solo publica a la nube eventos agregados o cambios significativos de estado, ahorrando ancho de banda.
+* **Luciano Ezequiel Salgado Bucco** (DNI: 43944385X)
+* **Daniel Pérez Pérez** (DNI: 35666868D)
+* **ULVIYYA HASANOVA**
+* **Rubén Fernández Bastos**
 
 ---
 
-## 2. Desglose de Capas y Protocolos
+## 📚 Documentación Oficial del Proyecto
 
-### A. Capa Cloud (Nube)
-* **Broker MQTT:** Punto central de enlace con el Gateway. Maneja tópicos como:
-  * `bunker/telemetria/ambiente` (publica ESP32)
-  * `bunker/telemetria/hidrico` (publica ESP32)
-  * `bunker/alertas/critico` (publica ESP32 con QoS 1)
-  * `bunker/comandos/valvula` (suscribe ESP32)
-* **Base de Datos Histórica (Time-Series DB):** Persistencia a largo plazo de lecturas de sensores y auditoría de incidentes (aperturas de escotilla, cortes de agua).
-* **Motor de Notificaciones:** Despacho de alertas Push al smartphone cuando se detecta un incidente grave.
-* **Integración con Open-Meteo:** La nube consulta periódicamente la API meteorológica externa (vía HTTPS) y publica la variable de riesgo de lluvia al broker para que el Edge la consuma sin sobrecargar el microcontrolador.
+Toda la especificación técnica, justificaciones de arquitectura y protocolos se encuentran centralizados en la **Wiki oficial del repositorio**:
 
-### B. Capa Gateway de Borde (ESP32 #3 - Garita / Superficie)
-* **Rol de Frontera (Edge Gateway):** Interconecta la red de campo de sensores (ESP-NOW) con la red IP externa (WiFi/MQTT).
-* **Concurrencia WiFi + ESP-NOW:** Opera en modo estación (`WIFI_STA`) asociado al router en un canal de RF fijo (ej. Canal 6). Al usar el mismo canal para ESP-NOW, la radio no sufre conmutación (*channel hopping*), garantizando estabilidad total.
-* **Procesamiento Asíncrono no Bloqueante:** La recepción de tramas ESP-NOW se gestiona copiando los datos a memoria en el callback y despachando a MQTT en el bucle principal (`loop()`), evitando bloqueos en la pila de red.
-* **HMI Local:** Proporciona visualización en pantalla LCD 16x2 I2C y aviso acústico por Buzzer directamente al personal en superficie, independiente de la disponibilidad de internet.
+👉 **[Acceder a la Wiki Oficial de BunkerOS](https://github.com/zellsito/proxecto_novas_arquitecturas_grupo_5_2627/wiki)**
 
-### C. Capa Edge Distribuida (ESP32 #1 y #2 - Subterráneo)
-* **Protocolo de Campo: ESP-NOW (P2P):**
-  * Comunicación a nivel de capa de enlace (Data Link Layer - IEEE 802.11 Vendor-Specific Action Frames).
-  * Sin handshake TCP/IP ni asignación DHCP $\rightarrow$ **Latencia de 2 a 5 ms**.
-  * Los nodos subterráneos se coordinan directamente entre sí (ej. alerta de inundación en Nodo 2 puede accionar corte o ventilación en Nodo 1 sin pasar por el Gateway).
-* **Interfaces Físicas con Sensores y Actuadores:**
-  * **GPIO OneWire / Digital:** DHT11 y Reed Switch.
-  * **Pulsos GPIO (Trigger/Echo):** Ultrasonido HC-SR04.
-  * **ADC (Conversor Analógico-Digital):** Sensor de inundación.
-  * **PWM (50 Hz):** Servomotor de la válvula de corte.
-  * **GPIO Digital:** Relé del ventilador.
+### Secciones Principales en la Wiki:
+* 📐 **[1. Arquitectura General](https://github.com/zellsito/proxecto_novas_arquitecturas_grupo_5_2627/wiki/Arquitectura-General)**: Diagrama completo de bloques, capas y componentes.
+* ⚖️ **[2. Edge vs Cloud: Reparto de Lógica](https://github.com/zellsito/proxecto_novas_arquitecturas_grupo_5_2627/wiki/Edge-vs-Cloud-Logica)**: Matriz anti-colisión y jerarquía de seguridad (*Safety Interlock*).
+* 📡 **[3. Protocolos y Tópicos MQTT](https://github.com/zellsito/proxecto_novas_arquitecturas_grupo_5_2627/wiki/Protocolos-y-Topicos-MQTT)**: Estándar `bunker/g5/...` y payloads JSON.
+* 📶 **[4. Modo Offline y Acceso Local](https://github.com/zellsito/proxecto_novas_arquitecturas_grupo_5_2627/wiki/Modo-Offline-Acceso-Local)**: Operación sin Internet y servidor web HTTP local del ESP32.
+* 🚀 **[5. Evolución por Fases](https://github.com/zellsito/proxecto_novas_arquitecturas_grupo_5_2627/wiki/Evolucion-por-Fases)**: Transición Fase 1 (Cloud) $\rightarrow$ Fase 2 (Edge) $\rightarrow$ Fase 3 (P2P).
+* 🛡️ **[6. Defensa y Resiliencia](https://github.com/zellsito/proxecto_novas_arquitecturas_grupo_5_2627/wiki/Defensa-y-Resiliencia)**: Matriz ante fallos catastróficos y justificación para la defensa del proyecto.
 
 ---
 
-## 3. Diagrama de Arquitectura
+## 🛠️ Stack Tecnológico Resumen
 
-![Arquitectura](lucianosalgado/arq.svg)
-
----
-## 4. Matriz de Resiliencia y Tolerancia a Fallos
-
-| Escenario de Fallo | Impacto en la Nube | Impacto en los ESP32 Subterráneos | Comportamiento del Sistema |
-| :--- | :--- | :--- | :--- |
-| **Corte de Fibra Óptica / Internet** | Se pierde el dashboard móvil en tiempo real. | **Ninguno.** | El Gateway conmuta a modo local; los ESP32 subterráneos siguen ejecutando todas las automatizaciones de supervivencia. Alertas visuales y acústicas locales activas en LCD y Buzzer. |
-| **Apagón / Caída del Router WiFi** | El Gateway no puede conectar por WiFi. | **Ninguno.** | Nodos 1 y 2 continúan comunicándose por ESP-NOW antena a antena. El sistema de corte de agua y control de humedad opera normalmente. |
-| **Destrucción o Fallo del Gateway (ESP32 #3)** | Se pierde la monitorización en superficie y nube. | **Ninguno.** | Malla subterránea intacta. El Nodo 2 sigue cerrando la válvula ante fugas y coordinándose con el Nodo 1 de forma peer-to-peer. |
+| Capa | Tecnologías | Propósito |
+| :--- | :--- | :--- |
+| **Cloud** | Node-RED (en Nube) + Dashboard 2.0 | Supervisión remota, reglas contextuales, histórico |
+| **Servicios Externos** | OpenWeatherMap API | Contexto meteorológico exterior (lluvia, tormenta) |
+| **Broker** | MQTT | Mensajería asíncrona y desacoplada |
+| **Edge Gateway** | ESP32 (Wi-Fi + WebServer HTTP + ESP-NOW) | Puente Cloud/P2P e interfaz de emergencia local |
+| **Edge Subterráneo** | ESP32 + Sensores/Actuadores físicos | Reflejos de latencia cero (< 5 ms) mediante ESP-NOW |
 
 ---
 
-## 5. Justificación Técnica para Defensa de Proyecto
+## 📂 Estructura del Repositorio
 
-1. **¿Por qué Broker MQTT en la Nube y no en el Edge?**  
-   Los microcontroladores ESP32 están optimizados para control en tiempo real, no para gestionar múltiples sockets concurrentes, colas de retención de mensajes ni bases de datos de series temporales. Delegar el broker y la BBDD a la nube ahorra RAM y evita problemas de seguridad como redirección de puertos (NAT traversal).
-2. **¿Por qué ESP-NOW frente a WiFi convencional para los sensores?**  
-   Elimina el Punto Único de Fallo (SPOF) del router, reduce la latencia de corte de 500ms a 5ms, disminuye el consumo energético y aísla los sistemas críticos de la red externa (ciberseguridad por segmentación física y lógica).
-3. **¿Por qué descartar una Raspberry Pi en el Edge?**  
-   Un entorno de búnker requiere tolerancia a cortes abruptos de energía. Los ESP32 arrancan en <1 segundo desde memoria Flash sin riesgo de corrupción de sistema de archivos, con un consumo total inferior a 1W para toda la red.
+```text
+proxecto_novas_arquitecturas_grupo_5_2627/
+├── README.md                 # Esta ficha técnica del proyecto
+├── lucianosalgado/           # Diagramas draw.io y recursos gráficos
+│   ├── arq.svg
+│   └── arquitectura.drawio
+└── ...                       # Código fuente de ESP32 y flujos Node-RED
+```
+
+---
+*Grupo 5 — Novas Arquitecturas e Paradigmas IoT (2026/2027)*
