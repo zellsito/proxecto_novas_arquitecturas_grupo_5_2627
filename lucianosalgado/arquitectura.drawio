@@ -1,13 +1,13 @@
 <mxfile host="app.diagrams.net">
   <diagram name="Página-1" id="u149tjEXtc2xtNffEvPC">
-    <mxGraphModel dx="1704" dy="895" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="645" dy="386" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="jci_ir23r7IpNTTKUWFq-15" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;" value="ESP NOW" vertex="1">
           <mxGeometry height="170" width="401.82" x="217.09" y="510" as="geometry" />
         </mxCell>
-        <mxCell id="jci_ir23r7IpNTTKUWFq-3" parent="1" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;perimeter=cloudPerimeter;" value="BROKER MQTT&lt;div&gt;BASE DE DATOS&lt;/div&gt;&lt;div&gt;MOTOR DE ALERTAS&lt;/div&gt;&lt;div&gt;WEBSERVER&lt;/div&gt;" vertex="1">
+        <mxCell id="jci_ir23r7IpNTTKUWFq-3" parent="1" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;perimeter=cloudPerimeter;" value="BROKER MQTT&lt;div&gt;BASE DE DATOS&lt;/div&gt;&lt;div&gt;MOTOR DE ALERTAS&lt;/div&gt;&lt;div&gt;WEBSERVER&lt;/div&gt;&lt;div&gt;NODE-RED&lt;/div&gt;" vertex="1">
           <mxGeometry height="150" width="204" x="316" y="50" as="geometry" />
         </mxCell>
         <mxCell id="jci_ir23r7IpNTTKUWFq-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="CLIENTES" vertex="1">
