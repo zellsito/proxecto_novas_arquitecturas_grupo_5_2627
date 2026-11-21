@@ -1,0 +1,668 @@
+[
+    {
+        "id": "9874083953ff6932",
+        "type": "tab",
+        "label": "Flujo 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "b050000000000001",
+        "type": "tab",
+        "label": "P1 · Meteorología exterior",
+        "disabled": false,
+        "info": "OpenWeatherMap para BunkerOS. La salida entrega texto en msg.payload y datos en msg.weather."
+    },
+    {
+        "id": "b375000000000001",
+        "type": "tab",
+        "label": "BunkerOS · P1 · Control V3",
+        "disabled": false,
+        "info": "Parte 3 de la práctica Cloud. Dashboard con simulación multialerta, entradas Link para MQTT y OpenWeatherMap. NO hay actuadores ni ESP32 conectados."
+    },
+    {
+        "id": "585c46e5a8ccd4d2",
+        "type": "tab",
+        "label": "Flujo 2",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "b04c000000000002",
+        "type": "ui-base",
+        "name": "BunkerOS",
+        "path": "/bunkeros",
+        "includeClientData": true,
+        "acceptsClientConfig": [
+            "ui-control",
+            "ui-notification"
+        ],
+        "showPathInSidebar": false,
+        "navigationStyle": "default",
+        "titleBarStyle": "default"
+    },
+    {
+        "id": "b375000000000003",
+        "type": "ui-page",
+        "name": "Centro de control V3",
+        "ui": "b04c000000000002",
+        "path": "/control-v3",
+        "icon": "shield-check",
+        "layout": "grid",
+        "theme": "b375000000000005",
+        "breakpoints": [
+            {
+                "name": "Default",
+                "px": "0",
+                "cols": "3"
+            },
+            {
+                "name": "Tablet",
+                "px": "576",
+                "cols": "6"
+            },
+            {
+                "name": "Small Desktop",
+                "px": "768",
+                "cols": "9"
+            },
+            {
+                "name": "Desktop",
+                "px": "1024",
+                "cols": "12"
+            }
+        ],
+        "tabs": [],
+        "order": 1,
+        "className": "",
+        "visible": "true",
+        "disabled": "false"
+    },
+    {
+        "id": "b375000000000004",
+        "type": "ui-group",
+        "name": "Panel BunkerOS",
+        "page": "b375000000000003",
+        "width": "12",
+        "height": "1",
+        "order": 1,
+        "showTitle": false,
+        "className": "",
+        "visible": "true",
+        "disabled": "false"
+    },
+    {
+        "id": "b375000000000005",
+        "type": "ui-theme",
+        "name": "BunkerOS · Grafito Cloud P1",
+        "colors": {
+            "surface": "#13222a",
+            "primary": "#72e0c4",
+            "bgPage": "#071219",
+            "groupBg": "#071219",
+            "groupOutline": "#071219"
+        },
+        "sizes": {
+            "pagePadding": "10px",
+            "groupGap": "12px",
+            "groupBorderRadius": "18px",
+            "widgetGap": "6px"
+        }
+    },
+    {
+        "id": "b050000000000002",
+        "type": "inject",
+        "z": "b050000000000001",
+        "name": "Consultar cada 15 min",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "900",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "2",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 80,
+        "wires": [
+            [
+                "b050000000000003"
+            ]
+        ]
+    },
+    {
+        "id": "b050000000000003",
+        "type": "function",
+        "z": "b050000000000001",
+        "name": "Configurar consulta HTTPS",
+        "func": "const key = (env.get(\"OPENWEATHER_API_KEY\") || \"\").trim();\nif (!key) {\n    return [null, { payload: \"Meteorología: falta OPENWEATHER_API_KEY\" }];\n}\nconst city = (env.get(\"OPENWEATHER_CITY\") || \"Vigo,ES\").trim() || \"Vigo,ES\";\nconst url = \"https://api.openweathermap.org/data/2.5/weather\"\n    + \"?q=\" + encodeURIComponent(city)\n    + \"&units=metric&lang=es&appid=\" + encodeURIComponent(key);\nreturn [{ url, requestTimeout: 10000 }, null];",
+        "outputs": 2,
+        "noerr": 0,
+        "x": 390,
+        "y": 80,
+        "wires": [
+            [
+                "b050000000000004"
+            ],
+            [
+                "b050000000000006",
+                "b050000000000007"
+            ]
+        ]
+    },
+    {
+        "id": "b050000000000004",
+        "type": "http request",
+        "z": "b050000000000001",
+        "name": "OpenWeatherMap",
+        "method": "GET",
+        "ret": "obj",
+        "url": "",
+        "persist": false,
+        "senderr": false,
+        "headers": [],
+        "x": 640,
+        "y": 60,
+        "wires": [
+            [
+                "b050000000000005"
+            ]
+        ]
+    },
+    {
+        "id": "b050000000000005",
+        "type": "function",
+        "z": "b050000000000001",
+        "name": "Validar y formatear",
+        "func": "const data = msg.payload;\nif (msg.statusCode !== 200) {\n    const hint = {\n        401: \"verifica la activación de la clave\",\n        404: \"revisa OPENWEATHER_CITY\",\n        429: \"límite de consultas alcanzado\"\n    }[msg.statusCode];\n    return { payload: \"Meteorología no disponible (HTTP \" + msg.statusCode\n        + (hint ? \": \" + hint : \"\") + \")\" };\n}\nif (!data || !Number.isFinite(data.main?.temp)\n    || !Number.isFinite(data.main?.humidity) || !Number.isFinite(data.dt)\n    || !data.name || !data.weather?.[0]?.description) {\n    return { payload: \"Meteorología: respuesta incompleta\" };\n}\nconst weather = {\n    city: data.name,\n    country: data.sys?.country,\n    temperatureC: data.main.temp,\n    humidityPct: data.main.humidity,\n    description: data.weather[0].description,\n    observedAt: new Date(data.dt * 1000).toISOString()\n};\nconst time = new Intl.DateTimeFormat(\"es-ES\", {\n    timeZone: \"Europe/Madrid\", hour: \"2-digit\", minute: \"2-digit\",\n    day: \"2-digit\", month: \"2-digit\"\n}).format(new Date(weather.observedAt));\nreturn {\n    weather,\n    payload: weather.city + \" · \" + weather.temperatureC.toFixed(1) + \" °C · \"\n        + weather.humidityPct + \" % HR · \" + weather.description + \" · \" + time\n};",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 860,
+        "y": 60,
+        "wires": [
+            [
+                "b050000000000006",
+                "b050000000000007"
+            ]
+        ]
+    },
+    {
+        "id": "b050000000000006",
+        "type": "debug",
+        "z": "b050000000000001",
+        "name": "Tiempo / estado",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 1100,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "b050000000000007",
+        "type": "link out",
+        "z": "b050000000000001",
+        "name": "Tiempo exterior → Dashboard",
+        "mode": "link",
+        "links": [
+            "850f467b33ae35bf"
+        ],
+        "x": 1100,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "b050000000000008",
+        "type": "catch",
+        "z": "b050000000000001",
+        "name": "Error de petición HTTP",
+        "scope": [
+            "b050000000000004"
+        ],
+        "uncaught": false,
+        "x": 170,
+        "y": 220,
+        "wires": [
+            [
+                "b050000000000009"
+            ]
+        ]
+    },
+    {
+        "id": "b050000000000009",
+        "type": "function",
+        "z": "b050000000000001",
+        "name": "Mostrar fallo de conexión",
+        "func": "return { payload: \"Meteorología no disponible: fallo de conexión con OpenWeatherMap\" };",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 420,
+        "y": 220,
+        "wires": [
+            [
+                "b050000000000006",
+                "b050000000000007"
+            ]
+        ]
+    },
+    {
+        "id": "850f467b33ae35bf",
+        "type": "link in",
+        "z": "b050000000000001",
+        "name": "link in 1",
+        "links": [
+            "b050000000000007"
+        ],
+        "x": 355,
+        "y": 520,
+        "wires": [
+            [
+                "9129c6e30c78675f",
+                "17119a053c44a3e5"
+            ]
+        ]
+    },
+    {
+        "id": "9129c6e30c78675f",
+        "type": "ui-text",
+        "z": "b050000000000001",
+        "group": "b375000000000004",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "Tiempo exterior",
+        "label": "Tiempo exterior",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "value": "payload",
+        "valueType": "msg",
+        "x": 660,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "17119a053c44a3e5",
+        "type": "function",
+        "z": "b050000000000001",
+        "name": "Adaptar clima para BunkerOS",
+        "func": "if (!msg.weather) return null;\n\nreturn {\n    topic: \"bunkeros/weather\",\n    payload: {\n        ciudad: msg.weather.city,\n        temperatura: msg.weather.temperatureC,\n        descripcion: msg.weather.description,\n        lluvia: null\n    }\n};",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 690,
+        "y": 600,
+        "wires": [
+            [
+                "0dd04cde6924958e"
+            ]
+        ]
+    },
+    {
+        "id": "0dd04cde6924958e",
+        "type": "link out",
+        "z": "b050000000000001",
+        "name": "link out 1",
+        "mode": "link",
+        "links": [
+            "b37500000000000c"
+        ],
+        "x": 985,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "b375000000000006",
+        "type": "inject",
+        "z": "b375000000000001",
+        "name": "Simulación · cada 5 s",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "5",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 1,
+        "topic": "bunkeros/demo",
+        "payload": "tick",
+        "payloadType": "str",
+        "x": 180,
+        "y": 100,
+        "wires": [
+            [
+                "b37500000000000d"
+            ]
+        ]
+    },
+    {
+        "id": "b375000000000007",
+        "type": "inject",
+        "z": "b375000000000001",
+        "name": "Restablecer todas las condiciones",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 1,
+        "topic": "bunkeros/demo",
+        "payload": "{\"action\":\"reset\"}",
+        "payloadType": "json",
+        "x": 180,
+        "y": 150,
+        "wires": [
+            [
+                "b37500000000000d"
+            ]
+        ]
+    },
+    {
+        "id": "b375000000000008",
+        "type": "inject",
+        "z": "b375000000000001",
+        "name": "Alternar temperatura alta",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 1,
+        "topic": "bunkeros/demo",
+        "payload": "{\"action\":\"toggle\",\"key\":\"calor\"}",
+        "payloadType": "json",
+        "x": 180,
+        "y": 200,
+        "wires": [
+            [
+                "b37500000000000d"
+            ]
+        ]
+    },
+    {
+        "id": "b375000000000009",
+        "type": "inject",
+        "z": "b375000000000001",
+        "name": "Alternar fuga de agua",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 1,
+        "topic": "bunkeros/demo",
+        "payload": "{\"action\":\"toggle\",\"key\":\"fuga\"}",
+        "payloadType": "json",
+        "x": 180,
+        "y": 250,
+        "wires": [
+            [
+                "b37500000000000d"
+            ]
+        ]
+    },
+    {
+        "id": "b37500000000000a",
+        "type": "inject",
+        "z": "b375000000000001",
+        "name": "Alternar puerta abierta",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 1,
+        "topic": "bunkeros/demo",
+        "payload": "{\"action\":\"toggle\",\"key\":\"puerta\"}",
+        "payloadType": "json",
+        "x": 180,
+        "y": 300,
+        "wires": [
+            [
+                "b37500000000000d"
+            ]
+        ]
+    },
+    {
+        "id": "b37500000000000b",
+        "type": "link in",
+        "z": "b375000000000001",
+        "name": "ENTRADA · telemetría MQTT adaptada",
+        "links": [],
+        "x": 185,
+        "y": 640,
+        "wires": [
+            [
+                "b37500000000000d"
+            ]
+        ],
+        "info": "Conectar con Link Out desde MQTT IN o desde un Function que genere msg.topic=\"bunkeros/live\" y msg.payload={temperatura:24,humedad:55,nivelAgua:80,puertaAbierta:false,fugaAgua:false}"
+    },
+    {
+        "id": "b37500000000000c",
+        "type": "link in",
+        "z": "b375000000000001",
+        "name": "ENTRADA · OpenWeatherMap adaptado",
+        "links": [
+            "0dd04cde6924958e"
+        ],
+        "x": 185,
+        "y": 690,
+        "wires": [
+            [
+                "b37500000000000d"
+            ]
+        ],
+        "info": "Conectar con Link Out desde Part 4 que entregue msg.topic=\"bunkeros/weather\" y msg.payload={ciudad:\"Vigo\",temperatura:18,descripcion:\"Nublado\",lluvia:false}"
+    },
+    {
+        "id": "b37500000000000d",
+        "type": "function",
+        "z": "b375000000000001",
+        "name": "Telemetría + multialertas + simulación independiente",
+        "func": "// BunkerOS · Cloud P1. Este bloque NO controla actuadores físicos.\n// Entradas reales: msg.topic=bunkeros/live y objeto {temperatura,humedad,nivelAgua,puertaAbierta,fugaAgua}\n// Clima: msg.topic=bunkeros/weather y objeto {ciudad,temperatura,descripcion,lluvia}\n// Simulación: msg.topic=bunkeros/demo; tick, {action:toggle,key}, {action:all}, {action:reset}\nconst keys=['calor','humedad','agua','puerta','fuga'];\nconst makeFlags=()=>({calor:false,humedad:false,agua:false,puerta:false,fuga:false});\nconst makeEmpty=()=>({temperatura:null,humedad:null,nivelAgua:null,puertaAbierta:null,fugaAgua:null});\nlet s=context.get('bunkerV3')||{mode:'demo',data:makeEmpty(),demoFlags:makeFlags(),history:[],events:[],flags:[],meteo:null,lastUpdate:null};\nif(!s.demoFlags) s.demoFlags=makeFlags();\nconst p=msg.payload, now=Date.now();\nconst event=(text,level='info')=>{s.events.unshift({ts:now,text,level});s.events=s.events.slice(0,20);};\nconst finite=(v,min,max)=>typeof v==='number'&&Number.isFinite(v)?Math.max(min,Math.min(max,v)):null;\nfunction apply(q){\n for(const [k,min,max] of [['temperatura',-30,80],['humedad',0,100],['nivelAgua',0,100]]){\n  if(Object.prototype.hasOwnProperty.call(q,k))s.data[k]=finite(q[k],min,max);\n }\n for(const k of ['puertaAbierta','fugaAgua']){\n  if(Object.prototype.hasOwnProperty.call(q,k))s.data[k]=typeof q[k]==='boolean'?q[k]:null;\n }\n}\nlet measurement=false;\nif(msg.topic==='bunkeros/weather'){\n if(!p||typeof p!=='object'||Array.isArray(p))return null;\n s.meteo={ciudad:String(p.ciudad||'Localidad'),temperatura:finite(p.temperatura,-80,80),descripcion:String(p.descripcion||'Sin descripción'),lluvia:typeof p.lluvia==='boolean'?p.lluvia:null,ts:now};\n}else if(msg.topic==='bunkeros/demo'){\n if(p==='tick'&&s.mode==='live')return null;\n if(s.mode==='live')return null; // se evita mezclar datos reales y pruebas\n if(p!=='tick'){\n  if(!p||typeof p!=='object'||Array.isArray(p))return null;\n  if(p.action==='reset'){\n   s.demoFlags=makeFlags();event('Simulación restablecida');\n  }else if(p.action==='all'){\n   s.demoFlags=Object.fromEntries(keys.map(k=>[k,true]));event('Prueba combinada: todas las condiciones activadas','warning');\n  }else if(p.action==='toggle'&&keys.includes(p.key)){\n   s.demoFlags[p.key]=!s.demoFlags[p.key];event((s.demoFlags[p.key]?'Activada':'Desactivada')+' condición de prueba: '+p.key);\n  }else return null;\n }\n const f=s.demoFlags;\n const jitter=(x,delta)=>Math.round((x+(Math.random()-.5)*delta)*10)/10;\n apply({temperatura:jitter(f.calor?34:23.5,.8),humedad:jitter(f.humedad?74:53,1.6),nivelAgua:jitter(f.agua?14:78,1.4),puertaAbierta:!!f.puerta,fugaAgua:!!f.fuga});\n measurement=true;\n}else if(msg.topic==='bunkeros/live'){\n let q=p;\n if(typeof q==='string'){try{q=JSON.parse(q);}catch(e){node.warn('Telemetría JSON no válida');return null;}}\n if(!q||typeof q!=='object'||Array.isArray(q)||!['temperatura','humedad','nivelAgua','puertaAbierta','fugaAgua'].some(k=>Object.prototype.hasOwnProperty.call(q,k)))return null;\n if(s.mode!=='live'){\n  s.mode='live';s.history=[];s.events=[];s.flags=[];s.data=makeEmpty();event('Recepción de telemetría MQTT externa');\n }\n apply(q);measurement=true;\n}else return null;\nconst d=s.data;\nif(measurement){\n s.lastUpdate=now;s.history.push({ts:now,temperatura:d.temperatura,nivelAgua:d.nivelAgua});s.history=s.history.slice(-50);\n}\nconst rules=[\n {id:'calor',active:d.temperatura!==null&&d.temperatura>=30,text:'Temperatura elevada',level:'warning'},\n {id:'humedad',active:d.humedad!==null&&d.humedad>=70,text:'Humedad elevada',level:'warning'},\n {id:'agua',active:d.nivelAgua!==null&&d.nivelAgua<=20,text:'Reserva de agua baja',level:'warning'},\n {id:'puerta',active:d.puertaAbierta===true,text:'Puerta abierta',level:'warning'},\n {id:'fuga',active:d.fugaAgua===true,text:'Fuga de agua detectada',level:'critical'}\n];\nconst flags=rules.filter(r=>r.active).map(r=>r.id);\nfor(const r of rules){\n if(r.active&&!s.flags.includes(r.id))event(r.text,r.level);\n if(!r.active&&s.flags.includes(r.id))event('Alerta desactivada: '+r.text,'info');\n}\ns.flags=flags;\nif(!s.events.length&&measurement)event('Monitorización inicializada');\ncontext.set('bunkerV3',s);\nmsg.payload={...s,alerts:rules.filter(r=>r.active),complete:Object.values(d).every(v=>v!==null)};\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 325,
+        "wires": [
+            [
+                "b37500000000000e",
+                "b37500000000000f"
+            ]
+        ],
+        "info": "La simulación usa 5 flags independientes: calor, humedad, agua, puerta y fuga. Se combinan; los umbrales son didácticos. Entrada MQTT / OpenWeatherMap por Link In."
+    },
+    {
+        "id": "b37500000000000f",
+        "type": "debug",
+        "z": "b375000000000001",
+        "name": "Estado para documentación",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 820,
+        "y": 390,
+        "wires": []
+    },
+    {
+        "id": "b375000000000010",
+        "type": "inject",
+        "z": "b375000000000001",
+        "name": "Alternar humedad alta",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 1,
+        "topic": "bunkeros/demo",
+        "payload": "{\"action\": \"toggle\", \"key\": \"humedad\"}",
+        "payloadType": "json",
+        "x": 180,
+        "y": 450,
+        "wires": [
+            [
+                "b37500000000000d"
+            ]
+        ]
+    },
+    {
+        "id": "b375000000000011",
+        "type": "inject",
+        "z": "b375000000000001",
+        "name": "Alternar reserva baja",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 1,
+        "topic": "bunkeros/demo",
+        "payload": "{\"action\": \"toggle\", \"key\": \"agua\"}",
+        "payloadType": "json",
+        "x": 180,
+        "y": 500,
+        "wires": [
+            [
+                "b37500000000000d"
+            ]
+        ]
+    },
+    {
+        "id": "b375000000000012",
+        "type": "inject",
+        "z": "b375000000000001",
+        "name": "Activar todos los escenarios",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 1,
+        "topic": "bunkeros/demo",
+        "payload": "{\"action\": \"all\"}",
+        "payloadType": "json",
+        "x": 180,
+        "y": 550,
+        "wires": [
+            [
+                "b37500000000000d"
+            ]
+        ]
+    },
+    {
+        "id": "b37500000000000e",
+        "type": "ui-template",
+        "z": "b375000000000001",
+        "group": "b375000000000004",
+        "page": "",
+        "ui": "",
+        "name": "BunkerOS · Centro de control / Multi-escenario",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "head": "",
+        "format": "<template>\n<div class=\"bo-shell ultra\">\n  <div class=\"bo-backglow\"></div>\n  <header class=\"bo-header\">\n    <div class=\"bo-brand\">\n      <div class=\"bo-logo\"><v-icon size=\"28\">mdi-shield-lock-outline</v-icon></div>\n      <div>\n        <div class=\"bo-kicker\">REFUGIO INTELIGENTE / CENTRO DE CONTROL</div>\n        <h1>Bunker<span>OS</span></h1>\n        <div class=\"bo-sub\">Supervisión de refugios · Prototipo Cloud</div>\n      </div>\n    </div>\n    <div class=\"bo-topright\">\n      <div class=\"bo-pills\">\n        <span class=\"bo-pill mint\">Cloud · Node-RED</span>\n        <span class=\"bo-pill cyan\">Edge · fase futura</span>\n        <span class=\"bo-pill violet\">ESP-NOW · fase futura</span>\n      </div>\n      <div :class=\"['bo-live', stale?'bad':'']\"><i></i>{{ stale?'SIN DATOS RECIENTES':state.mode==='live'?'TELEMETRÍA EXTERNA':'MODO SIMULACIÓN' }}</div>\n      <div class=\"bo-clock\">{{ clock }}</div>\n    </div>\n  </header>\n\n  <section :class=\"['bo-banner', severity]\">\n    <div class=\"bo-banner-left\">\n      <div class=\"bo-banner-icon\"><v-icon size=\"28\">{{ severity==='critical'?'mdi-alert-octagon-outline':severity==='warning'?'mdi-alert-outline':severity==='unknown'?'mdi-information-outline':'mdi-shield-check-outline' }}</v-icon></div>\n      <div>\n        <div class=\"bo-eyebrow\">ESTADO GENERAL DEL REFUGIO</div>\n        <h2>{{ severity==='critical'?'Incidencia crítica':severity==='warning'?'Atención requerida':severity==='unknown'?'Monitorización pendiente':'Operación normal' }}</h2>\n        <p>{{ summary }}</p>\n      </div>\n    </div>\n    <div class=\"bo-banner-stats\">\n      <div class=\"bo-kpi\"><b>{{ state.alerts?.length || 0 }}</b><span>Alertas activas</span></div>\n      <div class=\"bo-kpi\"><b>{{ criticalCount }}</b><span>Críticas</span></div>\n      <div class=\"bo-kpi\"><b>{{ warningCount }}</b><span>Avisos</span></div>\n    </div>\n  </section>\n\n  <section class=\"bo-quickgrid\">\n    <article class=\"bo-quickcard\">\n      <div class=\"bo-quickhead\">Fuente de datos</div>\n      <strong>{{ state.mode==='live'?'DATOS EXTERNOS':'SIMULACIÓN LOCAL' }}</strong>\n      <span>{{ stale?'Lecturas no actualizadas':'Actualización periódica activa' }}</span>\n    </article>\n    <article class=\"bo-quickcard\">\n      <div class=\"bo-quickhead\">Última actualización</div>\n      <strong>{{ time(state.lastUpdate) }}</strong>\n      <span>{{ state.complete?'Todas las variables recibidas':'Pendiente completar sensores' }}</span>\n    </article>\n    <article class=\"bo-quickcard\">\n      <div class=\"bo-quickhead\">Módulo meteorológico</div>\n      <strong>{{ state.meteo ? state.meteo.ciudad : 'Pendiente' }}</strong>\n      <span>{{ state.meteo ? (state.meteo.descripcion || 'Sin descripción') : 'OpenWeatherMap no conectado' }}</span>\n    </article>\n  </section>\n\n  <div class=\"bo-section\"><h3><i></i> Monitorización ambiental y recursos</h3><span>01 / SENSORES</span></div>\n  <div class=\"bo-grid\">\n    <article v-for=\"m in metrics\" :key=\"m.key\" class=\"bo-tile\">\n      <div class=\"bo-tilehead\">\n        <div :class=\"['bo-icon',m.color]\"><v-icon size=\"22\">{{m.icon}}</v-icon></div>\n        <span :class=\"['bo-tag',m.status]\">{{m.label}}</span>\n      </div>\n      <div class=\"bo-label\">{{m.title}}</div>\n      <div class=\"bo-val\">{{m.value}}<small>{{m.unit}}</small></div>\n      <div v-if=\"m.bar!==null\" class=\"bo-track\"><i :class=\"m.color\" :style=\"{width:m.bar+'%'}\"></i></div>\n      <div class=\"bo-foot\">{{m.hint}}</div>\n    </article>\n  </div>\n\n  <div class=\"bo-section\"><h3><i></i> Evolución de las mediciones</h3><span>02 / HISTÓRICO</span></div>\n  <div class=\"bo-charts\">\n    <article v-for=\"c in charts\" :key=\"c.key\" class=\"bo-panel\">\n      <div class=\"bo-panelhead\">\n        <div>\n          <div class=\"bo-eyebrow\">{{c.unit==='°C'?'AMBIENTE INTERIOR':'DEPÓSITO PRINCIPAL'}}</div>\n          <h3>{{c.title}}</h3>\n        </div>\n        <div class=\"bo-legend\"><i :style=\"{background:c.color}\"></i> {{c.unit}}</div>\n      </div>\n      <div class=\"bo-chart\" v-if=\"c.points.length\">\n        <svg viewBox=\"0 0 520 170\" role=\"img\" :aria-label=\"c.title\" preserveAspectRatio=\"none\">\n          <defs>\n            <linearGradient :id=\"'grad-'+c.key\" x1=\"0\" x2=\"0\" y1=\"0\" y2=\"1\">\n              <stop offset=\"0%\" :stop-color=\"c.color\" stop-opacity=\"0.32\"/>\n              <stop offset=\"100%\" :stop-color=\"c.color\" stop-opacity=\"0.02\"/>\n            </linearGradient>\n          </defs>\n          <g v-for=\"(y,i) in [12,49,86,123,160]\" :key=\"y\">\n            <line x1=\"44\" :y1=\"y\" x2=\"510\" :y2=\"y\" stroke=\"#27404a\" stroke-dasharray=\"4 6\"/>\n            <text x=\"4\" :y=\"y+4\" fill=\"#80959c\" font-size=\"11\">{{Math.round(c.max-(c.max-c.min)*i/4)}}</text>\n          </g>\n          <line x1=\"44\" x2=\"510\" :y1=\"c.limitY\" :y2=\"c.limitY\" stroke=\"#f3bc72\" stroke-width=\"1.3\" stroke-dasharray=\"5 5\" opacity=\".85\"/>\n          <text x=\"505\" :y=\"Math.max(10,c.limitY-5)\" font-size=\"10\" text-anchor=\"end\" fill=\"#e9af6f\">Umbral de prueba</text>\n          <polygon v-if=\"c.points.length>1\" :points=\"c.area\" :fill=\"'url(#grad-'+c.key+')'\"/>\n          <polyline :points=\"c.line\" fill=\"none\" :stroke=\"c.color\" stroke-width=\"3.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/>\n          <circle v-for=\"pt in c.points.slice(-1)\" :key=\"pt.x\" :cx=\"pt.x\" :cy=\"pt.y\" r=\"4.5\" :fill=\"c.color\"/>\n        </svg>\n        <div class=\"bo-chartfoot\"><span>{{c.start}}</span><span>Últimas {{c.points.length}} muestras</span><span>{{c.end}}</span></div>\n      </div>\n      <div v-else class=\"bo-empty\">Esperando mediciones…</div>\n    </article>\n  </div>\n\n  <div class=\"bo-section\"><h3><i></i> Seguridad y contexto meteorológico</h3><span>03 / SUPERVISIÓN</span></div>\n  <div class=\"bo-bottom\">\n    <article class=\"bo-panel\">\n      <div class=\"bo-panelhead\">\n        <div><div class=\"bo-eyebrow\">REGISTRO DE EVENTOS</div><h3>Actividad del sistema</h3></div>\n        <v-icon color=\"#7c9a99\">mdi-history</v-icon>\n      </div>\n      <div class=\"bo-events\">\n        <div v-for=\"(e,i) in (state.events||[]).slice(0,6)\" :key=\"i\" class=\"bo-event\">\n          <i :class=\"e.level\"></i>\n          <div>{{e.text}}<small>{{time(e.ts)}}</small></div>\n          <span>{{e.level==='critical'?'CRÍTICA':e.level==='warning'?'AVISO':'INFO'}}</span>\n        </div>\n        <div v-if=\"!state.events?.length\" class=\"bo-empty\">Sin eventos registrados.</div>\n      </div>\n    </article>\n    <article class=\"bo-panel bo-weatherpanel\">\n      <div class=\"bo-panelhead\">\n        <div><div class=\"bo-eyebrow\">OPENWEATHERMAP</div><h3>Clima exterior</h3></div>\n        <v-icon color=\"#7c9a99\">mdi-weather-partly-cloudy</v-icon>\n      </div>\n      <div v-if=\"state.meteo\" class=\"bo-weather\">\n        <div class=\"bo-weathercity\">{{state.meteo.ciudad}}</div>\n        <strong>{{fmt(state.meteo.temperatura)}}<small>°C</small></strong>\n        <p>{{state.meteo.descripcion}}</p>\n        <div class=\"bo-weathermeta\">{{state.meteo.lluvia===null?'Precipitación: sin dato':state.meteo.lluvia?'Precipitación detectada':'Sin precipitación indicada'}}</div>\n        <small>Actualización: {{time(state.meteo.ts)}}</small>\n      </div>\n      <div v-else class=\"bo-empty\">\n        <v-icon size=\"32\">mdi-cloud-outline</v-icon>\n        <p>Integración pendiente</p>\n        <small>Preparado para recibir datos reales del módulo meteorológico.</small>\n      </div>\n    </article>\n  </div>\n\n  <section class=\"bo-lab\">\n    <div class=\"bo-labhead\">\n      <div>\n        <div class=\"bo-eyebrow\"><v-icon size=\"16\">mdi-flask-outline</v-icon> LABORATORIO DE PRUEBAS</div>\n        <h3>Simulación de eventos simultáneos</h3>\n        <p>Activa varias condiciones a la vez. Cada interruptor se controla de forma independiente.</p>\n      </div>\n      <div class=\"bo-labcounter\"><strong>{{ activeDemoCount }}</strong><span>ESCENARIOS ACTIVOS</span></div>\n    </div>\n    <div class=\"bo-togglegrid\">\n      <button v-for=\"t in toggles\" :key=\"t.key\" type=\"button\"\n        :class=\"['bo-toggle', {on:state.mode==='demo'&&!!(state.demoFlags||{})[t.key]}]\"\n        :disabled=\"state.mode==='live'\"\n        :aria-pressed=\"state.mode==='demo'&&!!(state.demoFlags||{})[t.key]\"\n        @click=\"send({topic:'bunkeros/demo',payload:{action:'toggle',key:t.key}})\">\n        <v-icon size=\"21\">{{t.icon}}</v-icon>\n        <span>{{t.label}}</span>\n        <span class=\"bo-switch\"><i></i></span>\n      </button>\n    </div>\n    <div class=\"bo-labactions\">\n      <span v-if=\"state.mode==='live'\" class=\"bo-labnote\">Modo MQTT: simulación desactivada para no mezclar datos reales y de prueba.</span>\n      <span v-else class=\"bo-labnote\">Pruebas académicas · No accionan equipos físicos.</span>\n      <button type=\"button\" class=\"bo-laball\" :disabled=\"state.mode==='live'\" @click=\"send({topic:'bunkeros/demo',payload:{action:'all'}})\">Activar todas</button>\n      <button type=\"button\" class=\"bo-labreset\" :disabled=\"state.mode==='live'\" @click=\"send({topic:'bunkeros/demo',payload:{action:'reset'}})\"><v-icon size=\"16\">mdi-refresh</v-icon> Restablecer</button>\n    </div>\n  </section>\n\n  <footer class=\"bo-footer\">\n    <span>BUNKEROS / NAPIoT / PRÁCTICA 1</span>\n    <span>Cloud · Node-RED Dashboard 2.0 · Datos virtuales / Prototipo académico</span>\n  </footer>\n</div>\n</template>\n<script>\nexport default {\n data(){return {now:Date.now(),timer:null,toggles:[{key:'calor',label:'Temperatura alta',icon:'mdi-thermometer-high'},{key:'humedad',label:'Humedad alta',icon:'mdi-water-percent'},{key:'agua',label:'Reserva baja',icon:'mdi-water-minus'},{key:'puerta',label:'Puerta abierta',icon:'mdi-door-open'},{key:'fuga',label:'Fuga de agua',icon:'mdi-water-alert'}]}},\n mounted(){this.timer=setInterval(()=>{this.now=Date.now()},1000)},\n unmounted(){clearInterval(this.timer)},\n computed:{\n  state(){return this.msg?.payload||{mode:'demo',data:{},alerts:[],events:[],history:[]}},\n  clock(){return new Date(this.now).toLocaleString('es-ES',{dateStyle:'medium',timeStyle:'medium'})},\n  stale(){return !this.state.lastUpdate||this.now-this.state.lastUpdate>30000},\n  severity(){if(this.stale||!this.state.complete)return 'unknown';if(this.state.alerts.some(a=>a.level==='critical'))return 'critical';return this.state.alerts.length?'warning':'normal'},\n  activeDemoCount(){return Object.values(this.state.demoFlags||{}).filter(Boolean).length},\n  criticalCount(){return (this.state.alerts||[]).filter(a=>a.level==='critical').length},\n  warningCount(){return (this.state.alerts||[]).filter(a=>a.level==='warning').length},\n  summary(){return this.stale?'Esperando telemetría actualizada.':!this.state.complete?'Faltan mediciones; estado no confirmado.':this.state.alerts.length?this.state.alerts.map(a=>a.text).join(' · '):'Todas las mediciones recibidas están dentro de los umbrales de prueba.'},\n  metrics(){\n   const d=this.state.data||{};\n   const n=(key,title,unit,icon,color,hint,alertLevel,useBar=true)=>({key,title,unit,icon,color,hint,value:this.fmt(d[key]),bar:d[key]==null||!useBar?null:Math.max(0,Math.min(100,d[key])),status:d[key]==null?'unknown':alertLevel?'warning':'normal',label:d[key]==null?'SIN DATOS':alertLevel?'AVISO':'NORMAL'});\n   return [\n    n('temperatura','Temperatura','°C','mdi-thermometer','amber','Umbral de prueba: 30 °C',d.temperatura>=30,false),\n    n('humedad','Humedad relativa','%','mdi-water-percent','blue','Umbral de prueba: 70 %',d.humedad>=70,true),\n    n('nivelAgua','Reserva de agua','%','mdi-water-outline','teal','Umbral de prueba: 20 %',d.nivelAgua<=20,true),\n    {key:'puerta',title:'Puerta principal',unit:'',icon:'mdi-door',color:'violet',hint:'Contacto magnético',value:d.puertaAbierta==null?'—':d.puertaAbierta?'Abierta':'Cerrada',bar:null,status:d.puertaAbierta==null?'unknown':d.puertaAbierta?'warning':'normal',label:d.puertaAbierta==null?'SIN DATOS':d.puertaAbierta?'AVISO':'NORMAL'},\n    {key:'fuga',title:'Fuga de agua',unit:'',icon:'mdi-water-alert-outline',color:'blue',hint:'Detección de agua en suelo',value:d.fugaAgua==null?'—':d.fugaAgua?'Detectada':'Sin fuga',bar:null,status:d.fugaAgua==null?'unknown':d.fugaAgua?'critical':'normal',label:d.fugaAgua==null?'SIN DATOS':d.fugaAgua?'CRÍTICA':'NORMAL'}\n   ]\n  },\n  charts(){return [this.makeChart('temperatura','Temperatura interior','°C',0,40,'#e9af6f'),this.makeChart('nivelAgua','Disponibilidad de agua','%',0,100,'#59d9c5')]}\n },\n methods:{\n  fmt(v){return typeof v==='number'?v.toLocaleString('es-ES',{maximumFractionDigits:1}):'—'},\n  time(v){return v?new Date(v).toLocaleTimeString('es-ES'):'—'},\n  makeChart(key,title,unit,min,max,color){\n   let h=(this.state.history||[]).filter(x=>typeof x[key]==='number');\n   let points=h.map((d,i)=>({x:44+(h.length===1?233:i*466/(h.length-1)),y:160-148*Math.max(0,Math.min(1,(d[key]-min)/(max-min)))}));\n   let line=points.map(p=>p.x+','+p.y).join(' ');\n   let area=points.length ? (points[0].x + ',160 ' + line + ' ' + points[points.length-1].x + ',160') : '';\n   const limit=key==='temperatura'?30:20;\n   const limitY=160-148*Math.max(0,Math.min(1,(limit-min)/(max-min)));\n   return {key,title,unit,min,max,color,points,line,area,limitY,start:this.time(h[0]?.ts),end:this.time(h[h.length-1]?.ts)};\n  }\n }\n}\n</script>\n<style>\n.bo-shell.ultra{position:relative;overflow:hidden;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#e8f2ef;background:radial-gradient(circle at top right,rgba(52,98,102,.22),transparent 28%),linear-gradient(180deg,#08141b,#0b151b 42%,#0b161d);border:1px solid #23353d;border-radius:24px;padding:28px;box-sizing:border-box;max-width:1500px;margin:auto;min-width:0;line-height:1.4;box-shadow:0 25px 60px rgba(0,0,0,.28)}\n.bo-backglow{position:absolute;inset:auto -100px -120px auto;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(113,222,197,.12),transparent 65%);pointer-events:none}\n.bo-shell *{box-sizing:border-box}.bo-header,.bo-brand,.bo-topright,.bo-tilehead,.bo-panelhead,.bo-section,.bo-demo,.bo-footer,.bo-banner,.bo-banner-left,.bo-banner-stats,.bo-pills,.bo-chartfoot{display:flex;align-items:center;justify-content:space-between;gap:12px}.bo-header{padding-bottom:22px;border-bottom:1px solid #22363f}.bo-brand{justify-content:flex-start}.bo-logo{display:grid;place-items:center;width:54px;height:54px;border:1px solid #3f756d;background:linear-gradient(180deg,#183631,#122925);color:#72e0c4;border-radius:16px;box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}.bo-kicker,.bo-eyebrow,.bo-section>span,.bo-footer{font-size:10px;font-weight:700;letter-spacing:1.6px;color:#81999c;text-transform:uppercase}.bo-sub{font-size:12px;color:#89a4a8;margin-top:5px}.bo-brand h1{font-size:36px;line-height:1;margin:4px 0;font-weight:800;letter-spacing:-1.9px}.bo-brand h1 span{color:#71dec5}.bo-brand h1 small{font-size:12px;vertical-align:top;letter-spacing:1px;margin-left:8px;color:#90a2a5}.bo-topright{flex-direction:column;align-items:flex-end;gap:7px}.bo-pills{justify-content:flex-end;flex-wrap:wrap}.bo-pill{padding:5px 10px;border-radius:999px;border:1px solid #33505a;background:#162730;font-size:10px;font-weight:700;letter-spacing:.7px;color:#bbd2d6}.bo-pill.mint{color:#7fe2cb;border-color:#35665d;background:#17342e}.bo-pill.cyan{color:#7dcde2;border-color:#305869;background:#16303a}.bo-pill.violet{color:#c4b1ff;border-color:#56467d;background:#29213c}.bo-clock{font-size:12px;color:#91a5ab;font-variant-numeric:tabular-nums}.bo-live{font-size:10px;font-weight:800;letter-spacing:1px;display:flex;align-items:center;gap:7px;color:#71dec5}.bo-live i,.bo-section h3 i,.bo-legend i,.bo-event>i{width:8px;height:8px;border-radius:50%;background:#71dec5;display:inline-block;flex:none}.bo-live.bad{color:#e9af6f}.bo-live.bad i{background:#e9af6f}.bo-banner{margin:20px 0 18px;padding:20px;border:1px solid #32554f;background:linear-gradient(115deg,#152d2a,#132129);border-radius:18px;align-items:stretch}.bo-banner-left{justify-content:flex-start;align-items:flex-start;flex:1}.bo-banner.warning{border-color:#7b603c;background:linear-gradient(115deg,#362a1d,#2c2118)}.bo-banner.critical{border-color:#8b454c;background:linear-gradient(115deg,#391e27,#2f1b22)}.bo-banner.unknown{border-color:#4b5158;background:linear-gradient(115deg,#232b31,#1d242a)}.bo-banner-icon{color:#71dec5;padding-top:4px}.bo-banner.warning .bo-banner-icon{color:#e9af6f}.bo-banner.critical .bo-banner-icon{color:#f691a1}.bo-banner h2{font-size:24px;letter-spacing:-.5px;margin:4px 0;color:#f0f6f5}.bo-banner p{color:#b0c2c2;margin:0;font-size:14px;max-width:780px}.bo-banner-stats{align-items:stretch;flex:none}.bo-kpi{min-width:96px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);display:grid;align-content:center;text-align:right}.bo-kpi b{display:block;font-size:28px;font-weight:750;line-height:1}.bo-kpi span{font-size:9px;font-weight:700;color:#a1b4b5;letter-spacing:1px;text-transform:uppercase}.bo-quickgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:18px}.bo-quickcard{background:linear-gradient(180deg,#13232b,#101d25);border:1px solid #263842;border-radius:16px;padding:14px 16px}.bo-quickhead{font-size:10px;font-weight:800;letter-spacing:1.1px;color:#85a0a3;text-transform:uppercase}.bo-quickcard strong{display:block;margin-top:6px;font-size:16px;letter-spacing:-.3px}.bo-quickcard span{display:block;margin-top:5px;font-size:12px;color:#8fa3a8}.bo-section{margin:22px 0 12px}.bo-section h3{font-size:15px;letter-spacing:-.25px;margin:0;display:flex;align-items:center;gap:8px}.bo-section h3 i{width:6px;height:6px}.bo-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.bo-tile,.bo-panel{background:linear-gradient(180deg,#13222a,#112029);border:1px solid #2a3a43;border-radius:16px;padding:16px;min-width:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}.bo-icon{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:#24343c;color:#83b8df}.bo-icon.amber{color:#e9af6f;background:#3a3028}.bo-icon.teal{color:#71dec5;background:#203e3a}.bo-icon.violet{color:#b7a7e8;background:#322d40}.bo-tag{font-size:9px;font-weight:800;letter-spacing:.7px;white-space:nowrap;color:#79d7af;text-transform:uppercase}.bo-tag.warning{color:#e9af6f}.bo-tag.critical{color:#ff9ca9}.bo-tag.unknown{color:#9aa9af}.bo-label{color:#a0b3b9;font-size:12px;margin-top:14px}.bo-val{font-size:clamp(24px,2.7vw,35px);font-weight:760;letter-spacing:-1.3px;white-space:nowrap;margin:3px 0 7px;font-variant-numeric:tabular-nums}.bo-val small{font-size:15px;margin-left:3px;color:#95a9ac;letter-spacing:0;font-weight:500}.bo-track{height:6px;border-radius:4px;background:#2b3d45;margin:10px 0 8px}.bo-track i{height:100%;display:block;border-radius:4px;background:#78b8df;transition:width .4s}.bo-track i.teal{background:#71dec5}.bo-foot{font-size:10px;color:#82969e;min-height:16px}.bo-charts,.bo-bottom{display:grid;grid-template-columns:1fr 1fr;gap:12px}.bo-panelhead{align-items:flex-start;margin-bottom:16px}.bo-panel h3{font-size:17px;margin:3px 0;letter-spacing:-.4px}.bo-legend{font-size:11px;color:#a4b8bc;display:flex;align-items:center;gap:5px}.bo-chart svg{width:100%;height:160px;overflow:visible}.bo-chartfoot{color:#8a9fa5;font-size:10px}.bo-empty{display:grid;place-content:center;justify-items:center;text-align:center;color:#8fa2a9;min-height:180px;font-size:13px;gap:6px}.bo-empty p{margin:0;font-weight:650;color:#c3d4d7}.bo-empty small{max-width:250px}.bo-event{display:flex;gap:10px;align-items:center;border-top:1px solid #293b44;padding:8px 0;color:#d2dfe0;font-size:12px}.bo-event>i.warning{background:#e9af6f}.bo-event>i.critical{background:#f691a1}.bo-event>div{flex:1}.bo-event small{display:block;color:#849ca2;font-size:10px;margin-top:2px}.bo-event>span{font-size:9px;letter-spacing:.7px;color:#a4b5b7}.bo-weather{color:#b6c8c9;display:grid;gap:6px}.bo-weathercity{font-size:14px;font-weight:700;color:#94cfc2;letter-spacing:.4px}.bo-weather strong{font-size:46px;color:#e8f2ef;letter-spacing:-2px}.bo-weather strong small{font-size:19px;letter-spacing:0;margin-left:3px}.bo-weather p{margin:0;font-size:15px}.bo-weathermeta{font-size:12px;color:#a3b7ba}.bo-weather>small{color:#81999c}.bo-demo{margin-top:20px;padding:14px 0;border-top:1px solid #293b44;flex-wrap:wrap}.bo-demo b{font-size:13px;color:#c8dada;display:flex;align-items:center;gap:6px}.bo-demo p{color:#84999e;font-size:11px;margin:4px 0}.bo-buttons{display:flex;gap:6px;flex-wrap:wrap}.bo-buttons button{border:1px solid #3b5359;border-radius:10px;color:#bfd4d4;background:#182a31;padding:9px 12px;font:inherit;font-size:11px;cursor:pointer;transition:.2s ease}.bo-buttons button:hover{transform:translateY(-1px);border-color:#59767d}.bo-buttons button.selected{border-color:#71dec5;color:#71dec5;background:#1d3834;box-shadow:0 0 0 1px rgba(113,222,197,.15) inset}.bo-buttons button:focus-visible{outline:2px solid #71dec5;outline-offset:2px}.bo-footer{font-size:9px;letter-spacing:1px;padding-top:12px;border-top:1px solid #293b44;flex-wrap:wrap}.bo-shell .v-icon{line-height:1}\n@media(max-width:1180px){.bo-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.bo-quickgrid{grid-template-columns:1fr}.bo-banner{flex-direction:column}.bo-banner-stats{width:100%}}\n@media(max-width:760px){.bo-shell.ultra{padding:14px;border-radius:12px}.bo-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.bo-tile,.bo-panel,.bo-quickcard{padding:12px}.bo-charts,.bo-bottom{grid-template-columns:1fr}.bo-brand h1{font-size:27px}.bo-header{align-items:flex-start;flex-wrap:wrap}.bo-topright{align-items:flex-start}.bo-banner{padding:12px}.bo-banner h2{font-size:18px}.bo-kpi{min-width:unset;flex:1;text-align:left}.bo-section>span{display:none}.bo-val{font-size:26px}.bo-kicker{font-size:8px}}\n@media(max-width:470px){.bo-grid{grid-template-columns:1fr}.bo-brand{align-items:flex-start}.bo-logo{width:46px;height:46px;flex:none}.bo-banner-stats{flex-wrap:wrap}.bo-kpi{min-width:78px}.bo-quickcard strong{font-size:14px}.bo-chart svg{height:140px}.bo-brand h1{font-size:25px}.bo-pills{gap:5px}}\n@media(prefers-reduced-motion:reduce){.bo-shell *{transition:none!important;animation:none!important}}\n\n/* Ajustes de legibilidad y consola profesional */\n.bo-shell.ultra .bo-header{gap:22px}\n.bo-shell.ultra .bo-sub{letter-spacing:.15px;color:#9fbab9}\n.bo-shell.ultra .bo-brand h1{letter-spacing:-1.6px}\n.bo-shell.ultra .bo-pill{font-size:9px;white-space:nowrap}\n.bo-lab{background:linear-gradient(145deg,#14272c,#102128);border:1px solid #31545a;border-radius:19px;padding:19px;margin-top:22px;position:relative;overflow:hidden}\n.bo-lab::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#72e0c4,transparent)}\n.bo-labhead{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:14px}\n.bo-labhead .bo-eyebrow{color:#70c6b7;display:flex;gap:7px;align-items:center}\n.bo-labhead h3{font-size:19px;font-weight:750;color:#edf5f5;margin:5px 0;letter-spacing:-.3px}\n.bo-labhead p{font-size:12px;color:#9cb7b7;margin:5px 0 0;max-width:600px}\n.bo-labcounter{display:grid;justify-items:end;gap:2px;flex:none}\n.bo-labcounter strong{font-size:31px;line-height:1;color:#78e6cc;font-variant-numeric:tabular-nums}\n.bo-labcounter span{font-size:9px;color:#a3bdc0;letter-spacing:1.05px;font-weight:750}\n.bo-togglegrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}\n.bo-toggle{min-width:0;min-height:84px;display:flex;align-items:flex-start;flex-direction:column;justify-content:space-between;gap:5px;background:#172b33;color:#b8ced0;border:1px solid #344e58;border-radius:13px;padding:12px;font-size:11px;font-family:inherit;text-align:left;cursor:pointer;transition:background .2s,border-color .2s,box-shadow .2s}\n.bo-toggle .v-icon{color:#7c9da5}\n.bo-toggle>span:nth-of-type(1){font-size:12px;font-weight:700;line-height:1.2}\n.bo-toggle .bo-switch{align-self:flex-end;margin-top:-22px;width:31px;height:18px;border-radius:20px;border:1px solid #47616a;background:#243941;display:flex;align-items:center;padding:2px;transition:background .2s}\n.bo-toggle .bo-switch i{display:block;width:12px;height:12px;border-radius:50%;background:#9db2b7;transition:transform .2s}\n.bo-toggle:hover:not(:disabled){border-color:#79cfbd;background:#1a343a}\n.bo-toggle.on{color:#e5faf4;border-color:#65cbb4;background:linear-gradient(140deg,#1c4943,#193b3b);box-shadow:inset 0 0 0 1px rgba(101,203,180,.11)}\n.bo-toggle.on .v-icon{color:#81ead0}\n.bo-toggle.on .bo-switch{background:#439b87;border-color:#6ce0c7}\n.bo-toggle.on .bo-switch i{background:white;transform:translateX(13px)}\n.bo-toggle:focus-visible{outline:2px solid #81ead0;outline-offset:3px}\n.bo-toggle:disabled{cursor:not-allowed;opacity:.55}\n.bo-labactions{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin-top:15px;flex-wrap:wrap}\n.bo-labnote{margin-right:auto;color:#95acad;font-size:11px}\n.bo-labactions button{border-radius:10px;padding:9px 13px;font:inherit;font-size:12px;font-weight:650;cursor:pointer;display:inline-flex;align-items:center;gap:7px}\n.bo-laball{color:#dce9e7;background:#28434b;border:1px solid #466a73}\n.bo-labreset{background:#71dec5;color:#0c2926;border:1px solid #71dec5}\n.bo-labactions button:disabled{opacity:.5;cursor:not-allowed}\n.bo-labactions button:focus-visible{outline:2px solid #ffffff;outline-offset:2px}\n@media(max-width:1140px){.bo-togglegrid{grid-template-columns:repeat(3,minmax(0,1fr))}}\n@media(max-width:680px){.bo-lab{padding:12px}.bo-togglegrid{grid-template-columns:repeat(2,minmax(0,1fr))}.bo-labhead{flex-wrap:wrap}.bo-labcounter{justify-items:start}.bo-toggle>span:nth-of-type(1){font-size:11px}.bo-labactions{justify-content:stretch}.bo-labactions button{flex:1;justify-content:center}.bo-labnote{width:100%}}\n</style>",
+        "storeOutMessages": false,
+        "passthru": false,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 820,
+        "y": 300,
+        "wires": [
+            [
+                "b37500000000000d"
+            ]
+        ],
+        "info": "P1 Cloud: cabecera sobria, simulador de 5 condiciones independientes, alarmas simultáneas, visualización MQTT / OpenWeatherMap al integrar los compañeros. No controla el búnker real."
+    },
+    {
+        "id": "cc121972eebc6cd2",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "@flowfuse/node-red-dashboard": "1.37.0"
+        }
+    }
+]

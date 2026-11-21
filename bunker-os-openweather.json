@@ -1,0 +1,151 @@
+[
+  {
+    "id": "b050000000000001",
+    "type": "tab",
+    "label": "P1 · Meteorología exterior",
+    "disabled": false,
+    "info": "OpenWeatherMap para BunkerOS. La salida entrega texto en msg.payload y datos en msg.weather."
+  },
+  {
+    "id": "b050000000000002",
+    "type": "inject",
+    "z": "b050000000000001",
+    "name": "Consultar cada 15 min",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "900",
+    "crontab": "",
+    "once": true,
+    "onceDelay": "2",
+    "payload": "",
+    "payloadType": "date",
+    "x": 150,
+    "y": 80,
+    "wires": [
+      [
+        "b050000000000003"
+      ]
+    ]
+  },
+  {
+    "id": "b050000000000003",
+    "type": "function",
+    "z": "b050000000000001",
+    "name": "Configurar consulta HTTPS",
+    "func": "const key = (env.get(\"OPENWEATHER_API_KEY\") || \"\").trim();\nif (!key) {\n    return [null, { payload: \"Meteorología: falta OPENWEATHER_API_KEY\" }];\n}\nconst city = (env.get(\"OPENWEATHER_CITY\") || \"Vigo,ES\").trim() || \"Vigo,ES\";\nconst url = \"https://api.openweathermap.org/data/2.5/weather\"\n    + \"?q=\" + encodeURIComponent(city)\n    + \"&units=metric&lang=es&appid=\" + encodeURIComponent(key);\nreturn [{ url, requestTimeout: 10000 }, null];",
+    "outputs": 2,
+    "noerr": 0,
+    "x": 390,
+    "y": 80,
+    "wires": [
+      [
+        "b050000000000004"
+      ],
+      [
+        "b050000000000006",
+        "b050000000000007"
+      ]
+    ]
+  },
+  {
+    "id": "b050000000000004",
+    "type": "http request",
+    "z": "b050000000000001",
+    "name": "OpenWeatherMap",
+    "method": "GET",
+    "ret": "obj",
+    "url": "",
+    "persist": false,
+    "senderr": false,
+    "headers": [],
+    "x": 640,
+    "y": 60,
+    "wires": [
+      [
+        "b050000000000005"
+      ]
+    ]
+  },
+  {
+    "id": "b050000000000005",
+    "type": "function",
+    "z": "b050000000000001",
+    "name": "Validar y formatear",
+    "func": "const data = msg.payload;\nif (msg.statusCode !== 200) {\n    const hint = {\n        401: \"verifica la activación de la clave\",\n        404: \"revisa OPENWEATHER_CITY\",\n        429: \"límite de consultas alcanzado\"\n    }[msg.statusCode];\n    return { payload: \"Meteorología no disponible (HTTP \" + msg.statusCode\n        + (hint ? \": \" + hint : \"\") + \")\" };\n}\nif (!data || !Number.isFinite(data.main?.temp)\n    || !Number.isFinite(data.main?.humidity) || !Number.isFinite(data.dt)\n    || !data.name || !data.weather?.[0]?.description) {\n    return { payload: \"Meteorología: respuesta incompleta\" };\n}\nconst weather = {\n    city: data.name,\n    country: data.sys?.country,\n    temperatureC: data.main.temp,\n    humidityPct: data.main.humidity,\n    description: data.weather[0].description,\n    observedAt: new Date(data.dt * 1000).toISOString()\n};\nconst time = new Intl.DateTimeFormat(\"es-ES\", {\n    timeZone: \"Europe/Madrid\", hour: \"2-digit\", minute: \"2-digit\",\n    day: \"2-digit\", month: \"2-digit\"\n}).format(new Date(weather.observedAt));\nreturn {\n    weather,\n    payload: weather.city + \" · \" + weather.temperatureC.toFixed(1) + \" °C · \"\n        + weather.humidityPct + \" % HR · \" + weather.description + \" · \" + time\n};",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 860,
+    "y": 60,
+    "wires": [
+      [
+        "b050000000000006",
+        "b050000000000007"
+      ]
+    ]
+  },
+  {
+    "id": "b050000000000006",
+    "type": "debug",
+    "z": "b050000000000001",
+    "name": "Tiempo / estado",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "x": 1100,
+    "y": 60,
+    "wires": []
+  },
+  {
+    "id": "b050000000000007",
+    "type": "link out",
+    "z": "b050000000000001",
+    "name": "Tiempo exterior → Dashboard",
+    "mode": "link",
+    "links": [],
+    "x": 1100,
+    "y": 140,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "b050000000000008",
+    "type": "catch",
+    "z": "b050000000000001",
+    "name": "Error de petición HTTP",
+    "scope": [
+      "b050000000000004"
+    ],
+    "uncaught": false,
+    "x": 170,
+    "y": 220,
+    "wires": [
+      [
+        "b050000000000009"
+      ]
+    ]
+  },
+  {
+    "id": "b050000000000009",
+    "type": "function",
+    "z": "b050000000000001",
+    "name": "Mostrar fallo de conexión",
+    "func": "return { payload: \"Meteorología no disponible: fallo de conexión con OpenWeatherMap\" };",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 420,
+    "y": 220,
+    "wires": [
+      [
+        "b050000000000006",
+        "b050000000000007"
+      ]
+    ]
+  }
+]
