@@ -54,7 +54,8 @@ proxecto_novas_arquitecturas_grupo_5_2627/
 ├── README.md                 # Esta ficha técnica del proyecto
 ├── lucianosalgado/           # Diagramas draw.io y recursos gráficos
 │   ├── arq.svg
-│   └── arquitectura.drawio
+│   ├── arquitectura.drawio
+│   └── README.md
 └── ...                       # Código fuente de ESP32 y flujos Node-RED
 ```
 
