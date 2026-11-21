@@ -1,0 +1,978 @@
+[
+    {
+        "id": "8a969cd43a7fe382",
+        "type": "tab",
+        "label": "Flujo 2",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "f1af6283ff14e9cd",
+        "type": "function",
+        "z": "8a969cd43a7fe382",
+        "name": "Control escenarios",
+        "func": "\nlet estados = flow.get(\"escenarios\") || {\n    calor: false,\n    humedad: false,\n    reservaBaja: false,\n    fuga: false,\n    escotillaAbierta: false\n};\n\nconst comando = msg.payload;\n\nif (comando === \"reset\") {\n    estados = {\n        calor: false,\n        humedad: false,\n        reservaBaja: false,\n        fuga: false,\n        escotillaAbierta: false\n    };\n}\nelse if (Object.hasOwn(estados, comando)) {\n    estados[comando] = !estados[comando];\n}\n\nflow.set(\"escenarios\", estados);\n\nmsg.payload = estados;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 440,
+        "wires": [
+            [
+                "e8c4a4ae6243e7c6",
+                "918f0c87a0358906",
+                "bb7b5b81ca501d5c",
+                "a13b59b540098ca5"
+            ]
+        ]
+    },
+    {
+        "id": "7a797ece2c4c14ef",
+        "type": "inject",
+        "z": "8a969cd43a7fe382",
+        "name": "Alternar humedad alta",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "humedad",
+        "payloadType": "str",
+        "x": 270,
+        "y": 280,
+        "wires": [
+            [
+                "f1af6283ff14e9cd"
+            ]
+        ]
+    },
+    {
+        "id": "118490c7aa92cfc6",
+        "type": "inject",
+        "z": "8a969cd43a7fe382",
+        "name": "Alternar reserva baja",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "reservaBaja",
+        "payloadType": "str",
+        "x": 250,
+        "y": 360,
+        "wires": [
+            [
+                "f1af6283ff14e9cd"
+            ]
+        ]
+    },
+    {
+        "id": "333ea4b178e13f43",
+        "type": "inject",
+        "z": "8a969cd43a7fe382",
+        "name": "Alternar filtracion",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "fuga",
+        "payloadType": "str",
+        "x": 230,
+        "y": 440,
+        "wires": [
+            [
+                "f1af6283ff14e9cd"
+            ]
+        ]
+    },
+    {
+        "id": "99f9d244b23ab00a",
+        "type": "inject",
+        "z": "8a969cd43a7fe382",
+        "name": "Alternar escotilla",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "escotillaAbierta",
+        "payloadType": "str",
+        "x": 230,
+        "y": 520,
+        "wires": [
+            [
+                "f1af6283ff14e9cd"
+            ]
+        ]
+    },
+    {
+        "id": "882c73b00ac4aca6",
+        "type": "inject",
+        "z": "8a969cd43a7fe382",
+        "name": "Restablecer normalidad",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "reset",
+        "payloadType": "str",
+        "x": 270,
+        "y": 600,
+        "wires": [
+            [
+                "f1af6283ff14e9cd"
+            ]
+        ]
+    },
+    {
+        "id": "a919a34f282aa292",
+        "type": "inject",
+        "z": "8a969cd43a7fe382",
+        "name": "Alternar temperatura alta",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "calor",
+        "payloadType": "str",
+        "x": 290,
+        "y": 200,
+        "wires": [
+            [
+                "f1af6283ff14e9cd"
+            ]
+        ]
+    },
+    {
+        "id": "027fe5b129ddecce",
+        "type": "inject",
+        "z": "8a969cd43a7fe382",
+        "name": "Reloj de simulacion",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "5",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "topic": "",
+        "payload": "iso",
+        "payloadType": "date",
+        "x": 641.9857177734375,
+        "y": 140,
+        "wires": [
+            [
+                "e8c4a4ae6243e7c6",
+                "918f0c87a0358906",
+                "bb7b5b81ca501d5c",
+                "a13b59b540098ca5"
+            ]
+        ]
+    },
+    {
+        "id": "e8c4a4ae6243e7c6",
+        "type": "function",
+        "z": "8a969cd43a7fe382",
+        "name": "Sensor 1 — DHT11 virtual",
+        "func": "\nconst s = flow.get(\"escenarios\") || {};\n\nmsg.topic = \"sensor/dht11\";\nmsg.payload = {\n    temperature_c: Number((\n        s.calor ? 34 + Math.random() : 23 + Math.random() * 3\n    ).toFixed(1)),\n    humidity_pct: Number((\n        s.humedad ? 78 + Math.random() : 50 + Math.random() * 10\n    ).toFixed(1))\n};\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 991.9857177734375,
+        "y": 280,
+        "wires": [
+            [
+                "ef147af0b84b765c"
+            ]
+        ]
+    },
+    {
+        "id": "918f0c87a0358906",
+        "type": "function",
+        "z": "8a969cd43a7fe382",
+        "name": "Sensor 2 — Reed virtual",
+        "func": "\nconst s = flow.get(\"escenarios\") || {};\n\nmsg.topic = \"sensor/reed\";\nmsg.payload = {\n    hatch_state: s.escotillaAbierta ? \"open\" : \"closed\"\n};\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 971.9857177734375,
+        "y": 380,
+        "wires": [
+            [
+                "ef147af0b84b765c"
+            ]
+        ]
+    },
+    {
+        "id": "bb7b5b81ca501d5c",
+        "type": "function",
+        "z": "8a969cd43a7fe382",
+        "name": "Sensor 3 — HC-SR04 virtual",
+        "func": "\nconst s = flow.get(\"escenarios\") || {};\n\nmsg.topic = \"sensor/ultrasonico\";\nmsg.payload = {\n    tank_level_pct: Number((\n        s.reservaBaja ? 45 + Math.random() * 5 :\n            75 + Math.random() * 10\n    ).toFixed(1))\n};\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 981.9857177734375,
+        "y": 480,
+        "wires": [
+            [
+                "ef147af0b84b765c"
+            ]
+        ]
+    },
+    {
+        "id": "a13b59b540098ca5",
+        "type": "function",
+        "z": "8a969cd43a7fe382",
+        "name": "Sensor 4 — Detector de agua virtual",
+        "func": "\nconst s = flow.get(\"escenarios\") || {};\n\nmsg.topic = \"sensor/fuga\";\nmsg.payload = {\n    leak_detected: !!s.fuga\n};\n\nreturn msg;\n  ",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1011.9857177734375,
+        "y": 600,
+        "wires": [
+            [
+                "ef147af0b84b765c"
+            ]
+        ]
+    },
+    {
+        "id": "ef147af0b84b765c",
+        "type": "function",
+        "z": "8a969cd43a7fe382",
+        "name": "Empaquetar telemetria",
+        "func": "\nlet datos = flow.get(\"sensores\") || {};\n\nswitch (msg.topic) {\n    case \"sensor/dht11\":\n        datos.ambiente = msg.payload;\n        break;\n\n    case \"sensor/ultrasonico\":\n        datos.nivel = msg.payload.tank_level_pct;\n        break;\n\n    case \"sensor/fuga\":\n        datos.fuga = msg.payload.leak_detected;\n        break;\n\n    case \"sensor/reed\":\n        datos.acceso = msg.payload.hatch_state;\n        break;\n\n    default:\n        return null;\n}\n\nflow.set(\"sensores\", datos);\n\nconst timestamp = new Date().toISOString();\nconst salida = [null, null, null];\n\nif (msg.topic === \"sensor/dht11\") {\n    salida[0] = {\n        topic: \"bunker/g5/telemetria/ambiente\",\n        payload: {\n            device_id: \"esp32-env-01\",\n            ...datos.ambiente,\n            timestamp\n        }\n    };\n}\n\nif (\n    msg.topic === \"sensor/fuga\" &&\n    typeof datos.nivel === \"number\" &&\n    typeof datos.fuga === \"boolean\"\n\n) {\n    salida[1] = {\n        topic: \"bunker/g5/telemetria/hidrico\",\n        payload: {\n            device_id: \"esp32-water-01\",\n            tank_level_pct: datos.nivel,\n            leak_detected: datos.fuga,\n            timestamp\n        }\n    };\n}\n\nif (msg.topic === \"sensor/reed\") {\n    salida[2] = {\n        topic: \"bunker/g5/telemetria/acceso\",\n        payload: {\n            device_id: \"esp32-env-01\",\n            hatch_state: datos.acceso,\n            timestamp\n        }\n    };\n}\n\nreturn salida;\n",
+        "outputs": 3,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1301.9857177734375,
+        "y": 420,
+        "wires": [
+            [
+                "4ed9dcc32ea31279"
+            ],
+            [
+                "bb5ff57ea971bf1a"
+            ],
+            [
+                "cb911158dd03f9f0"
+            ]
+        ]
+    },
+    {
+        "id": "4ed9dcc32ea31279",
+        "type": "mqtt out",
+        "z": "8a969cd43a7fe382",
+        "name": "Publicar Sist. ambiente",
+        "topic": "",
+        "qos": "0",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "9f4c978c3b0727f3",
+        "x": 1820,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "bb5ff57ea971bf1a",
+        "type": "mqtt out",
+        "z": "8a969cd43a7fe382",
+        "name": "Publicar Sist. hidrico",
+        "topic": "",
+        "qos": "0",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "9f4c978c3b0727f3",
+        "x": 1820,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "cb911158dd03f9f0",
+        "type": "mqtt out",
+        "z": "8a969cd43a7fe382",
+        "name": "Publicar Sist. Acceso",
+        "topic": "",
+        "qos": "1",
+        "retain": "true",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "9f4c978c3b0727f3",
+        "x": 1820,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "44ca5f02e610d2cb",
+        "type": "function",
+        "z": "8a969cd43a7fe382",
+        "name": "Alerta de fuga",
+        "func": "\nif (msg.topic !== \"bunker/g5/telemetria/hidrico\") {\n    return null;\n}\n\nconst p = msg.payload;\n\nif (typeof p.leak_detected !== \"boolean\") {\n    return null;\n}\n\nconst fuga = p.leak_detected;\nconst anterior = context.get(\"fugaAnterior\");\n\n// Solo publicar cuando el estado cambia\nif (anterior === fuga) {\n    return null;\n}\n\ncontext.set(\"fugaAnterior\", fuga);\n\nmsg.topic = \"bunker/g5/alerta/fuga\";\n\nmsg.payload = {\n    device_id: p.device_id || \"esp32-water-01\",\n    severity: fuga ? \"CRITICAL\" : \"INFO\",\n    event: fuga\n        ? \"WATER_LEAK_TRIGGERED\"\n        : \"WATER_LEAK_CLEARED\",\n    active: fuga,\n    timestamp: new Date().toISOString()\n};\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2500,
+        "y": 480,
+        "wires": [
+            [
+                "0388fed67065d728"
+            ]
+        ]
+    },
+    {
+        "id": "d7393835e65dfc9b",
+        "type": "function",
+        "z": "8a969cd43a7fe382",
+        "name": "Alerta de escotilla",
+        "func": "\nif (msg.topic !== \"bunker/g5/telemetria/acceso\") {\n    return null;\n}\n\nconst p = msg.payload;\nconst estado = p.hatch_state;\n\nif (estado !== \"open\" && estado !== \"closed\") {\n    return null;\n}\n\nconst armado = flow.get(\"modoProteccion\") === true;\nconst anterior = context.get(\"estadoAnterior\");\nlet alarmaActiva = context.get(\"alarmaActiva\") === true;\n\ncontext.set(\"estadoAnterior\", estado);\n\n// Activar alarma por apertura bajo protección\nif (\n    armado &&\n    estado === \"open\" &&\n    anterior !== \"open\" &&\n    !alarmaActiva\n) {\n    alarmaActiva = true;\n    context.set(\"alarmaActiva\", true);\n\n    msg.topic = \"bunker/g5/alerta/escotilla\";\n    msg.payload = {\n        device_id: p.device_id || \"esp32-env-01\",\n        severity: \"WARNING\",\n        event: \"UNAUTHORIZED_HATCH_OPEN\",\n        active: true,\n        timestamp: new Date().toISOString()\n    };\n    return msg;\n}\n\n// Resolver alarma cuando se cierra la escotilla\nif (estado === \"closed\" && alarmaActiva) {\n    context.set(\"alarmaActiva\", false);\n\n    msg.topic = \"bunker/g5/alerta/escotilla\";\n    msg.payload = {\n        device_id: p.device_id || \"esp32-env-01\",\n        severity: \"INFO\",\n        event: \"HATCH_ALERT_CLEARED\",\n        active: false,\n        timestamp: new Date().toISOString()\n    };\n    return msg;\n}\n\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2510,
+        "y": 400,
+        "wires": [
+            [
+                "0388fed67065d728"
+            ]
+        ]
+    },
+    {
+        "id": "0388fed67065d728",
+        "type": "mqtt out",
+        "z": "8a969cd43a7fe382",
+        "name": "Publicar alertas",
+        "topic": "",
+        "qos": "1",
+        "retain": "true",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "9f4c978c3b0727f3",
+        "x": 2920,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "b01a3f6a7c100700",
+        "type": "mqtt in",
+        "z": "8a969cd43a7fe382",
+        "name": "Recibir Telemetría",
+        "topic": "bunker/g5/telemetria/#",
+        "qos": "1",
+        "datatype": "auto-detect",
+        "broker": "9f4c978c3b0727f3",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 2210,
+        "y": 440,
+        "wires": [
+            [
+                "d7393835e65dfc9b",
+                "44ca5f02e610d2cb",
+                "83f269e668d2abe8",
+                "088eb2fd1ba8327f",
+                "51d14cd5c1d8b32b"
+            ]
+        ]
+    },
+    {
+        "id": "83f269e668d2abe8",
+        "type": "function",
+        "z": "8a969cd43a7fe382",
+        "name": "Alerta de reserva hidrica baja",
+        "func": "\nif (msg.topic !== \"bunker/g5/telemetria/hidrico\") {\n    return null;\n}\n\nconst p = msg.payload;\nconst nivel = p.tank_level_pct;\n\nif (\n    typeof nivel !== \"number\" ||\n    !Number.isFinite(nivel) ||\n    nivel < 0 ||\n    nivel > 100\n) {\n    return null;\n}\n\nconst alerta = nivel < 60;\nconst anterior = context.get(\"reservaBajaAnterior\");\n\nif (anterior === alerta) {\n    return null;\n}\n\ncontext.set(\"reservaBajaAnterior\", alerta);\n\nmsg.topic = \"bunker/g5/alerta/hidrico\";\n\nmsg.payload = {\n    device_id: p.device_id || \"esp32-water-01\",\n    severity: alerta ? \"WARNING\" : \"INFO\",\n    event: alerta\n        ? \"LOW_WATER_LEVEL\"\n        : \"WATER_LEVEL_RECOVERED\",\n    tank_level_pct: nivel,\n    active: alerta,\n    timestamp: new Date().toISOString()\n};\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2520,
+        "y": 560,
+        "wires": [
+            [
+                "0388fed67065d728"
+            ]
+        ]
+    },
+    {
+        "id": "a911f3e54e4ce3dd",
+        "type": "inject",
+        "z": "8a969cd43a7fe382",
+        "name": "Activar proteccion",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "ARM",
+        "payloadType": "str",
+        "x": 270,
+        "y": 740,
+        "wires": [
+            [
+                "5ec120441d06625e"
+            ]
+        ]
+    },
+    {
+        "id": "5ba714e0f53a4fd4",
+        "type": "inject",
+        "z": "8a969cd43a7fe382",
+        "name": "Desactivar proteccion",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "DISARM",
+        "x": 280,
+        "y": 820,
+        "wires": [
+            [
+                "5ec120441d06625e"
+            ]
+        ]
+    },
+    {
+        "id": "5ec120441d06625e",
+        "type": "function",
+        "z": "8a969cd43a7fe382",
+        "name": "Modo Proteccion",
+        "func": "\nif (msg.payload === \"ARM\") {\n    flow.set(\"modoProteccion\", true);\n    node.status({\n        fill: \"green\",\n        shape: \"dot\",\n        text: \"Protección activada\"\n    });\n}\n\nif (msg.payload === \"DISARM\") {\n    flow.set(\"modoProteccion\", false);\n    node.status({\n        fill: \"grey\",\n        shape: \"ring\",\n        text: \"Protección desactivada\"\n    });\n}\n\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 780,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "088eb2fd1ba8327f",
+        "type": "debug",
+        "z": "8a969cd43a7fe382",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2560,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "5bb2613a8e372131",
+        "type": "debug",
+        "z": "8a969cd43a7fe382",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3640,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "7ff91fea26485ed4",
+        "type": "mqtt in",
+        "z": "8a969cd43a7fe382",
+        "name": "Recibir alertas",
+        "topic": "bunker/g5/alerta/#",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "9f4c978c3b0727f3",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 3390,
+        "y": 420,
+        "wires": [
+            [
+                "5bb2613a8e372131"
+            ]
+        ]
+    },
+    {
+        "id": "51d14cd5c1d8b32b",
+        "type": "function",
+        "z": "8a969cd43a7fe382",
+        "name": "Motor de control",
+        "func": "\n/*\n * BunkerOS - Motor de control Cloud\n *\n * Salida 1: eventos de actuadores\n * Salida 2: estados de actuadores\n *\n * Reglas:\n * Ventilador: ON >=30 C; OFF <=27 C\n * Valvula: CLOSED >=100%; OPEN <80%\n * Fuga: obliga a cerrar la valvula\n * Control manual: ON/OFF, OPEN/CLOSE y AUTO\n */\n\nlet p = msg.payload;\n\nif (typeof p === \"string\") {\n    try {\n        p = JSON.parse(p);\n    } catch (e) {\n        node.warn(\"JSON no valido\");\n        return null;\n    }\n}\n\nif (!p || typeof p !== \"object\" || Array.isArray(p)) {\n    return null;\n}\n\n// Estado persistente dentro del nodo\nlet s = context.get(\"controlBunker\") || {\n    temperatura: null,\n    nivel: null,\n    fuga: null,\n    fan: \"OFF\",\n    valve: \"OPEN\",\n    fanMode: \"AUTO\",\n    valveMode: \"AUTO\",\n    fanRequest: null,\n    valveRequest: null,\n    initializedFan: false,\n    initializedValve: false\n};\n\nconst anteriorFan = s.fan;\nconst anteriorValve = s.valve;\n\nlet motivoFan = \"AUTO\";\nlet motivoValve = \"AUTO\";\nlet resultadoComando = null;\n\n// 1. RECIBIR TELEMETRIA\nif (msg.topic === \"bunker/g5/telemetria/ambiente\") {\n    if (typeof p.temperature_c !== \"number\" ||\n        !Number.isFinite(p.temperature_c)) return null;\n\n    s.temperatura = p.temperature_c;\n}\n\nelse if (msg.topic === \"bunker/g5/telemetria/hidrico\") {\n    if (typeof p.tank_level_pct !== \"number\" ||\n        !Number.isFinite(p.tank_level_pct) ||\n        p.tank_level_pct < 0 ||\n        p.tank_level_pct > 100 ||\n        typeof p.leak_detected !== \"boolean\") return null;\n\n    s.nivel = p.tank_level_pct;\n    s.fuga = p.leak_detected;\n}\n\n// 2. RECIBIR COMANDOS MANUALES\nelse if (msg.topic === \"bunker/g5/control/ventilacion\") {\n    if (p.target !== \"fan\" ||\n        ![\"ON\", \"OFF\", \"AUTO\"].includes(p.action)) return null;\n\n    s.fanMode = p.action === \"AUTO\" ? \"AUTO\" : \"MANUAL\";\n    s.fanRequest = p.action === \"AUTO\" ? null : p.action;\n    resultadoComando = \"ACCEPTED\";\n}\n\nelse if (msg.topic === \"bunker/g5/control/valvula\") {\n    if (p.target !== \"valve\" ||\n        ![\"OPEN\", \"CLOSE\", \"AUTO\"].includes(p.action)) return null;\n\n    if (p.action === \"OPEN\" && s.fuga !== false) {\n        resultadoComando = \"REJECTED_LEAK_OR_UNKNOWN\";\n    } else {\n        s.valveMode = p.action === \"AUTO\" ? \"AUTO\" : \"MANUAL\";\n        s.valveRequest = p.action === \"AUTO\" ? null : p.action;\n        resultadoComando = \"ACCEPTED\";\n    }\n}\n\nelse {\n    return null;\n}\n\n// 3. CONTROL DE VENTILACION\nif (s.fanMode === \"MANUAL\") {\n    s.fan = s.fanRequest;\n    motivoFan = \"MANUAL\";\n}\nelse if (s.temperatura !== null) {\n    if (s.temperatura >= 30) s.fan = \"ON\";\n    else if (s.temperatura <= 27) s.fan = \"OFF\";\n\n    motivoFan = \"TEMPERATURE_CONTROL\";\n}\n\n// 4. CONTROL HIDRICO\n// La seguridad tiene prioridad sobre las ordenes.\nif (s.fuga === true) {\n    s.valve = \"CLOSED\";\n    motivoValve = \"LEAK_SAFETY\";\n}\nelse if (s.fuga === false) {\n    if (s.valveMode === \"MANUAL\") {\n        s.valve = s.valveRequest === \"CLOSE\" ? \"CLOSED\" : \"OPEN\";\n        motivoValve = \"MANUAL\";\n    }\n    else if (s.nivel !== null) {\n        if (s.nivel >= 100) {\n            s.valve = \"CLOSED\";\n            motivoValve = \"TANK_FULL\";\n        }\n        else if (s.nivel < 80) {\n            s.valve = \"OPEN\";\n            motivoValve = \"TANK_LOW\";\n        }\n    }\n}\nelse {\n    // Sin dato valido del detector de fuga:\n    // no permitir una apertura insegura.\n    s.valve = \"CLOSED\";\n    motivoValve = \"LEAK_STATUS_UNKNOWN\";\n}\n\n// Guardar estado\ncontext.set(\"controlBunker\", s);\n\nconst timestamp = new Date().toISOString();\nlet eventos = [];\n\n// 5. EVENTOS DE CAMBIO DE ESTADO\nif (s.temperatura !== null) {\n    if (s.initializedFan && anteriorFan !== s.fan) {\n        eventos.push({\n            topic: \"bunker/g5/evento/ventilacion\",\n            payload: {\n                device_id: \"esp32-env-01\",\n                event: s.fan === \"ON\" ? \"FAN_ON\" : \"FAN_OFF\",\n                reason: motivoFan,\n                timestamp\n            }\n        });\n    }\n    s.initializedFan = true;\n}\n\nif (s.nivel !== null && s.fuga !== null) {\n    if (s.initializedValve && anteriorValve !== s.valve) {\n        eventos.push({\n            topic: \"bunker/g5/evento/hidrico\",\n            payload: {\n                device_id: \"esp32-water-01\",\n                event: s.valve === \"OPEN\" ? \"VALVE_OPENED\" : \"VALVE_CLOSED\",\n                reason: motivoValve,\n                tank_level_pct: s.nivel,\n                timestamp\n            }\n        });\n    }\n    s.initializedValve = true;\n}\n\ncontext.set(\"controlBunker\", s);\n\n// 6. PUBLICAR ESTADOS\nconst estado = {\n    topic: \"bunker/g5/estado/actuadores\",\n    payload: {\n        fan_state: s.fan,\n        valve_state: s.valve,\n        fan_mode: s.fanMode,\n        valve_mode: s.valveMode,\n        command_result: resultadoComando,\n        simulated: true,\n        timestamp\n    }\n};\n\n// Primera salida: eventos (puede haber varios)\n// Segunda salida: estado actual\nreturn [eventos.length ? eventos : null, estado];\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2520,
+        "y": 740,
+        "wires": [
+            [
+                "9d4cad2b41e3bc26"
+            ],
+            [
+                "0ac04d4f3e21cc6d"
+            ]
+        ]
+    },
+    {
+        "id": "9d4cad2b41e3bc26",
+        "type": "mqtt out",
+        "z": "8a969cd43a7fe382",
+        "name": "Publicar eventos",
+        "topic": "",
+        "qos": "1",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "9f4c978c3b0727f3",
+        "x": 2910,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "0ac04d4f3e21cc6d",
+        "type": "mqtt out",
+        "z": "8a969cd43a7fe382",
+        "name": "Publicar estado de actuadores",
+        "topic": "",
+        "qos": "1",
+        "retain": "true",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "9f4c978c3b0727f3",
+        "x": 2950,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "1f8d8e5793f3167f",
+        "type": "mqtt in",
+        "z": "8a969cd43a7fe382",
+        "name": "Recibir eventos",
+        "topic": "bunker/g5/evento/#",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "9f4c978c3b0727f3",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 3400,
+        "y": 540,
+        "wires": [
+            [
+                "eae948b671e2f180"
+            ]
+        ]
+    },
+    {
+        "id": "b290b2cab5a186ae",
+        "type": "mqtt in",
+        "z": "8a969cd43a7fe382",
+        "name": "Recibir estados",
+        "topic": "bunker/g5/estado/actuadores",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "9f4c978c3b0727f3",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 3400,
+        "y": 640,
+        "wires": [
+            [
+                "965fc6f4398fe4e0"
+            ]
+        ]
+    },
+    {
+        "id": "eae948b671e2f180",
+        "type": "debug",
+        "z": "8a969cd43a7fe382",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3640,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "965fc6f4398fe4e0",
+        "type": "debug",
+        "z": "8a969cd43a7fe382",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3660,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "8311c9f791a109fa",
+        "type": "function",
+        "z": "8a969cd43a7fe382",
+        "name": "Preparar comandos manuales",
+        "func": "\nconst ordenes = {\n    FAN_ON: [\n        \"bunker/g5/control/ventilacion\",\n        \"fan\", \"ON\"\n    ],\n    FAN_OFF: [\n        \"bunker/g5/control/ventilacion\",\n        \"fan\", \"OFF\"\n    ],\n    FAN_AUTO: [\n        \"bunker/g5/control/ventilacion\",\n        \"fan\", \"AUTO\"\n    ],\n    VALVE_OPEN: [\n        \"bunker/g5/control/valvula\",\n        \"valve\", \"OPEN\"\n    ],\n    VALVE_CLOSE: [\n        \"bunker/g5/control/valvula\",\n        \"valve\", \"CLOSE\"\n    ],\n    VALVE_AUTO: [\n        \"bunker/g5/control/valvula\",\n        \"valve\", \"AUTO\"\n    ]\n};\n\nconst orden = ordenes[msg.payload];\n\nif (!orden) return null;\n\nmsg.topic = orden[0];\n\nmsg.payload = {\n    target: orden[1],\n    action: orden[2],\n    requested_by: \"node_red_test\",\n    timestamp: new Date().toISOString()\n};\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 1060,
+        "wires": [
+            [
+                "2b92eb7d28ad63de"
+            ]
+        ]
+    },
+    {
+        "id": "2b92eb7d28ad63de",
+        "type": "mqtt out",
+        "z": "8a969cd43a7fe382",
+        "name": "Publicar comandos manuales",
+        "topic": "",
+        "qos": "1",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "9f4c978c3b0727f3",
+        "x": 1030,
+        "y": 1060,
+        "wires": []
+    },
+    {
+        "id": "a9e8f1ec9140bb0f",
+        "type": "mqtt in",
+        "z": "8a969cd43a7fe382",
+        "name": "Recibir comandos de control",
+        "topic": "bunker/g5/control/#",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "9f4c978c3b0727f3",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 2200,
+        "y": 740,
+        "wires": [
+            [
+                "d991e1fec7a62c12",
+                "51d14cd5c1d8b32b"
+            ]
+        ]
+    },
+    {
+        "id": "d991e1fec7a62c12",
+        "type": "debug",
+        "z": "8a969cd43a7fe382",
+        "name": "debug 7",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2500,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "3741d3c97b2a915e",
+        "type": "inject",
+        "z": "8a969cd43a7fe382",
+        "name": "Encender ventilacion",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "FAN_ON",
+        "x": 290,
+        "y": 960,
+        "wires": [
+            [
+                "8311c9f791a109fa"
+            ]
+        ]
+    },
+    {
+        "id": "143f7e6620aa9359",
+        "type": "inject",
+        "z": "8a969cd43a7fe382",
+        "name": "Apagar ventilacion",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "FAN_OFF",
+        "x": 270,
+        "y": 1040,
+        "wires": [
+            [
+                "8311c9f791a109fa"
+            ]
+        ]
+    },
+    {
+        "id": "df2cc4629ac211da",
+        "type": "inject",
+        "z": "8a969cd43a7fe382",
+        "name": "ventilacion Automatica",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "FAN_AUTO",
+        "x": 300,
+        "y": 1120,
+        "wires": [
+            [
+                "8311c9f791a109fa"
+            ]
+        ]
+    },
+    {
+        "id": "37876d3343c5a38a",
+        "type": "inject",
+        "z": "8a969cd43a7fe382",
+        "name": "Abrir valvula",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "VALPE_OPEN",
+        "x": 270,
+        "y": 1200,
+        "wires": [
+            [
+                "8311c9f791a109fa"
+            ]
+        ]
+    },
+    {
+        "id": "a8708dfdabf476c9",
+        "type": "inject",
+        "z": "8a969cd43a7fe382",
+        "name": "Cerrar Valvula",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "VALVE_CLOSE",
+        "x": 270,
+        "y": 1280,
+        "wires": [
+            [
+                "8311c9f791a109fa"
+            ]
+        ]
+    },
+    {
+        "id": "cb3b44c44aa5bc35",
+        "type": "inject",
+        "z": "8a969cd43a7fe382",
+        "name": "Valvula automatica",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "VALVE_AUTO",
+        "x": 290,
+        "y": 1360,
+        "wires": [
+            [
+                "8311c9f791a109fa"
+            ]
+        ]
+    },
+    {
+        "id": "9f4c978c3b0727f3",
+        "type": "mqtt-broker",
+        "name": "Test Mosquitto",
+        "broker": "test.mosquitto.org",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    }
+]
