@@ -10,11 +10,6 @@
                 "name": "OPENWEATHER_CITY",
                 "value": "Vigo,ES",
                 "type": "str"
-            },
-            {
-                "name": "OPENWEATHER_API_KEY",
-                "value": "",
-                "type": "str"
             }
         ]
     },
@@ -349,7 +344,7 @@
         "type": "function",
         "z": "b050000000000001",
         "name": "Configurar consulta HTTPS",
-        "func": "const key = (env.get(\"OPENWEATHER_API_KEY\") || \"\").trim();\nif (!key) {\n    return [null, { payload: \"Meteorología: falta OPENWEATHER_API_KEY\" }];\n}\nconst city = (env.get(\"OPENWEATHER_CITY\") || \"Vigo,ES\").trim() || \"Vigo,ES\";\nconst url = \"https://api.openweathermap.org/data/2.5/weather\"\n    + \"?q=\" + encodeURIComponent(city)\n    + \"&units=metric&lang=es&appid=\" + encodeURIComponent(key);\nreturn [{ url, requestTimeout: 10000 }, null];\n",
+        "func": "const key = (process.env.OPENWEATHER_API_KEY || \"\").trim();\nif (!key) {\n    return [null, { payload: \"Meteorología: falta OPENWEATHER_API_KEY\" }];\n}\nconst city = (process.env.OPENWEATHER_CITY || \"\").trim() || (env.get(\"OPENWEATHER_CITY\") || \"Vigo,ES\").trim() || \"Vigo,ES\";\nconst url = \"https://api.openweathermap.org/data/2.5/weather\"\n    + \"?q=\" + encodeURIComponent(city)\n    + \"&units=metric&lang=es&appid=\" + encodeURIComponent(key);\nreturn [{ url, requestTimeout: 10000 }, null];",
         "outputs": 2,
         "noerr": 0,
         "x": 390,
