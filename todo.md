@@ -65,6 +65,24 @@ No le veo sentido al menu de la izq
 que se llame v3 el panel no me gusta, volaria toda la barra de arriba.
 cuando encendes la humedad alta tiene un bug
 
-seguir testeando todo.... hay bugs
+seguir testeando todo....  buscar bugs, codesmell, codigo feos, comentarios innecesarios, inconsistencias con la docu y la consigna, etc.
 
 
+
+hay un bug que encontre. si esto corre local, envia eventos al mismo topic que la nube, lo que ocasiona que todo funcione mal. se podria solucioanr con una variable de prefijo en produ ya la configure le puse MQTT_BASE_TOPIC= bunker/g5/prod
+lo que habria que hacer es hacer que se use, yo corri en produ 
+ pm2 start node-red --name "bunkeros" -- flows.json
+ 2. ¿Cómo se detiene?
+
+  Con pm2:
+
+  • Para pausarlo/detenerlo temporalmente:
+    pm2 stop bunkeros
+
+  • Para reanudarlo:
+    pm2 restart bunkeros
+
+  • Para eliminarlo del todo del segundo plano:
+    pm2 delete bunkeros
+
+si es esta la solucion, documentarlo correctamente en wiki y no olvidarse de configurar la pertinente variable en caso de desarrollar en local (algo que la practica no lo admite)
