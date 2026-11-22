@@ -344,7 +344,7 @@
         "type": "function",
         "z": "b050000000000001",
         "name": "Configurar consulta HTTPS",
-        "func": "const key = (process.env.OPENWEATHER_API_KEY || \"\").trim();\nconst city = (process.env.OPENWEATHER_CITY || \"\").trim() || (env.get(\"OPENWEATHER_CITY\") || \"Vigo,ES\").trim() || \"Vigo,ES\";\n\nif (!key) {\n    const errorWeather = {\n        city: city,\n        temperatureC: null,\n        description: \"Falta OPENWEATHER_API_KEY\",\n        observedAt: new Date().toISOString(),\n        conditionId: 999,\n        missingKey: true\n    };\n    return [null, { weather: errorWeather, payload: \"Meteorología: falta OPENWEATHER_API_KEY\" }];\n}\n\nconst url = \"https://api.openweathermap.org/data/2.5/weather\"\n    + \"?q=\" + encodeURIComponent(city)\n    + \"&units=metric&lang=es&appid=\" + encodeURIComponent(key);\nreturn [{ url, requestTimeout: 10000 }, null];",
+        "func": "const key = (env.get(\"OPENWEATHER_API_KEY\") || \"\").trim();\nconst city = (env.get(\"OPENWEATHER_CITY\") || \"Vigo,ES\").trim() || \"Vigo,ES\";\n\nif (!key) {\n    const errorWeather = {\n        city: city,\n        temperatureC: null,\n        description: \"Falta OPENWEATHER_API_KEY\",\n        observedAt: new Date().toISOString(),\n        conditionId: 999,\n        missingKey: true\n    };\n    return [null, { weather: errorWeather, payload: \"Meteorología: falta OPENWEATHER_API_KEY\" }];\n}\n\nconst url = \"https://api.openweathermap.org/data/2.5/weather\"\n    + \"?q=\" + encodeURIComponent(city)\n    + \"&units=metric&lang=es&appid=\" + encodeURIComponent(key);\nreturn [{ url, requestTimeout: 10000 }, null];",
         "outputs": 2,
         "noerr": 0,
         "x": 390,
