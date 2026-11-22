@@ -5,27 +5,14 @@
         "label": "P1 · Meteorología exterior",
         "disabled": false,
         "info": "OpenWeatherMap para BunkerOS. La salida entrega texto en msg.payload y datos en msg.weather.",
-        "env": [
-            {
-                "name": "OPENWEATHER_CITY",
-                "value": "Vigo,ES",
-                "type": "str"
-            }
-        ]
+        "env": []
     },
     {
         "id": "b375000000000001",
         "type": "tab",
         "label": "P1 · Centro de Control",
         "disabled": false,
-        "info": "",
-        "env": [
-            {
-                "name": "MQTT_BASE_TOPIC",
-                "value": "bunker/g5",
-                "type": "str"
-            }
-        ]
+        "info": ""
     },
     {
         "id": "8a969cd43a7fe382",
@@ -92,7 +79,7 @@
             "a8708dfdabf476c9",
             "cb3b44c44aa5bc35",
             "1efaa352-855a-4bbb-aa0d-d686447a33fb",
-            "d0a7718e-e242-4120-be5f-74ac7de3314b"
+            "fn_despacho_ensayos_edge"
         ],
         "x": 24,
         "y": 59,
@@ -328,7 +315,7 @@
         "repeat": "300",
         "crontab": "",
         "once": true,
-        "onceDelay": 1,
+        "onceDelay": "1",
         "payload": "",
         "payloadType": "date",
         "x": 150,
@@ -344,7 +331,7 @@
         "type": "function",
         "z": "b050000000000001",
         "name": "Configurar consulta HTTPS",
-        "func": "const key = (env.get(\"OPENWEATHER_API_KEY\") || \"\").trim();\nconst city = (env.get(\"OPENWEATHER_CITY\") || \"Vigo,ES\").trim() || \"Vigo,ES\";\n\nif (!key) {\n    const errorWeather = {\n        city: city,\n        temperatureC: null,\n        description: \"Falta OPENWEATHER_API_KEY\",\n        observedAt: new Date().toISOString(),\n        conditionId: 999,\n        missingKey: true\n    };\n    return [null, { weather: errorWeather, payload: \"Meteorología: falta OPENWEATHER_API_KEY\" }];\n}\n\nconst url = \"https://api.openweathermap.org/data/2.5/weather\"\n    + \"?q=\" + encodeURIComponent(city)\n    + \"&units=metric&lang=es&appid=\" + encodeURIComponent(key);\nreturn [{ url, requestTimeout: 10000 }, null];",
+        "func": "const key = (env.get(\"OPENWEATHER_API_KEY\") || \"\").trim();\nif (!key) {\n    return [null, { payload: \"Meteorología: falta OPENWEATHER_API_KEY\" }];\n}\nconst city = (env.get(\"OPENWEATHER_CITY\") || \"Vigo,ES\").trim() || \"Vigo,ES\";\nconst url = \"https://api.openweathermap.org/data/2.5/weather\"\n    + \"?q=\" + encodeURIComponent(city)\n    + \"&units=metric&lang=es&appid=\" + encodeURIComponent(key);\nreturn [{ url, requestTimeout: 10000 }, null];\n",
         "outputs": 2,
         "noerr": 0,
         "x": 390,
@@ -383,7 +370,7 @@
         "type": "function",
         "z": "b050000000000001",
         "name": "Validar y formatear",
-        "func": "const data = msg.payload;\nif (msg.statusCode !== 200) {\n    const hint = {\n        401: \"clave inválida o no activada\",\n        404: \"revisa OPENWEATHER_CITY\",\n        429: \"límite de consultas alcanzado\"\n    }[msg.statusCode] || \"error de conexión\";\n\n    const errorWeather = {\n        city: \"Vigo, ES\",\n        temperatureC: null,\n        description: \"Error HTTP \" + msg.statusCode + \" (\" + hint + \")\",\n        observedAt: new Date().toISOString(),\n        conditionId: 999,\n        missingKey: true\n    };\n    return {\n        weather: errorWeather,\n        payload: \"Meteorología no disponible (HTTP \" + msg.statusCode + \": \" + hint + \")\"\n    };\n}\n\nif (!data || !Number.isFinite(data.main?.temp)\n    || !Number.isFinite(data.main?.humidity) || !Number.isFinite(data.dt)\n    || !data.name || !data.weather?.[0]?.description) {\n    return { payload: \"Meteorología: respuesta incompleta\" };\n}\n\nconst weather = {\n    city: data.name,\n    country: data.sys?.country,\n    temperatureC: data.main.temp,\n    feelsLikeC: data.main.feels_like,\n    humidityPct: data.main.humidity,\n    pressureHpa: data.main.pressure,\n    windSpeedMs: data.wind?.speed,\n    description: data.weather[0].description,\n    observedAt: new Date(data.dt * 1000).toISOString(),\n    conditionId: data.weather[0].id,\n    rain: (data.weather[0].id >= 200 && data.weather[0].id < 700) ||\n        !!(data.rain && Object.values(data.rain).some(x => typeof x === \"number\" && x > 0)) ||\n        !!(data.snow && Object.values(data.snow).some(x => typeof x === \"number\" && x > 0)),\n    storm: data.weather[0].id >= 200 && data.weather[0].id < 300\n};\n\nconst time = new Intl.DateTimeFormat(\"es-ES\", {\n    timeZone: \"Europe/Madrid\", hour: \"2-digit\", minute: \"2-digit\",\n    day: \"2-digit\", month: \"2-digit\"\n}).format(new Date(weather.observedAt));\n\nreturn {\n    weather,\n    payload: weather.city + \" · \" + weather.temperatureC.toFixed(1) + \" °C · \"\n        + weather.humidityPct + \" % HR · \" + weather.description + \" · \" + time\n};",
+        "func": "const data = msg.payload;\nif (msg.statusCode !== 200) {\n    const hint = {\n        401: \"verifica la activación de la clave\",\n        404: \"revisa OPENWEATHER_CITY\",\n        429: \"límite de consultas alcanzado\"\n    }[msg.statusCode];\n    return { payload: \"Meteorología no disponible (HTTP \" + msg.statusCode\n        + (hint ? \": \" + hint : \"\") + \")\" };\n}\nif (!data || !Number.isFinite(data.main?.temp)\n    || !Number.isFinite(data.main?.humidity) || !Number.isFinite(data.dt)\n    || !data.name || !data.weather?.[0]?.description) {\n    return { payload: \"Meteorología: respuesta incompleta\" };\n}\nconst weather = {\n    city: data.name,\n    country: data.sys?.country,\n    temperatureC: data.main.temp,\n    feelsLikeC: data.main.feels_like,\n    humidityPct: data.main.humidity,\n    pressureHpa: data.main.pressure,\n    windSpeedMs: data.wind?.speed,\n    description: data.weather[0].description,\n    observedAt: new Date(data.dt * 1000).toISOString(),\n    conditionId: data.weather[0].id,\n    rain: (data.weather[0].id >= 200 && data.weather[0].id < 700) ||\n        !!(data.rain && Object.values(data.rain).some(x => typeof x === 'number' && x > 0)) ||\n        !!(data.snow && Object.values(data.snow).some(x => typeof x === 'number' && x > 0)),\n    storm: data.weather[0].id >= 200 && data.weather[0].id < 300\n};\nconst time = new Intl.DateTimeFormat(\"es-ES\", {\n    timeZone: \"Europe/Madrid\", hour: \"2-digit\", minute: \"2-digit\",\n    day: \"2-digit\", month: \"2-digit\"\n}).format(new Date(weather.observedAt));\nreturn {\n    weather,\n    payload: weather.city + \" · \" + weather.temperatureC.toFixed(1) + \" °C · \"\n        + weather.humidityPct + \" % HR · \" + weather.description + \" · \" + time\n};",
         "outputs": 1,
         "noerr": 0,
         "x": 860,
@@ -478,7 +465,7 @@
         "type": "function",
         "z": "b050000000000001",
         "name": "Adaptar clima para BunkerOS",
-        "func": "if (!msg.weather) return null;\n\nif (msg.weather.missingKey) {\n    return {\n        topic: \"bunkeros/weather\",\n        payload: {\n            ciudad: msg.weather.city || \"Vigo, ES\",\n            temperatura: \"--\",\n            sensacion: \"--\",\n            humedad: \"--\",\n            presion: \"--\",\n            viento: \"--\",\n            descripcion: \"⚠️ Falta OPENWEATHER_API_KEY en Codespaces\",\n            icon: \"⚠️\",\n            lluvia: false,\n            tormenta: false,\n            observedAt: msg.weather.observedAt || new Date().toISOString()\n        }\n    };\n}\n\nconst id = msg.weather.conditionId || 800;\nlet icon = \"🌤️\";\nif (id >= 200 && id < 300) icon = \"⛈️\";\nelse if (id >= 300 && id < 600) icon = \"🌧️\";\nelse if (id >= 600 && id < 700) icon = \"❄️\";\nelse if (id >= 700 && id < 800) icon = \"🌫️\";\nelse if (id === 800) icon = \"☀️\";\nelse if (id === 801 || id === 802) icon = \"⛅\";\nelse if (id >= 803) icon = \"☁️\";\n\nreturn {\n    topic: \"bunkeros/weather\",\n    payload: {\n        ciudad: msg.weather.city,\n        temperatura: msg.weather.temperatureC,\n        sensacion: msg.weather.feelsLikeC,\n        humedad: msg.weather.humidityPct,\n        presion: msg.weather.pressureHpa,\n        viento: msg.weather.windSpeedMs,\n        descripcion: msg.weather.description,\n        icon: icon,\n        lluvia: typeof msg.weather.rain === \"boolean\" ? msg.weather.rain : false,\n        tormenta: typeof msg.weather.storm === \"boolean\" ? msg.weather.storm : false,\n        observedAt: msg.weather.observedAt\n    }\n};",
+        "func": "if (!msg.weather) return null;\nconst id = msg.weather.conditionId || 800;\nlet icon = '🌤️';\nif (id >= 200 && id < 300) icon = '⛈️';\nelse if (id >= 300 && id < 600) icon = '🌧️';\nelse if (id >= 600 && id < 700) icon = '❄️';\nelse if (id >= 700 && id < 800) icon = '🌫️';\nelse if (id === 800) icon = '☀️';\nelse if (id === 801 || id === 802) icon = '⛅';\nelse if (id >= 803) icon = '☁️';\n\nreturn {\n    topic: 'bunkeros/weather',\n    payload: {\n        ciudad: msg.weather.city,\n        temperatura: msg.weather.temperatureC,\n        sensacion: msg.weather.feelsLikeC,\n        humedad: msg.weather.humidityPct,\n        presion: msg.weather.pressureHpa,\n        viento: msg.weather.windSpeedMs,\n        descripcion: msg.weather.description,\n        icon: icon,\n        lluvia: typeof msg.weather.rain === 'boolean' ? msg.weather.rain : false,\n        tormenta: typeof msg.weather.storm === 'boolean' ? msg.weather.storm : false,\n        observedAt: msg.weather.observedAt\n    }\n};",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -541,7 +528,7 @@
         "name": "Comandos manuales UI → MQTT",
         "mode": "link",
         "links": [
-            "e4553964-5e9f-4203-bcc7-fce4b9d50fb0"
+            "d0a7718e-e242-4120-be5f-74ac7de3314b"
         ],
         "x": 1175,
         "y": 120,
@@ -1371,7 +1358,7 @@
             },
             {
                 "p": "topic",
-                "v": "bunker/g5/dev_luciano/control/ventilacion",
+                "v": "/control/ventilacion",
                 "vt": "str"
             }
         ],
@@ -1379,14 +1366,14 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "bunker/g5/dev_luciano/control/ventilacion",
+        "topic": "/control/ventilacion",
         "payload": "{\"target\": \"fan\", \"action\": \"ON\", \"requested_by\": \"node_red_test\"}",
         "payloadType": "json",
         "x": 170,
         "y": 660,
         "wires": [
             [
-                "2b92eb7d28ad63de"
+                "fn_despacho_ensayos_edge"
             ]
         ]
     },
@@ -1402,7 +1389,7 @@
             },
             {
                 "p": "topic",
-                "v": "bunker/g5/dev_luciano/control/seguridad",
+                "v": "/control/seguridad",
                 "vt": "str"
             }
         ],
@@ -1410,14 +1397,14 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "bunker/g5/dev_luciano/control/seguridad",
+        "topic": "/control/seguridad",
         "payload": "{\"target\": \"security\", \"action\": \"ARM\", \"requested_by\": \"node_red_test\"}",
         "payloadType": "json",
         "x": 170,
         "y": 1000,
         "wires": [
             [
-                "2b92eb7d28ad63de"
+                "fn_despacho_ensayos_edge"
             ]
         ]
     },
@@ -1433,7 +1420,7 @@
             },
             {
                 "p": "topic",
-                "v": "bunker/g5/dev_luciano/control/seguridad",
+                "v": "/control/seguridad",
                 "vt": "str"
             }
         ],
@@ -1441,14 +1428,14 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "bunker/g5/dev_luciano/control/seguridad",
+        "topic": "/control/seguridad",
         "payload": "{\"target\": \"security\", \"action\": \"DISARM\", \"requested_by\": \"node_red_test\"}",
         "payloadType": "json",
         "x": 170,
         "y": 1050,
         "wires": [
             [
-                "2b92eb7d28ad63de"
+                "fn_despacho_ensayos_edge"
             ]
         ]
     },
@@ -1483,7 +1470,7 @@
             },
             {
                 "p": "topic",
-                "v": "bunker/g5/dev_luciano/control/ventilacion",
+                "v": "/control/ventilacion",
                 "vt": "str"
             }
         ],
@@ -1491,14 +1478,14 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "bunker/g5/dev_luciano/control/ventilacion",
+        "topic": "/control/ventilacion",
         "payload": "{\"target\": \"fan\", \"action\": \"OFF\", \"requested_by\": \"node_red_test\"}",
         "payloadType": "json",
         "x": 170,
         "y": 710,
         "wires": [
             [
-                "2b92eb7d28ad63de"
+                "fn_despacho_ensayos_edge"
             ]
         ]
     },
@@ -1514,7 +1501,7 @@
             },
             {
                 "p": "topic",
-                "v": "bunker/g5/dev_luciano/control/ventilacion",
+                "v": "/control/ventilacion",
                 "vt": "str"
             }
         ],
@@ -1522,14 +1509,14 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "bunker/g5/dev_luciano/control/ventilacion",
+        "topic": "/control/ventilacion",
         "payload": "{\"target\": \"fan\", \"action\": \"AUTO\", \"requested_by\": \"node_red_test\"}",
         "payloadType": "json",
         "x": 170,
         "y": 760,
         "wires": [
             [
-                "2b92eb7d28ad63de"
+                "fn_despacho_ensayos_edge"
             ]
         ]
     },
@@ -1545,7 +1532,7 @@
             },
             {
                 "p": "topic",
-                "v": "bunker/g5/dev_luciano/control/valvula",
+                "v": "/control/valvula",
                 "vt": "str"
             }
         ],
@@ -1553,14 +1540,14 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "bunker/g5/dev_luciano/control/valvula",
+        "topic": "/control/valvula",
         "payload": "{\"target\": \"valve\", \"action\": \"OPEN\", \"requested_by\": \"node_red_test\"}",
         "payloadType": "json",
         "x": 170,
         "y": 820,
         "wires": [
             [
-                "2b92eb7d28ad63de"
+                "fn_despacho_ensayos_edge"
             ]
         ]
     },
@@ -1576,7 +1563,7 @@
             },
             {
                 "p": "topic",
-                "v": "bunker/g5/dev_luciano/control/valvula",
+                "v": "/control/valvula",
                 "vt": "str"
             }
         ],
@@ -1584,14 +1571,14 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "bunker/g5/dev_luciano/control/valvula",
+        "topic": "/control/valvula",
         "payload": "{\"target\": \"valve\", \"action\": \"CLOSE\", \"requested_by\": \"node_red_test\"}",
         "payloadType": "json",
         "x": 170,
         "y": 870,
         "wires": [
             [
-                "2b92eb7d28ad63de"
+                "fn_despacho_ensayos_edge"
             ]
         ]
     },
@@ -1631,7 +1618,7 @@
             },
             {
                 "p": "topic",
-                "v": "bunker/g5/dev_luciano/control/valvula",
+                "v": "/control/valvula",
                 "vt": "str"
             }
         ],
@@ -1639,14 +1626,14 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "bunker/g5/dev_luciano/control/valvula",
+        "topic": "/control/valvula",
         "payload": "{\"target\": \"valve\", \"action\": \"AUTO\", \"requested_by\": \"node_red_test\"}",
         "payloadType": "json",
         "x": 170,
         "y": 920,
         "wires": [
             [
-                "2b92eb7d28ad63de"
+                "fn_despacho_ensayos_edge"
             ]
         ]
     },
@@ -1692,8 +1679,8 @@
         "links": [
             "cf00da0100000001"
         ],
-        "x": 165,
-        "y": 300,
+        "x": 225,
+        "y": 280,
         "wires": [
             [
                 "967fa92d-e526-405e-9555-ad20eef8c946"
@@ -1791,5 +1778,25 @@
         "x": 780,
         "y": 280,
         "wires": []
+    },
+    {
+        "id": "fn_despacho_ensayos_edge",
+        "type": "function",
+        "z": "8a969cd43a7fe382",
+        "g": "group_edge_ensayos",
+        "name": "Despachar Ensayos Manuales (Env)",
+        "func": "const BASE = env.get(\"MQTT_BASE_TOPIC\") || \"bunker/g5\";\nconst sub = String(msg.topic || \"\");\nmsg.topic = BASE + (sub.startsWith(\"/\") ? sub : \"/\" + sub);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 800,
+        "wires": [
+            [
+                "2b92eb7d28ad63de"
+            ]
+        ]
     }
 ]
