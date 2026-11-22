@@ -13,7 +13,7 @@ Sistema de soporte vital, supervisión ambiental preventiva y gestión automáti
 | Integrante | Rol | Responsabilidad Principal |
 | :--- | :--- | :--- |
 | **Luciano Ezequiel Salgado Bucco** (DNI: 43944385X) | **Software Architect** | Diseño arquitectónico global, balance Edge-Cloud y especificación técnica |
-| **Ulviyya Hasanova** | **UX / UI** | Diseño e implementación de Dashboards (Node-RED Dashboard 2.0 y WebServer local) |
+| **Ulviyya Hasanova** (NIE: Z3546129V) | **UX / UI** | Diseño e implementación de Dashboards (Node-RED Dashboard 2.0 y WebServer local) |
 | **Daniel Pérez Pérez** (DNI: 35666868D) | **DevOps** | Entornos de despliegue, Docker Compose, CI/CD y gestión de Brokers MQTT |
 | **Rubén Fernández Bastos** (DNI: 39494438B) | **Data Engineer** | Modelado de datos JSON, ingestión de telemetría y reglas de procesamiento |
 
@@ -51,12 +51,12 @@ Toda la especificación técnica, justificaciones de arquitectura y protocolos s
 
 ```text
 proxecto_novas_arquitecturas_grupo_5_2627/
-├── README.md                 # Esta ficha técnica del proyecto
-├── lucianosalgado/           # Diagramas draw.io y recursos gráficos
-│   ├── arq.svg
-│   ├── arquitectura.drawio
-│   └── README.md
-└── ...                       # Código fuente de ESP32 y flujos Node-RED
+├── README.md                     # Ficha técnica oficial del proyecto
+├── flows.json                    # Flujos finales integrados de Node-RED (P1)
+├── danielperez/                  # Módulos y entregables DevOps / Despliegue
+├── lucianosalgado/               # Diagramas de arquitectura y especificación
+├── rubenfernandez/               # Módulos Data Engineer / Modelado de telemetría
+└── ulviyyahasanova/              # Módulos UX/UI y Dashboards
 ```
 
 ---

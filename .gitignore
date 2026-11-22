@@ -1,2 +1,5 @@
 wiki_repo/
 lucianosalgado/borrador/
+.*
+node_red_data/
+consigna/
