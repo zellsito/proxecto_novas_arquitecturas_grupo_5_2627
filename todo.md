@@ -1,3 +1,5 @@
+
+
 # Diferencia de Eventos: Especificación Wiki vs. Implementación BunkerOS
 
 Este documento detalla la comparativa formal entre los eventos definidos en la documentación técnica de la cátedra ([Protocolos-y-Topicos-MQTT.md](wiki_repo/Protocolos-y-Topicos-MQTT.md)) y los eventos procesados por el motor de BunkerOS.
@@ -42,3 +44,27 @@ Para cumplir con las buenas prácticas de arquitectura *Event-Driven* y garantiz
 
 ## 3. Resumen Arquitectónico
 El sistema respeta al 100% la convención de tópicos bajo el prefijo `bunker/g5/`, garantiza que ningún comando manual de la nube viole los interbloqueos de seguridad físicos en el Edge, y registra cada evento una única vez de manera idempotente a partir de la confirmación MQTT.
+
+
+FALTA ACTUALIZAR LA WIKI CON ESTOS LINKS
+wiki-bunker.lucho.gal
+repo-bunker.lucho.gal
+codespace-bunker.lucho.gal
+nodered-bunker.lucho.gal
+dash-bunker.lucho.gal
+
+Podriamos agregar la logica de simular el uso del agua algo mas copado. nunca llega a 100 y corta por ejemplo..
+o bajar progresivo como que esta en uso
+
+el foot del dash no me gusta: BUNKEROS / NAPIoT / PRÁCTICA 1 Cloud · Node-RED Dashboard 2.0 · Datos virtuales / Prototipo académico
+Umbral de Prueba cambiar solo por umbral en el front. de humedad.
+y los graficos que solo digan umbral
+este msj no me gusta:" Inyección directa al módulo Edge/Sensores · Propagación por MQTT en tiempo real.
+
+No le veo sentido al menu de la izq
+que se llame v3 el panel no me gusta, volaria toda la barra de arriba.
+cuando encendes la humedad alta tiene un bug
+
+seguir testeando todo.... hay bugs
+
+
