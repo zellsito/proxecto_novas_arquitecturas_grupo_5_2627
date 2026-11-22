@@ -64,7 +64,7 @@
   {
     "id": "9f4c978c3b0727f3",
     "type": "mqtt-broker",
-    "name": "Test Mosquitto",
+    "name": "Mosquitto público · Fase 1",
     "broker": "test.mosquitto.org",
     "port": 1883,
     "clientid": "",
@@ -1325,7 +1325,7 @@
     "x": 1910,
     "y": 1140,
     "wires": [],
-    "info": "QoS/retain dinámicos mediante msg.qos/msg.retain; topic de prueba aislado.",
+    "info": "QoS y retain dinámicos mediante msg.qos/msg.retain. Publicación deshabilitada hasta la integración oficial.",
     "d": true
   },
   {
