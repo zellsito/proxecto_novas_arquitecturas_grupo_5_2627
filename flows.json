@@ -1,0 +1,1705 @@
+[
+  {
+    "id": "b050000000000001",
+    "type": "tab",
+    "label": "P1 \u00b7 Meteorolog\u00eda exterior",
+    "disabled": false,
+    "info": "OpenWeatherMap para BunkerOS. La salida entrega texto en msg.payload y datos en msg.weather.",
+    "env": []
+  },
+  {
+    "id": "b375000000000001",
+    "type": "tab",
+    "label": "P1 \u00b7 Control V3",
+    "disabled": false,
+    "info": ""
+  },
+  {
+    "id": "8a969cd43a7fe382",
+    "type": "tab",
+    "label": "P1 \u00b7 Edge: ESP32 Coordinador & Sensores",
+    "disabled": false,
+    "info": "",
+    "env": []
+  },
+  {
+    "id": "7a124bcf-0937-4b52-8d89-7bf2cef7093f",
+    "type": "tab",
+    "label": "P1 \u00b7 Cloud: Ingesta & Correlaci\u00f3n OWM",
+    "disabled": false,
+    "info": "",
+    "env": []
+  },
+  {
+    "id": "group_edge_ensayos",
+    "type": "group",
+    "z": "8a969cd43a7fe382",
+    "name": "BANCO DE ENSAYOS & SIMULACI\u00d3N",
+    "style": {
+      "stroke": "#3f729b",
+      "fill": "#142733",
+      "fill-opacity": "0.3",
+      "label": true,
+      "color": "#82b1ff"
+    },
+    "nodes": [
+      "027fe5b129ddecce",
+      "882c73b00ac4aca6",
+      "a919a34f282aa292",
+      "7a797ece2c4c14ef",
+      "118490c7aa92cfc6",
+      "333ea4b178e13f43",
+      "99f9d244b23ab00a",
+      "cf00da0100000002",
+      "f1af6283ff14e9cd"
+    ],
+    "x": 24,
+    "y": 59,
+    "w": 702,
+    "h": 502
+  },
+  {
+    "id": "group_edge_actuadores",
+    "type": "group",
+    "z": "8a969cd43a7fe382",
+    "name": "COORDINADOR EDGE & ACTUADORES (AUT\u00d3NOMO)",
+    "style": {
+      "stroke": "#e65100",
+      "fill": "#331908",
+      "fill-opacity": "0.3",
+      "label": true,
+      "color": "#ffcc80"
+    },
+    "nodes": [
+      "3741d3c97b2a915e",
+      "143f7e6620aa9359",
+      "df2cc4629ac211da",
+      "37876d3343c5a38a",
+      "a8708dfdabf476c9",
+      "cb3b44c44aa5bc35",
+      "8311c9f791a109fa",
+      "2b92eb7d28ad63de",
+      "a911f3e54e4ce3dd",
+      "5ba714e0f53a4fd4",
+      "5ec120441d06625e",
+      "a9e8f1ec9140bb0f",
+      "b01a3f6a7c100700",
+      "51d14cd5c1d8b32b",
+      "9d4cad2b41e3bc26",
+      "0ac04d4f3e21cc6d",
+      "d7393835e65dfc9b",
+      "44ca5f02e610d2cb",
+      "83f269e668d2abe8",
+      "0388fed67065d728",
+      "debug_coordinador_edge"
+    ],
+    "x": 34,
+    "y": 639,
+    "w": 1882,
+    "h": 472
+  },
+  {
+    "id": "group_edge_monitor",
+    "type": "group",
+    "z": "8a969cd43a7fe382",
+    "name": "MONITOR Y CONSOLA MQTT UNIFICADA",
+    "style": {
+      "stroke": "#37474f",
+      "fill": "#1c2428",
+      "fill-opacity": "0.3",
+      "label": true,
+      "color": "#cfd8dc"
+    },
+    "nodes": [
+      "7ff91fea26485ed4",
+      "1f8d8e5793f3167f",
+      "b290b2cab5a186ae",
+      "edge_unified_debug"
+    ],
+    "x": 74,
+    "y": 1159,
+    "w": 562,
+    "h": 202
+  },
+  {
+    "id": "group_edge_ambiente",
+    "type": "group",
+    "z": "8a969cd43a7fe382",
+    "name": "SUBSISTEMA AMBIENTAL & ACCESO",
+    "style": {
+      "stroke": "#2e7d32",
+      "fill": "#1b3320",
+      "fill-opacity": "0.25",
+      "label": true,
+      "color": "#a5d6a7"
+    },
+    "nodes": [
+      "e8c4a4ae6243e7c6",
+      "918f0c87a0358906",
+      "ef147af0b84b765c",
+      "4ed9dcc32ea31279",
+      "cb911158dd03f9f0",
+      "debug_amb"
+    ],
+    "x": 814,
+    "y": 129,
+    "w": 1102,
+    "h": 162
+  },
+  {
+    "id": "group_edge_hidrico",
+    "type": "group",
+    "z": "8a969cd43a7fe382",
+    "name": "SUBSISTEMA H\u00cdDRICO",
+    "style": {
+      "stroke": "#0277bd",
+      "fill": "#0f2b38",
+      "fill-opacity": "0.25",
+      "label": true,
+      "color": "#81d4fa"
+    },
+    "nodes": [
+      "bb7b5b81ca501d5c",
+      "a13b59b540098ca5",
+      "emp_hidrico_node",
+      "bb5ff57ea971bf1a",
+      "debug_hid"
+    ],
+    "x": 844,
+    "y": 359,
+    "w": 1082,
+    "h": 142
+  },
+  {
+    "id": "9f4c978c3b0727f3",
+    "type": "mqtt-broker",
+    "name": "Test Mosquitto",
+    "broker": "test.mosquitto.org",
+    "port": 1883,
+    "clientid": "",
+    "autoConnect": true,
+    "usetls": false,
+    "protocolVersion": 4,
+    "keepalive": 60,
+    "cleansession": true,
+    "autoUnsubscribe": true,
+    "birthTopic": "",
+    "birthQos": "0",
+    "birthRetain": "false",
+    "birthPayload": "",
+    "birthMsg": {},
+    "closeTopic": "",
+    "closeQos": "0",
+    "closeRetain": "false",
+    "closePayload": "",
+    "closeMsg": {},
+    "willTopic": "",
+    "willQos": "0",
+    "willRetain": "false",
+    "willPayload": "",
+    "willMsg": {},
+    "userProps": "",
+    "sessionExpiry": ""
+  },
+  {
+    "id": "b375000000000005",
+    "type": "ui-theme",
+    "name": "BunkerOS \u00b7 Grafito Cloud P1",
+    "colors": {
+      "surface": "#13222a",
+      "primary": "#72e0c4",
+      "bgPage": "#071219",
+      "groupBg": "#071219",
+      "groupOutline": "#071219"
+    },
+    "sizes": {
+      "pagePadding": "10px",
+      "groupGap": "12px",
+      "groupBorderRadius": "18px",
+      "widgetGap": "6px"
+    }
+  },
+  {
+    "id": "b04c000000000002",
+    "type": "ui-base",
+    "name": "BunkerOS",
+    "path": "/bunkeros",
+    "includeClientData": true,
+    "acceptsClientConfig": [
+      "ui-control",
+      "ui-notification"
+    ],
+    "showPathInSidebar": false,
+    "navigationStyle": "default",
+    "titleBarStyle": "default"
+  },
+  {
+    "id": "b375000000000003",
+    "type": "ui-page",
+    "name": "Centro de control V3",
+    "ui": "b04c000000000002",
+    "path": "/control-v3",
+    "icon": "shield-check",
+    "layout": "grid",
+    "theme": "b375000000000005",
+    "breakpoints": [
+      {
+        "name": "Default",
+        "px": "0",
+        "cols": "3"
+      },
+      {
+        "name": "Tablet",
+        "px": "576",
+        "cols": "6"
+      },
+      {
+        "name": "Small Desktop",
+        "px": "768",
+        "cols": "9"
+      },
+      {
+        "name": "Desktop",
+        "px": "1024",
+        "cols": "12"
+      }
+    ],
+    "tabs": [],
+    "order": 1,
+    "className": "",
+    "visible": "true",
+    "disabled": "false"
+  },
+  {
+    "id": "b375000000000004",
+    "type": "ui-group",
+    "name": "Panel BunkerOS",
+    "page": "b375000000000003",
+    "width": "12",
+    "height": "1",
+    "order": 1,
+    "showTitle": false,
+    "className": "",
+    "visible": "true",
+    "disabled": "false"
+  },
+  {
+    "id": "b050000000000002",
+    "type": "inject",
+    "z": "b050000000000001",
+    "name": "Consultar cada 15 min",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "300",
+    "crontab": "",
+    "once": true,
+    "onceDelay": "1",
+    "payload": "",
+    "payloadType": "date",
+    "x": 150,
+    "y": 80,
+    "wires": [
+      [
+        "b050000000000003"
+      ]
+    ]
+  },
+  {
+    "id": "b050000000000003",
+    "type": "function",
+    "z": "b050000000000001",
+    "name": "Configurar consulta HTTPS",
+    "func": "const key = (env.get(\"OPENWEATHER_API_KEY\") || \"\").trim();\nif (!key) {\n    return [null, { payload: \"Meteorolog\u00eda: falta OPENWEATHER_API_KEY\" }];\n}\nconst city = (env.get(\"OPENWEATHER_CITY\") || \"Vigo,ES\").trim() || \"Vigo,ES\";\nconst url = \"https://api.openweathermap.org/data/2.5/weather\"\n    + \"?q=\" + encodeURIComponent(city)\n    + \"&units=metric&lang=es&appid=\" + encodeURIComponent(key);\nreturn [{ url, requestTimeout: 10000 }, null];\n",
+    "outputs": 2,
+    "noerr": 0,
+    "x": 390,
+    "y": 80,
+    "wires": [
+      [
+        "b050000000000004"
+      ],
+      [
+        "b050000000000006",
+        "b050000000000007"
+      ]
+    ]
+  },
+  {
+    "id": "b050000000000004",
+    "type": "http request",
+    "z": "b050000000000001",
+    "name": "OpenWeatherMap",
+    "method": "GET",
+    "ret": "obj",
+    "url": "",
+    "persist": false,
+    "senderr": false,
+    "headers": [],
+    "x": 640,
+    "y": 60,
+    "wires": [
+      [
+        "b050000000000005"
+      ]
+    ]
+  },
+  {
+    "id": "b050000000000005",
+    "type": "function",
+    "z": "b050000000000001",
+    "name": "Validar y formatear",
+    "func": "const data = msg.payload;\nif (msg.statusCode !== 200) {\n    const hint = {\n        401: \"verifica la activaci\u00f3n de la clave\",\n        404: \"revisa OPENWEATHER_CITY\",\n        429: \"l\u00edmite de consultas alcanzado\"\n    }[msg.statusCode];\n    return { payload: \"Meteorolog\u00eda no disponible (HTTP \" + msg.statusCode\n        + (hint ? \": \" + hint : \"\") + \")\" };\n}\nif (!data || !Number.isFinite(data.main?.temp)\n    || !Number.isFinite(data.main?.humidity) || !Number.isFinite(data.dt)\n    || !data.name || !data.weather?.[0]?.description) {\n    return { payload: \"Meteorolog\u00eda: respuesta incompleta\" };\n}\nconst weather = {\n    city: data.name,\n    country: data.sys?.country,\n    temperatureC: data.main.temp,\n    feelsLikeC: data.main.feels_like,\n    humidityPct: data.main.humidity,\n    pressureHpa: data.main.pressure,\n    windSpeedMs: data.wind?.speed,\n    description: data.weather[0].description,\n    observedAt: new Date(data.dt * 1000).toISOString(),\n    conditionId: data.weather[0].id,\n    rain: (data.weather[0].id >= 200 && data.weather[0].id < 700) ||\n        !!(data.rain && Object.values(data.rain).some(x => typeof x === 'number' && x > 0)) ||\n        !!(data.snow && Object.values(data.snow).some(x => typeof x === 'number' && x > 0)),\n    storm: data.weather[0].id >= 200 && data.weather[0].id < 300\n};\nconst time = new Intl.DateTimeFormat(\"es-ES\", {\n    timeZone: \"Europe/Madrid\", hour: \"2-digit\", minute: \"2-digit\",\n    day: \"2-digit\", month: \"2-digit\"\n}).format(new Date(weather.observedAt));\nreturn {\n    weather,\n    payload: weather.city + \" \u00b7 \" + weather.temperatureC.toFixed(1) + \" \u00b0C \u00b7 \"\n        + weather.humidityPct + \" % HR \u00b7 \" + weather.description + \" \u00b7 \" + time\n};",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 860,
+    "y": 60,
+    "wires": [
+      [
+        "b050000000000006",
+        "b050000000000007"
+      ]
+    ]
+  },
+  {
+    "id": "b050000000000006",
+    "type": "debug",
+    "z": "b050000000000001",
+    "name": "Tiempo / estado",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "x": 1100,
+    "y": 60,
+    "wires": []
+  },
+  {
+    "id": "b050000000000007",
+    "type": "link out",
+    "z": "b050000000000001",
+    "name": "Tiempo exterior \u2192 Dashboard",
+    "mode": "link",
+    "links": [
+      "850f467b33ae35bf"
+    ],
+    "x": 1100,
+    "y": 140,
+    "wires": []
+  },
+  {
+    "id": "b050000000000008",
+    "type": "catch",
+    "z": "b050000000000001",
+    "name": "Error de petici\u00f3n HTTP",
+    "scope": [
+      "b050000000000004"
+    ],
+    "uncaught": false,
+    "x": 160,
+    "y": 220,
+    "wires": [
+      [
+        "b050000000000009"
+      ]
+    ]
+  },
+  {
+    "id": "b050000000000009",
+    "type": "function",
+    "z": "b050000000000001",
+    "name": "Mostrar fallo de conexi\u00f3n",
+    "func": "return { payload: \"Meteorolog\u00eda no disponible: fallo de conexi\u00f3n con OpenWeatherMap\" };",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 420,
+    "y": 220,
+    "wires": [
+      [
+        "b050000000000006",
+        "b050000000000007"
+      ]
+    ]
+  },
+  {
+    "id": "850f467b33ae35bf",
+    "type": "link in",
+    "z": "b050000000000001",
+    "name": "link in 1",
+    "links": [
+      "b050000000000007"
+    ],
+    "x": 395,
+    "y": 600,
+    "wires": [
+      [
+        "17119a053c44a3e5"
+      ]
+    ]
+  },
+  {
+    "id": "17119a053c44a3e5",
+    "type": "function",
+    "z": "b050000000000001",
+    "name": "Adaptar clima para BunkerOS",
+    "func": "if (!msg.weather) return null;\nconst id = msg.weather.conditionId || 800;\nlet icon = '\ud83c\udf24\ufe0f';\nif (id >= 200 && id < 300) icon = '\u26c8\ufe0f';\nelse if (id >= 300 && id < 600) icon = '\ud83c\udf27\ufe0f';\nelse if (id >= 600 && id < 700) icon = '\u2744\ufe0f';\nelse if (id >= 700 && id < 800) icon = '\ud83c\udf2b\ufe0f';\nelse if (id === 800) icon = '\u2600\ufe0f';\nelse if (id === 801 || id === 802) icon = '\u26c5';\nelse if (id >= 803) icon = '\u2601\ufe0f';\n\nreturn {\n    topic: 'bunkeros/weather',\n    payload: {\n        ciudad: msg.weather.city,\n        temperatura: msg.weather.temperatureC,\n        sensacion: msg.weather.feelsLikeC,\n        humedad: msg.weather.humidityPct,\n        presion: msg.weather.pressureHpa,\n        viento: msg.weather.windSpeedMs,\n        descripcion: msg.weather.description,\n        icon: icon,\n        lluvia: typeof msg.weather.rain === 'boolean' ? msg.weather.rain : false,\n        tormenta: typeof msg.weather.storm === 'boolean' ? msg.weather.storm : false,\n        observedAt: msg.weather.observedAt\n    }\n};",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 690,
+    "y": 600,
+    "wires": [
+      [
+        "0dd04cde6924958e"
+      ]
+    ]
+  },
+  {
+    "id": "0dd04cde6924958e",
+    "type": "link out",
+    "z": "b050000000000001",
+    "name": "link out 1",
+    "mode": "link",
+    "links": [
+      "1ba10743-7d6a-4a47-a37e-6233dca69863"
+    ],
+    "x": 985,
+    "y": 600,
+    "wires": []
+  },
+  {
+    "id": "b37500000000000e",
+    "type": "ui-template",
+    "z": "b375000000000001",
+    "group": "b375000000000004",
+    "page": "",
+    "ui": "",
+    "name": "BunkerOS \u00b7 Centro de control / Multi-escenario",
+    "order": 1,
+    "width": 0,
+    "height": 0,
+    "head": "",
+    "format": "<template>\n<div class=\"bo-shell ultra\">\n  <div class=\"bo-backglow\"></div>\n  <header class=\"bo-header\">\n    <div class=\"bo-brand\">\n      <div class=\"bo-logo\"><v-icon size=\"28\">mdi-shield-lock-outline</v-icon></div>\n      <div>\n        <div class=\"bo-kicker\">REFUGIO INTELIGENTE / CENTRO DE CONTROL</div>\n        <h1>Bunker<span>OS</span></h1>\n        <div class=\"bo-sub\">Supervisi\u00f3n de refugios \u00b7 Prototipo Cloud</div>\n      </div>\n    </div>\n    <div class=\"bo-topright\">\n      <div class=\"bo-pills\">\n        <span class=\"bo-pill mint\">Cloud \u00b7 Node-RED</span>\n        <span class=\"bo-pill cyan\">Edge \u00b7 fase futura</span>\n        <span class=\"bo-pill violet\">ESP-NOW \u00b7 fase futura</span>\n      </div>\n      <div :class=\"['bo-live', stale?'bad':'']\"><i></i>{{ stale?'SIN DATOS RECIENTES':'SISTEMA ONLINE' }}</div>\n      <div class=\"bo-clock\">{{ clock }}</div>\n      <div style=\"font-size:11px;color:#85a0a3;letter-spacing:.3px;margin-top:2px\">\n        \u00daltima telemetr\u00eda: <strong style=\"color:#d8e8e7\">{{ time(state.lastUpdate) }}</strong>\n      </div>\n    </div>\n  </header>\n\n  <div class=\"bo-toprow\">\n    <section :class=\"['bo-banner', severity]\">\n      <div class=\"bo-banner-left\">\n        <div class=\"bo-banner-icon\"><v-icon size=\"28\">{{ severity==='critical'?'mdi-alert-octagon-outline':severity==='warning'?'mdi-alert-outline':severity==='unknown'?'mdi-information-outline':'mdi-shield-check-outline' }}</v-icon></div>\n        <div>\n          <div class=\"bo-eyebrow\">ESTADO GENERAL DEL REFUGIO</div>\n          <h2>{{ severity==='critical'?'Incidencia cr\u00edtica':severity==='warning'?'Atenci\u00f3n requerida':severity==='unknown'?'Monitorizaci\u00f3n pendiente':'Operaci\u00f3n normal' }}</h2>\n          <p>{{ summary }}</p>\n        </div>\n      </div>\n      <div class=\"bo-banner-stats\">\n        <div class=\"bo-kpi\"><b>{{ state.alerts?.length || 0 }}</b><span>Alertas activas</span></div>\n        <div class=\"bo-kpi\"><b>{{ criticalCount }}</b><span>Cr\u00edticas</span></div>\n        <div class=\"bo-kpi\"><b>{{ warningCount }}</b><span>Avisos</span></div>\n      </div>\n    </section>\n\n    <article class=\"bo-panel bo-weather-widget\">\n      <div class=\"bo-weather-head\">M\u00d3DULO METEOROL\u00d3GICO</div>\n      <div class=\"bo-weather-body\">\n        <span>{{ state.meteo ? (state.meteo.icon || '\ud83c\udf24\ufe0f') : '\ud83c\udf24\ufe0f' }}</span>\n        <span>{{ state.meteo ? state.meteo.ciudad : 'Vigo' }}</span>\n        <span class=\"bo-weather-temp\">{{ state.meteo?.temperatura != null ? fmt(state.meteo.temperatura) + '\u00b0C' : '\u2014' }}</span>\n      </div>\n      <div class=\"bo-weather-desc\">\n        {{ state.meteo ? ((state.meteo.descripcion || 'Sin descripci\u00f3n') + (state.meteo.humedad != null ? ' \u00b7 HR ' + state.meteo.humedad + '%' : '') + (state.meteo.viento != null ? ' \u00b7 ' + state.meteo.viento + ' km/h' : '')) : 'Conectando con OpenWeatherMap...' }}\n      </div>\n      <div v-if=\"state.meteo?.ts\" class=\"bo-weather-time\">\n        Actualizado: {{ time(state.meteo.ts) }}\n      </div>\n    </article>\n  </div>\n\n  <div class=\"bo-section\"><h3><i></i> Monitorizaci\u00f3n ambiental y recursos</h3><span>SENSORES</span></div>\n  <div class=\"bo-grid\">\n    <article v-for=\"m in metrics\" :key=\"m.key\" class=\"bo-tile\">\n      <div class=\"bo-tilehead\">\n        <div :class=\"['bo-icon',m.color]\"><v-icon size=\"22\">{{m.icon}}</v-icon></div>\n        <span :class=\"['bo-tag',m.status]\">{{m.label}}</span>\n      </div>\n      <div class=\"bo-label\">{{m.title}}</div>\n      <div class=\"bo-val\">{{m.value}}<small>{{m.unit}}</small></div>\n      <div v-if=\"m.bar!==null\" class=\"bo-track\"><i :class=\"m.color\" :style=\"{width:m.bar+'%'}\"></i></div>\n      <div class=\"bo-foot\">{{m.hint}}</div>\n    </article>\n  </div>\n\n\n  <div class=\"bo-section\"><h3><i></i> Actuadores \u00b7 confirmaci\u00f3n MQTT</h3><span>SEGURIDAD / CONTROL</span></div>\n  <div class=\"bo-charts\">\n    <article class=\"bo-panel\">\n      <div class=\"bo-eyebrow\">EXTRACTOR DE AIRE</div><h3>{{state.data?.fanEstado || 'SIN CONFIRMAR'}}</h3>\n      \n      <div class=\"bo-buttons\" style=\"margin-top:12px\">\n        <button type=\"button\" :class=\"{selected: isFanSelected('ON')}\" @click=\"manual('FAN_ON')\">Encender</button>\n        <button type=\"button\" :class=\"{selected: isFanSelected('OFF')}\" @click=\"manual('FAN_OFF')\">Apagar</button>\n        <button type=\"button\" :class=\"{selected: isFanSelected('AUTO')}\" @click=\"manual('FAN_AUTO')\">Autom\u00e1tico</button>\n      </div>\n    </article>\n    <article class=\"bo-panel\">\n      <div class=\"bo-eyebrow\">V\u00c1LVULA DE AGUA</div><h3>{{state.data?.valvulaEstado || 'SIN CONFIRMAR'}}</h3>\n      \n      <div v-if=\"state.data?.fugaAgua===true\" class=\"bo-interlock-warning\" role=\"status\">\n        <v-icon size=\"18\">mdi-shield-lock-outline</v-icon>\n        <span><strong>Bloqueo de seguridad activo.</strong> Fuga detectada: la v\u00e1lvula debe permanecer cerrada. La apertura se rechazar\u00e1 mientras exista peligro.</span>\n      </div>\n      <div class=\"bo-buttons\" style=\"margin-top:12px\">\n        <button type=\"button\" :class=\"{selected: isValveSelected('OPEN')}\" @click=\"manual('VALVE_OPEN')\">Abrir</button>\n        <button type=\"button\" :class=\"{selected: isValveSelected('CLOSE')}\" @click=\"manual('VALVE_CLOSE')\">Cerrar</button>\n        <button type=\"button\" :class=\"{selected: isValveSelected('AUTO')}\" @click=\"manual('VALVE_AUTO')\">Autom\u00e1tico</button>\n      </div>\n    </article>\n    <article class=\"bo-panel\">\n      <div class=\"bo-eyebrow\">SEGURIDAD PERIMETRAL</div><h3>{{(state.data?.modoSeguridad || 'ARM') === 'ARM' ? 'SELLADO' : 'ACCESO AUTORIZADO'}}</h3>\n      <div class=\"bo-buttons\" style=\"margin-top:12px\">\n        <button type=\"button\" :class=\"{selected: isSecuritySelected('ARM')}\" @click=\"manual('SEC_ARM')\">Armar (Sellado)</button>\n        <button type=\"button\" :class=\"{selected: isSecuritySelected('DISARM')}\" @click=\"manual('SEC_DISARM')\">Desarmar (Acceso)</button>\n      </div>\n    </article>\n  </div>\n  \n  \n\n  <div class=\"bo-section\"><h3><i></i> Evoluci\u00f3n de las mediciones</h3><span>HIST\u00d3RICO</span></div>\n  <div class=\"bo-charts\">\n    <article v-for=\"c in charts\" :key=\"c.key\" class=\"bo-panel\">\n      <div class=\"bo-panelhead\">\n        <div>\n          <div class=\"bo-eyebrow\">{{c.key==='temperatura'?'TERMOMETR\u00cdA':c.key==='humedad'?'HIGROMETR\u00cdA':'DEP\u00d3SITO PRINCIPAL'}}</div>\n          <h3>{{c.title}}</h3>\n        </div>\n        <div class=\"bo-legend\"><i :style=\"{background:c.color}\"></i> {{c.unit}}</div>\n      </div>\n      <div class=\"bo-chart\" v-if=\"c.points.length\">\n        <svg viewBox=\"0 0 520 170\" role=\"img\" :aria-label=\"c.title\" preserveAspectRatio=\"none\">\n          <defs>\n            <linearGradient :id=\"'grad-'+c.key\" x1=\"0\" x2=\"0\" y1=\"0\" y2=\"1\">\n              <stop offset=\"0%\" :stop-color=\"c.color\" stop-opacity=\"0.32\"/>\n              <stop offset=\"100%\" :stop-color=\"c.color\" stop-opacity=\"0.02\"/>\n            </linearGradient>\n          </defs>\n          <g v-for=\"(y,i) in [12,49,86,123,160]\" :key=\"y\">\n            <line x1=\"44\" :y1=\"y\" x2=\"510\" :y2=\"y\" stroke=\"#27404a\" stroke-dasharray=\"4 6\"/>\n            <text x=\"4\" :y=\"y+4\" fill=\"#80959c\" font-size=\"11\">{{Math.round(c.max-(c.max-c.min)*i/4)}}</text>\n          </g>\n          <line x1=\"44\" x2=\"510\" :y1=\"c.limitY\" :y2=\"c.limitY\" stroke=\"#f3bc72\" stroke-width=\"1.3\" stroke-dasharray=\"5 5\" opacity=\".85\"/>\n          <text x=\"505\" :y=\"Math.max(10,c.limitY-5)\" font-size=\"10\" text-anchor=\"end\" fill=\"#e9af6f\">Umbral/prueba</text>\n          <polygon v-if=\"c.points.length>1\" :points=\"c.area\" :fill=\"'url(#grad-'+c.key+')'\"/>\n          <polyline :points=\"c.line\" fill=\"none\" :stroke=\"c.color\" stroke-width=\"3.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/>\n          <circle v-for=\"pt in c.points.slice(-1)\" :key=\"pt.x\" :cx=\"pt.x\" :cy=\"pt.y\" r=\"4.5\" :fill=\"c.color\"/>\n        </svg>\n        <div class=\"bo-chartfoot\"><span>{{c.start}}</span><span>\u00daltimas {{c.points.length}} muestras</span><span>{{c.end}}</span></div>\n      </div>\n      <div v-else class=\"bo-empty\">Esperando mediciones\u2026</div>\n    </article>\n  </div>\n\n  <div class=\"bo-section\"><h3><i></i> Auditor\u00eda y eventos de seguridad</h3><span>REGISTRO DE AUDITOR\u00cdA</span></div>\n  <article class=\"bo-panel\" style=\"margin-bottom:20px\">\n    <div class=\"bo-panelhead\">\n      <div><div class=\"bo-eyebrow\">REGISTRO HIST\u00d3RICO</div><h3>Actividad reciente del sistema</h3></div>\n      <v-icon color=\"#7c9a99\">mdi-history</v-icon>\n    </div>\n    <div class=\"bo-events\">\n      <div v-for=\"(e,i) in (state.events||[]).slice(0,6)\" :key=\"i\" class=\"bo-event\">\n        <i :class=\"e.level\"></i>\n        <div>{{e.text}}<small>{{time(e.ts)}}</small></div>\n        <span>{{e.level==='critical'?'CR\u00cdTICA':e.level==='warning'?'AVISO':'INFO'}}</span>\n      </div>\n      <div v-if=\"!state.events?.length\" class=\"bo-empty\">Sin eventos registrados.</div>\n    </div>\n  </article>\n\n  <section class=\"bo-lab\">\n    <div class=\"bo-labhead\">\n      <div>\n        <div class=\"bo-eyebrow\"><v-icon size=\"16\">mdi-flask-outline</v-icon> BANCO DE ENSAYOS / SIMULACI\u00d3N EDGE</div>\n        <h3>Laboratorio de Inyecci\u00f3n de Eventos</h3>\n        <p>Dispara escenarios an\u00f3malos directamente al simulador de sensores para probar las alarmas del sistema.</p>\n      </div>\n      <div class=\"bo-labcounter\"><strong>{{ activeScenarioCount }}</strong><span>CONDICIONES ACTIVAS</span></div>\n    </div>\n    <div>\n      <div class=\"bo-togglegrid\">\n        <button v-for=\"t in toggles\" :key=\"t.key\" type=\"button\"\n          :class=\"['bo-toggle', {on: !!simFlags[t.key]}]\"\n          :aria-pressed=\"!!simFlags[t.key]\"\n          @click=\"triggerSim(t.key)\">\n          <v-icon size=\"21\">{{t.icon}}</v-icon>\n          <span>{{t.label}}</span>\n          <span class=\"bo-switch\"><i></i></span>\n        </button>\n      </div>\n      <div class=\"bo-labactions\">\n        <span class=\"bo-labnote\">Inyecci\u00f3n directa al m\u00f3dulo Edge/Sensores \u00b7 Propagaci\u00f3n por MQTT en tiempo real.</span>\n        <button type=\"button\" class=\"bo-labreset\" @click=\"triggerSim('reset')\"><v-icon size=\"16\">mdi-refresh</v-icon> Restablecer normalidad</button>\n      </div>\n    </div>\n  </section>\n\n  <footer class=\"bo-footer\">\n    <span>BUNKEROS / NAPIoT / PR\u00c1CTICA 1</span>\n    <span>Cloud \u00b7 Node-RED Dashboard 2.0 \u00b7 Datos virtuales / Prototipo acad\u00e9mico</span>\n  </footer>\n</div>\n</template>\n<script>\nexport default {\n data(){return {now:Date.now(),timer:null,localNotice:null,toggles:[{key:'calor',label:'Temperatura alta',icon:'mdi-thermometer-high'},{key:'humedad',label:'Humedad alta',icon:'mdi-water-percent'},{key:'reservaBaja',label:'Reserva baja',icon:'mdi-water-minus'},{key:'escotillaAbierta',label:'Escotilla abierta',icon:'mdi-door-open'},{key:'fuga',label:'Fuga de agua',icon:'mdi-water-alert'}]}},\n mounted(){this.timer=setInterval(()=>{this.now=Date.now()},1000)},\n unmounted(){clearInterval(this.timer)},\n computed:{\n  state(){return this.msg?.payload||{mode:'demo',data:{},alerts:[],events:[],history:[]}},\n  clock(){return new Date(this.now).toLocaleString('es-ES',{dateStyle:'medium',timeStyle:'medium'})},\n  stale(){return !this.state.lastUpdate||this.now-this.state.lastUpdate>30000},\n  severity(){if(this.stale||!this.state.complete)return 'unknown';if(this.state.alerts.some(a=>a.level==='critical'))return 'critical';return this.state.alerts.length?'warning':'normal'},\n  simFlags(){\n   const d = this.state.data || {};\n   return {\n    calor: d.temperatura !== null && d.temperatura >= 30,\n    humedad: d.humedad !== null && d.humedad >= 70,\n    reservaBaja: d.nivelAgua !== null && d.nivelAgua < 60,\n    escotillaAbierta: d.puertaAbierta === true,\n    fuga: d.fugaAgua === true\n   };\n  },\n  activeScenarioCount(){return Object.values(this.simFlags).filter(Boolean).length},\n  criticalCount(){return (this.state.alerts||[]).filter(a=>a.level==='critical').length},\n  warningCount(){return (this.state.alerts||[]).filter(a=>a.level==='warning').length},\n  \n  summary(){return this.stale?'Esperando telemetr\u00eda actualizada.':!this.state.complete?'Faltan mediciones; estado no confirmado.':this.state.alerts.length?this.state.alerts.map(a=>a.text).join(' \u00b7 '):'Todas las mediciones recibidas est\u00e1n dentro de los umbrales de prueba.'},\n  metrics(){\n   const d=this.state.data||{};\n   const armado=(d.modoSeguridad||'ARM')==='ARM';\n   const n=(key,title,unit,icon,color,hint,alertLevel,useBar=true)=>({key,title,unit,icon,color,hint,value:this.fmt(d[key]),bar:d[key]==null||!useBar?null:Math.max(0,Math.min(100,d[key])),status:d[key]==null?'unknown':alertLevel?'warning':'normal',label:d[key]==null?'SIN DATOS':alertLevel?'AVISO':'NORMAL'});\n   return [\n    n('temperatura','Temperatura','\u00b0C','mdi-thermometer','amber','Umbral de prueba: 30 \u00b0C',d.temperatura>=30,false),\n    n('humedad','Humedad relativa','%','mdi-water-percent','blue','Umbral de prueba: 70 %',d.humedad>=70,true),\n    n('nivelAgua','Reserva de agua','%','mdi-water-outline','teal','Umbral: < 60 %',d.nivelAgua<60,true),\n    {key:'puerta',title:'Escotilla principal',unit:'',icon:'mdi-door',color:'violet',hint:'Contacto magn\u00e9tico',value:d.puertaAbierta==null?'\u2014':d.puertaAbierta?'Abierta':'Cerrada',bar:null,status:d.puertaAbierta==null?'unknown':(d.puertaAbierta&&armado)?'warning':'normal',label:d.puertaAbierta==null?'SIN DATOS':(d.puertaAbierta&&armado)?'INTRUSI\u00d3N':'NORMAL'},\n    {key:'fuga',title:'Fuga de agua',unit:'',icon:'mdi-water-alert-outline',color:'blue',hint:'Detecci\u00f3n de agua en suelo',value:d.fugaAgua==null?'\u2014':d.fugaAgua?'Detectada':'Sin fuga',bar:null,status:d.fugaAgua==null?'unknown':d.fugaAgua?'critical':'normal',label:d.fugaAgua==null?'SIN DATOS':d.fugaAgua?'CR\u00cdTICA':'NORMAL'}\n   ]\n  },\n  charts(){return [this.makeChart('temperatura','Temperatura interior','\u00b0C',0,40,'#e9af6f'),this.makeChart('humedad','Humedad relativa','%',0,100,'#64b5f6'),this.makeChart('nivelAgua','Disponibilidad de agua','%',0,100,'#59d9c5')]}\n },\n methods:{\n  triggerSim(key){\n   this.send({topic:'bunkeros/sim/trigger',payload:key});\n  },\n  isFanSelected(mode){\n   const d = this.state.data || {};\n   const currentMode = d.fanMode || 'AUTO';\n   if(mode === 'AUTO') return currentMode === 'AUTO';\n   if(currentMode === 'MANUAL') return d.fanEstado === mode;\n   return false;\n  },\n  isValveSelected(mode){\n   const d = this.state.data || {};\n   const currentMode = d.valvulaMode || 'AUTO';\n   if(mode === 'AUTO') return currentMode === 'AUTO';\n   if(currentMode === 'MANUAL') return d.valvulaEstado === (mode === 'OPEN' ? 'OPEN' : 'CLOSED');\n   return false;\n  },\n  isSecuritySelected(mode){\n   const current = (this.state.data || {}).modoSeguridad || 'ARM';\n   return current === mode;\n  },\n  manual(action){\n   this.send({topic:'bunkeros/manual',payload:action});\n  },\n  fmt(v){return typeof v==='number'?v.toLocaleString('es-ES',{maximumFractionDigits:1}):'\u2014'},\n  time(v){return v?new Date(v).toLocaleTimeString('es-ES'):'\u2014'},\n  makeChart(key,title,unit,min,max,color){\n   let h=(this.state.history||[]).filter(x=>typeof x[key]==='number');\n   let points=h.map((d,i)=>({x:44+(h.length===1?233:i*466/(h.length-1)),y:160-148*Math.max(0,Math.min(1,(d[key]-min)/(max-min)))}));\n   let line=points.map(p=>p.x+','+p.y).join(' ');\n   let area=points.length ? (points[0].x + ',160 ' + line + ' ' + points[points.length-1].x + ',160') : '';\n   const limit = key === 'temperatura' ? 30 : key === 'humedad' ? 70 : 60;\n   const limitY = 160 - 148 * Math.max(0, Math.min(1, (limit - min) / (max - min)));\n   return {key,title,unit,min,max,color,points,line,area,limitY,start:this.time(h[0]?.ts),end:this.time(h[h.length-1]?.ts)};\n  }\n }\n}\n</script>\n<style>\n.bo-shell.ultra{position:relative;overflow:hidden;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#e8f2ef;background:radial-gradient(circle at top right,rgba(52,98,102,.22),transparent 28%),linear-gradient(180deg,#08141b,#0b151b 42%,#0b161d);border:1px solid #23353d;border-radius:24px;padding:28px;box-sizing:border-box;max-width:1500px;margin:auto;min-width:0;line-height:1.4;box-shadow:0 25px 60px rgba(0,0,0,.28)}\n.bo-backglow{position:absolute;inset:auto -100px -120px auto;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(113,222,197,.12),transparent 65%);pointer-events:none}\n.bo-shell *{box-sizing:border-box}.bo-header,.bo-brand,.bo-topright,.bo-tilehead,.bo-panelhead,.bo-section,.bo-demo,.bo-footer,.bo-banner,.bo-banner-left,.bo-banner-stats,.bo-pills,.bo-chartfoot{display:flex;align-items:center;justify-content:space-between;gap:12px}.bo-header{padding-bottom:22px;border-bottom:1px solid #22363f}.bo-brand{justify-content:flex-start}.bo-logo{display:grid;place-items:center;width:54px;height:54px;border:1px solid #3f756d;background:linear-gradient(180deg,#183631,#122925);color:#72e0c4;border-radius:16px;box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}.bo-kicker,.bo-eyebrow,.bo-section>span,.bo-footer{font-size:10px;font-weight:700;letter-spacing:1.6px;color:#81999c;text-transform:uppercase}.bo-sub{font-size:12px;color:#89a4a8;margin-top:5px}.bo-brand h1{font-size:36px;line-height:1;margin:4px 0;font-weight:800;letter-spacing:-1.9px}.bo-brand h1 span{color:#71dec5}.bo-brand h1 small{font-size:12px;vertical-align:top;letter-spacing:1px;margin-left:8px;color:#90a2a5}.bo-topright{flex-direction:column;align-items:flex-end;gap:7px}.bo-pills{justify-content:flex-end;flex-wrap:wrap}.bo-pill{padding:5px 10px;border-radius:999px;border:1px solid #33505a;background:#162730;font-size:10px;font-weight:700;letter-spacing:.7px;color:#bbd2d6}.bo-pill.mint{color:#7fe2cb;border-color:#35665d;background:#17342e}.bo-pill.cyan{color:#7dcde2;border-color:#305869;background:#16303a}.bo-pill.violet{color:#c4b1ff;border-color:#56467d;background:#29213c}.bo-clock{font-size:12px;color:#91a5ab;font-variant-numeric:tabular-nums}.bo-live{font-size:10px;font-weight:800;letter-spacing:1px;display:flex;align-items:center;gap:7px;color:#71dec5}.bo-live i,.bo-section h3 i,.bo-legend i,.bo-event>i{width:8px;height:8px;border-radius:50%;background:#71dec5;display:inline-block;flex:none}.bo-live.bad{color:#e9af6f}.bo-live.bad i{background:#e9af6f}.bo-banner{padding:20px;border:1px solid #32554f;background:linear-gradient(115deg,#152d2a,#132129);border-radius:18px;align-items:stretch}.bo-banner-left{justify-content:flex-start;align-items:flex-start;flex:1}.bo-banner.warning{border-color:#7b603c;background:linear-gradient(115deg,#362a1d,#2c2118)}.bo-banner.critical{border-color:#8b454c;background:linear-gradient(115deg,#391e27,#2f1b22)}.bo-banner.unknown{border-color:#4b5158;background:linear-gradient(115deg,#232b31,#1d242a)}.bo-banner-icon{color:#71dec5;padding-top:4px}.bo-banner.warning .bo-banner-icon{color:#e9af6f}.bo-banner.critical .bo-banner-icon{color:#f691a1}.bo-banner h2{font-size:24px;letter-spacing:-.5px;margin:4px 0;color:#f0f6f5}.bo-banner p{color:#b0c2c2;margin:0;font-size:14px;max-width:780px}.bo-banner-stats{align-items:stretch;flex:none}.bo-kpi{min-width:96px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);display:grid;align-content:center;text-align:right}.bo-kpi b{display:block;font-size:28px;font-weight:750;line-height:1}.bo-kpi span{font-size:9px;font-weight:700;color:#a1b4b5;letter-spacing:1px;text-transform:uppercase}.bo-quickgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;width:100%}.bo-quickcard{background:linear-gradient(180deg,#13232b,#101d25);border:1px solid #263842;border-radius:16px;padding:14px 16px}.bo-quickhead{font-size:10px;font-weight:800;letter-spacing:1.1px;color:#85a0a3;text-transform:uppercase}.bo-quickcard strong{display:block;margin-top:6px;font-size:16px;letter-spacing:-.3px}.bo-quickcard span{display:block;margin-top:5px;font-size:12px;color:#8fa3a8}.bo-section{margin:22px 0 12px}.bo-section h3{font-size:15px;letter-spacing:-.25px;margin:0;display:flex;align-items:center;gap:8px}.bo-section h3 i{width:6px;height:6px}.bo-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.bo-tile,.bo-panel{background:linear-gradient(180deg,#13222a,#112029);border:1px solid #2a3a43;border-radius:16px;padding:16px;min-width:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}.bo-icon{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:#24343c;color:#83b8df}.bo-icon.amber{color:#e9af6f;background:#3a3028}.bo-icon.teal{color:#71dec5;background:#203e3a}.bo-icon.violet{color:#b7a7e8;background:#322d40}.bo-tag{font-size:9px;font-weight:800;letter-spacing:.7px;white-space:nowrap;color:#79d7af;text-transform:uppercase}.bo-tag.warning{color:#e9af6f}.bo-tag.critical{color:#ff9ca9}.bo-tag.unknown{color:#9aa9af}.bo-label{color:#a0b3b9;font-size:12px;margin-top:14px}.bo-val{font-size:clamp(24px,2.7vw,35px);font-weight:760;letter-spacing:-1.3px;white-space:nowrap;margin:3px 0 7px;font-variant-numeric:tabular-nums}.bo-val small{font-size:15px;margin-left:3px;color:#95a9ac;letter-spacing:0;font-weight:500}.bo-track{height:6px;border-radius:4px;background:#2b3d45;margin:10px 0 8px}.bo-track i{height:100%;display:block;border-radius:4px;background:#78b8df;transition:width .4s}.bo-track i.teal{background:#71dec5}.bo-foot{font-size:10px;color:#82969e;min-height:16px}.bo-charts{display:grid;grid-template-columns:repeat(3, minmax(0, 1fr));gap:13px;margin-bottom:20px}\n.bo-bottom{display:grid;grid-template-columns:1fr 1fr;gap:12px}.bo-panelhead{align-items:flex-start;margin-bottom:16px}.bo-panel h3{font-size:17px;margin:3px 0;letter-spacing:-.4px}.bo-legend{font-size:11px;color:#a4b8bc;display:flex;align-items:center;gap:5px}.bo-chart svg{width:100%;height:160px;overflow:visible}.bo-chartfoot{color:#8a9fa5;font-size:10px}.bo-empty{display:grid;place-content:center;justify-items:center;text-align:center;color:#8fa2a9;min-height:180px;font-size:13px;gap:6px}.bo-empty p{margin:0;font-weight:650;color:#c3d4d7}.bo-empty small{max-width:250px}.bo-event{display:flex;gap:10px;align-items:center;border-top:1px solid #293b44;padding:8px 0;color:#d2dfe0;font-size:12px}.bo-event>i.warning{background:#e9af6f}.bo-event>i.critical{background:#f691a1}.bo-event>div{flex:1}.bo-event small{display:block;color:#849ca2;font-size:10px;margin-top:2px}.bo-event>span{font-size:9px;letter-spacing:.7px;color:#a4b5b7}.bo-weather{color:#b6c8c9;display:grid;gap:6px}.bo-weathercity{font-size:14px;font-weight:700;color:#94cfc2;letter-spacing:.4px}.bo-weather strong{font-size:46px;color:#e8f2ef;letter-spacing:-2px}.bo-weather strong small{font-size:19px;letter-spacing:0;margin-left:3px}.bo-weather p{margin:0;font-size:15px}.bo-weathermeta{font-size:12px;color:#a3b7ba}.bo-weather>small{color:#81999c}.bo-demo{margin-top:20px;padding:14px 0;border-top:1px solid #293b44;flex-wrap:wrap}.bo-demo b{font-size:13px;color:#c8dada;display:flex;align-items:center;gap:6px}.bo-demo p{color:#84999e;font-size:11px;margin:4px 0} .bo-interlock-warning{display:flex;align-items:flex-start;gap:9px;padding:10px 12px;margin-top:11px;border:1px solid #9d6443;border-radius:10px;background:#342b23;color:#ffdbad;font-size:12px;line-height:1.4}\n .bo-interlock-warning .v-icon{flex:none;color:#ffc284}\n .bo-command-notice{display:flex;align-items:flex-start;gap:9px;margin-top:12px;padding:12px 14px;border:1px solid #45626b;border-radius:11px;background:#1a3038;color:#c8e1e6;font-size:12px;line-height:1.45}\n .bo-command-notice .v-icon{flex:none}\n .bo-command-notice.error{border-color:#a84d5d;background:#3a2028;color:#ffd3db}\n .bo-command-notice.warning{border-color:#a07946;background:#35291d;color:#ffdfaf}\n .bo-command-notice.success{border-color:#398775;background:#1b3a32;color:#baf5df}\n .bo-buttons{display:flex;gap:6px;flex-wrap:wrap}.bo-buttons button{border:1px solid #3b5359;border-radius:10px;color:#bfd4d4;background:#182a31;padding:9px 12px;font:inherit;font-size:11px;cursor:pointer;transition:.2s ease}.bo-buttons button:hover{transform:translateY(-1px);border-color:#59767d}.bo-buttons button.selected{border-color:#71dec5;color:#71dec5;background:#1d3834;box-shadow:0 0 0 1px rgba(113,222,197,.15) inset}.bo-buttons button:focus-visible{outline:2px solid #71dec5;outline-offset:2px}.bo-footer{font-size:9px;letter-spacing:1px;padding-top:12px;border-top:1px solid #293b44;flex-wrap:wrap}.bo-shell .v-icon{line-height:1}\n@media(max-width:1180px){.bo-toprow{grid-template-columns:1fr!important;}\n.bo-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.bo-quickgrid{grid-template-columns:1fr}.bo-banner{flex-direction:column}.bo-banner-stats{width:100%}}\n@media(max-width:760px){.bo-shell.ultra{padding:14px;border-radius:12px}.bo-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.bo-tile,.bo-panel,.bo-quickcard{padding:12px}.bo-charts,.bo-bottom{grid-template-columns:1fr}.bo-brand h1{font-size:27px}.bo-header{align-items:flex-start;flex-wrap:wrap}.bo-topright{align-items:flex-start}.bo-banner{padding:12px}.bo-banner h2{font-size:18px}.bo-kpi{min-width:unset;flex:1;text-align:left}.bo-section>span{display:none}.bo-val{font-size:26px}.bo-kicker{font-size:8px}}\n@media(max-width:470px){.bo-grid{grid-template-columns:1fr}.bo-brand{align-items:flex-start}.bo-logo{width:46px;height:46px;flex:none}.bo-banner-stats{flex-wrap:wrap}.bo-kpi{min-width:78px}.bo-quickcard strong{font-size:14px}.bo-chart svg{height:140px}.bo-brand h1{font-size:25px}.bo-pills{gap:5px}}\n@media(prefers-reduced-motion:reduce){.bo-shell *{transition:none!important;animation:none!important}}\n\n/* Ajustes de legibilidad y consola profesional */\n.bo-shell.ultra .bo-header{gap:22px}\n.bo-shell.ultra .bo-sub{letter-spacing:.15px;color:#9fbab9}\n.bo-shell.ultra .bo-brand h1{letter-spacing:-1.6px}\n.bo-shell.ultra .bo-pill{font-size:9px;white-space:nowrap}\n.bo-lab{background:linear-gradient(145deg,#14272c,#102128);border:1px solid #31545a;border-radius:19px;padding:19px;margin-top:22px;position:relative;overflow:hidden}\n.bo-lab::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#72e0c4,transparent)}\n.bo-labhead{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:14px}\n.bo-labhead .bo-eyebrow{color:#70c6b7;display:flex;gap:7px;align-items:center}\n.bo-labhead h3{font-size:19px;font-weight:750;color:#edf5f5;margin:5px 0;letter-spacing:-.3px}\n.bo-labhead p{font-size:12px;color:#9cb7b7;margin:5px 0 0;max-width:600px}\n.bo-labcounter{display:grid;justify-items:end;gap:2px;flex:none}\n.bo-labcounter strong{font-size:31px;line-height:1;color:#78e6cc;font-variant-numeric:tabular-nums}\n.bo-labcounter span{font-size:9px;color:#a3bdc0;letter-spacing:1.05px;font-weight:750}\n.bo-togglegrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}\n.bo-toggle{min-width:0;min-height:84px;display:flex;align-items:flex-start;flex-direction:column;justify-content:space-between;gap:5px;background:#172b33;color:#b8ced0;border:1px solid #344e58;border-radius:13px;padding:12px;font-size:11px;font-family:inherit;text-align:left;cursor:pointer;transition:background .2s,border-color .2s,box-shadow .2s}\n.bo-toggle .v-icon{color:#7c9da5}\n.bo-toggle>span:nth-of-type(1){font-size:12px;font-weight:700;line-height:1.2}\n.bo-toggle .bo-switch{align-self:flex-end;margin-top:-22px;width:31px;height:18px;border-radius:20px;border:1px solid #47616a;background:#243941;display:flex;align-items:center;padding:2px;transition:background .2s}\n.bo-toggle .bo-switch i{display:block;width:12px;height:12px;border-radius:50%;background:#9db2b7;transition:transform .2s}\n.bo-toggle:hover:not(:disabled){border-color:#79cfbd;background:#1a343a}\n.bo-toggle.on{color:#e5faf4;border-color:#65cbb4;background:linear-gradient(140deg,#1c4943,#193b3b);box-shadow:inset 0 0 0 1px rgba(101,203,180,.11)}\n.bo-toggle.on .v-icon{color:#81ead0}\n.bo-toggle.on .bo-switch{background:#439b87;border-color:#6ce0c7}\n.bo-toggle.on .bo-switch i{background:white;transform:translateX(13px)}\n.bo-toggle:focus-visible{outline:2px solid #81ead0;outline-offset:3px}\n.bo-toggle:disabled{cursor:not-allowed;opacity:.55}\n.bo-labactions{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin-top:15px;flex-wrap:wrap}\n.bo-labnote{margin-right:auto;color:#95acad;font-size:11px}\n.bo-labactions button{border-radius:10px;padding:9px 13px;font:inherit;font-size:12px;font-weight:650;cursor:pointer;display:inline-flex;align-items:center;gap:7px}\n.bo-laball{color:#dce9e7;background:#28434b;border:1px solid #466a73}\n.bo-labreset{background:#71dec5;color:#0c2926;border:1px solid #71dec5}\n.bo-labactions button:disabled{opacity:.5;cursor:not-allowed}\n.bo-labactions button:focus-visible{outline:2px solid #ffffff;outline-offset:2px}\n@media(max-width:1140px){.bo-togglegrid{grid-template-columns:repeat(3,minmax(0,1fr))}}\n@media(max-width:680px){.bo-lab{padding:12px}.bo-togglegrid{grid-template-columns:repeat(2,minmax(0,1fr))}.bo-labhead{flex-wrap:wrap}.bo-labcounter{justify-items:start}.bo-toggle>span:nth-of-type(1){font-size:11px}.bo-labactions{justify-content:stretch}.bo-labactions button{flex:1;justify-content:center}.bo-labnote{width:100%}}\n\n/* Toprow 66% / 33% perfecta alineaci\u00f3n */\n.bo-toprow{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin:20px 0 24px;align-items:stretch}\n.bo-toprow .bo-banner{margin:0;height:100%;box-sizing:border-box}\n.bo-toprow .bo-weather-widget{margin:0;height:100%;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;padding:20px;border-radius:18px}\n.bo-weather-head{font-size:10px;font-weight:800;letter-spacing:1.1px;color:#85a0a3;text-transform:uppercase;margin-bottom:8px}\n.bo-weather-body{font-size:22px;font-weight:700;letter-spacing:-.4px;color:#e8f2ef;display:flex;align-items:center;gap:10px}\n.bo-weather-temp{color:#71dec5;margin-left:auto;font-variant-numeric:tabular-nums}\n.bo-weather-desc{font-size:12px;color:#8fa3a8;margin-top:8px;line-height:1.4}\n.bo-weather-time{font-size:10px;color:#5a767d;margin-top:6px}\n\n/* Actuadores: 3 columnas sim\u00e9tricas con misma altura y gap */\n.bo-charts{display:grid;grid-template-columns:repeat(3, minmax(0, 1fr));gap:14px;margin-bottom:24px;align-items:stretch}\n.bo-charts .bo-panel{display:flex;flex-direction:column;justify-content:space-between;min-height:140px;box-sizing:border-box}\n.bo-charts .bo-buttons{margin-top:auto;padding-top:14px}\n\n</style>\n",
+    "storeOutMessages": false,
+    "passthru": false,
+    "resendOnRefresh": true,
+    "templateScope": "local",
+    "className": "",
+    "x": 820,
+    "y": 140,
+    "wires": [
+      [
+        "cf00da0100000001",
+        "cf00da0100000099"
+      ]
+    ],
+    "info": "P1 Cloud: cabecera sobria, simulador de 5 condiciones independientes, alarmas simult\u00e1neas, visualizaci\u00f3n MQTT / OpenWeatherMap al integrar los compa\u00f1eros. No controla el b\u00fanker real."
+  },
+  {
+    "id": "cf00da0100000001",
+    "type": "link out",
+    "z": "b375000000000001",
+    "name": "Comandos manuales UI \u2192 MQTT",
+    "mode": "link",
+    "links": [
+      "e4553964-5e9f-4203-bcc7-fce4b9d50fb0"
+    ],
+    "x": 1175,
+    "y": 120,
+    "wires": []
+  },
+  {
+    "id": "96bcb067-3585-4953-844f-feca2e7de5e0",
+    "type": "link in",
+    "z": "b375000000000001",
+    "name": "Estado Consolidado desde Backend",
+    "links": [
+      "5356c917-e77b-4cae-a036-a3bc2d29e33b"
+    ],
+    "x": 550,
+    "y": 140,
+    "wires": [
+      [
+        "b37500000000000e"
+      ]
+    ]
+  },
+  {
+    "id": "cf00da0100000099",
+    "type": "link out",
+    "z": "b375000000000001",
+    "name": "Ensayos UI \u2192 Simulaci\u00f3n",
+    "mode": "link",
+    "links": [
+      "cf00da0100000002"
+    ],
+    "x": 1175,
+    "y": 160,
+    "wires": []
+  },
+  {
+    "id": "f1af6283ff14e9cd",
+    "type": "function",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_ensayos",
+    "name": "Control escenarios",
+    "func": "const defaults = {\n    calor: false,\n    humedad: false,\n    reservaBaja: false,\n    fuga: false,\n    escotillaAbierta: false,\n    gas: false\n};\nlet estados = Object.assign({}, defaults, flow.get('escenarios') || {});\nconst comando = msg.payload;\nif (comando === 'reset') {\n    estados = { ...defaults };\n} else if (Object.prototype.hasOwnProperty.call(defaults, comando)) {\n    estados[comando] = !estados[comando];\n} else {\n    return null;\n}\nflow.set('escenarios', estados);\nmsg.payload = estados;\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 500,
+    "y": 310,
+    "wires": [
+      [
+        "e8c4a4ae6243e7c6",
+        "918f0c87a0358906",
+        "bb7b5b81ca501d5c",
+        "a13b59b540098ca5"
+      ]
+    ]
+  },
+  {
+    "id": "7a797ece2c4c14ef",
+    "type": "inject",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_ensayos",
+    "name": "Alternar humedad alta",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "humedad",
+    "payloadType": "str",
+    "x": 180,
+    "y": 280,
+    "wires": [
+      [
+        "f1af6283ff14e9cd"
+      ]
+    ]
+  },
+  {
+    "id": "118490c7aa92cfc6",
+    "type": "inject",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_ensayos",
+    "name": "Alternar reserva baja",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "reservaBaja",
+    "payloadType": "str",
+    "x": 180,
+    "y": 340,
+    "wires": [
+      [
+        "f1af6283ff14e9cd"
+      ]
+    ]
+  },
+  {
+    "id": "333ea4b178e13f43",
+    "type": "inject",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_ensayos",
+    "name": "Alternar filtracion",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "fuga",
+    "payloadType": "str",
+    "x": 180,
+    "y": 400,
+    "wires": [
+      [
+        "f1af6283ff14e9cd"
+      ]
+    ]
+  },
+  {
+    "id": "99f9d244b23ab00a",
+    "type": "inject",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_ensayos",
+    "name": "Alternar escotilla",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "escotillaAbierta",
+    "payloadType": "str",
+    "x": 180,
+    "y": 460,
+    "wires": [
+      [
+        "f1af6283ff14e9cd"
+      ]
+    ]
+  },
+  {
+    "id": "882c73b00ac4aca6",
+    "type": "inject",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_ensayos",
+    "name": "Restablecer normalidad",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "reset",
+    "payloadType": "str",
+    "x": 180,
+    "y": 160,
+    "wires": [
+      [
+        "f1af6283ff14e9cd"
+      ]
+    ]
+  },
+  {
+    "id": "a919a34f282aa292",
+    "type": "inject",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_ensayos",
+    "name": "Alternar temperatura alta",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "calor",
+    "payloadType": "str",
+    "x": 180,
+    "y": 220,
+    "wires": [
+      [
+        "f1af6283ff14e9cd"
+      ]
+    ]
+  },
+  {
+    "id": "027fe5b129ddecce",
+    "type": "inject",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_ensayos",
+    "name": "Reloj de simulacion",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "2",
+    "crontab": "",
+    "once": true,
+    "onceDelay": "1",
+    "topic": "",
+    "payload": "iso",
+    "payloadType": "date",
+    "x": 600,
+    "y": 100,
+    "wires": [
+      [
+        "e8c4a4ae6243e7c6",
+        "918f0c87a0358906",
+        "bb7b5b81ca501d5c",
+        "a13b59b540098ca5"
+      ]
+    ]
+  },
+  {
+    "id": "e8c4a4ae6243e7c6",
+    "type": "function",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_ambiente",
+    "name": "Sensor ambiente DHT22 + MQ-2 (virtual)",
+    "func": "// DHT22 + MQ-2 virtuales: gas_ppm es una SIMULACION, no una medida calibrada.\nconst s = flow.get('escenarios') || {};\nmsg.topic = 'sensor/dht11';\nmsg.payload = {\n    temperature_c: Number((s.calor ? 34 + Math.random() : 23 + Math.random() * 3).toFixed(1)),\n    humidity_pct: Number((s.humedad ? 78 + Math.random() : 50 + Math.random() * 10).toFixed(1)),\n    gas_ppm: Number((s.gas ? 420 + Math.random() * 60 : 95 + Math.random() * 55).toFixed(0))\n};\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1000,
+    "y": 180,
+    "wires": [
+      [
+        "ef147af0b84b765c"
+      ]
+    ]
+  },
+  {
+    "id": "918f0c87a0358906",
+    "type": "function",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_ambiente",
+    "name": "Sensor 2 \u2014 Reed virtual",
+    "func": "\nconst s = flow.get(\"escenarios\") || {};\n\nmsg.topic = \"sensor/reed\";\nmsg.payload = {\n    hatch_state: s.escotillaAbierta ? \"open\" : \"closed\"\n};\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1000,
+    "y": 240,
+    "wires": [
+      [
+        "ef147af0b84b765c"
+      ]
+    ]
+  },
+  {
+    "id": "bb7b5b81ca501d5c",
+    "type": "function",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_hidrico",
+    "name": "Sensor 3 \u2014 HC-SR04 virtual",
+    "func": "const s = flow.get('escenarios') || {};\nmsg.topic = 'sensor/ultrasonico';\nmsg.payload = {\n    // Rango normal por debajo de 80%, para ensayar reapertura autom\u00e1tica.\n    tank_level_pct: Number((s.reservaBaja ? 12 + Math.random() * 3 : 74 + Math.random() * 5).toFixed(1))\n};\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1020,
+    "y": 400,
+    "wires": [
+      [
+        "emp_hidrico_node"
+      ]
+    ]
+  },
+  {
+    "id": "a13b59b540098ca5",
+    "type": "function",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_hidrico",
+    "name": "Sensor 4 \u2014 Detector de agua virtual",
+    "func": "\nconst s = flow.get(\"escenarios\") || {};\n\nmsg.topic = \"sensor/fuga\";\nmsg.payload = {\n    leak_detected: !!s.fuga\n};\n\nreturn msg;\n  ",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1020,
+    "y": 460,
+    "wires": [
+      [
+        "emp_hidrico_node"
+      ]
+    ]
+  },
+  {
+    "id": "ef147af0b84b765c",
+    "type": "function",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_ambiente",
+    "name": "Empaquetar Ambiente",
+    "func": "const BASE = \"bunker/g5\";\nlet datos = flow.get('sensores') || {};\nconst estado = flow.get('actuadores_simulados') || {};\n\nswitch (msg.topic) {\n    case 'sensor/dht11': datos.ambiente = msg.payload; break;\n    case 'sensor/reed': datos.acceso = msg.payload.hatch_state; break;\n    default: return null;\n}\nflow.set('sensores', datos);\nconst timestamp = new Date().toISOString();\nconst salida = [null, null];\n\nif (msg.topic === 'sensor/dht11' && datos.ambiente) {\n    salida[0] = {\n        topic: BASE + '/telemetria/ambiente', qos: 0, retain: false,\n        payload: {\n            device_id: 'esp32-env-01',\n            temperature_c: datos.ambiente.temperature_c,\n            humidity_pct: datos.ambiente.humidity_pct,\n            gas_ppm: datos.ambiente.gas_ppm,\n            fan_state: estado.fan_state || null,\n            timestamp,\n            simulated: true\n        }\n    };\n}\nif (msg.topic === 'sensor/reed') {\n    salida[1] = {\n        topic: BASE + '/telemetria/acceso', qos: 1, retain: true,\n        payload: {device_id: 'esp32-env-01', hatch_state: datos.acceso, timestamp, simulated: true}\n    };\n}\nreturn salida;",
+    "outputs": 2,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1280,
+    "y": 210,
+    "wires": [
+      [
+        "4ed9dcc32ea31279",
+        "debug_amb"
+      ],
+      [
+        "cb911158dd03f9f0",
+        "debug_amb"
+      ]
+    ]
+  },
+  {
+    "id": "4ed9dcc32ea31279",
+    "type": "mqtt out",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_ambiente",
+    "name": "Publicar Sist. ambiente",
+    "topic": "",
+    "qos": "0",
+    "retain": "false",
+    "respTopic": "",
+    "contentType": "",
+    "userProps": "",
+    "correl": "",
+    "expiry": "",
+    "broker": "9f4c978c3b0727f3",
+    "x": 1520,
+    "y": 170,
+    "wires": []
+  },
+  {
+    "id": "bb5ff57ea971bf1a",
+    "type": "mqtt out",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_hidrico",
+    "name": "Publicar Sist. hidrico",
+    "topic": "",
+    "qos": "0",
+    "retain": "false",
+    "respTopic": "",
+    "contentType": "",
+    "userProps": "",
+    "correl": "",
+    "expiry": "",
+    "broker": "9f4c978c3b0727f3",
+    "x": 1540,
+    "y": 430,
+    "wires": []
+  },
+  {
+    "id": "cb911158dd03f9f0",
+    "type": "mqtt out",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_ambiente",
+    "name": "Publicar Sist. Acceso",
+    "topic": "",
+    "qos": "1",
+    "retain": "true",
+    "respTopic": "",
+    "contentType": "",
+    "userProps": "",
+    "correl": "",
+    "expiry": "",
+    "broker": "9f4c978c3b0727f3",
+    "x": 1520,
+    "y": 250,
+    "wires": []
+  },
+  {
+    "id": "44ca5f02e610d2cb",
+    "type": "function",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_actuadores",
+    "name": "Alerta de fuga",
+    "func": "// Entra \u00fanicamente DESPU\u00c9S del interbloqueo del motor virtual de la Fase 1.\nconst BASE = \"bunker/g5\";\nif (msg.topic !== BASE + '/telemetria/hidrico') return null;\nconst p = msg.payload;\nif (!p || typeof p.leak_detected !== 'boolean') return null;\nconst fuga = p.leak_detected;\nconst anterior = context.get('fugaAnterior');\nif (anterior === fuga) return null;\nif (fuga && p.valve_state !== 'CLOSED') {\n    node.warn('Fuga detectada sin confirmaci\u00f3n de cierre: no se declara cierre ejecutado');\n    return null;\n}\ncontext.set('fugaAnterior', fuga);\nreturn {\n    topic: BASE + '/alerta/fuga', qos: 1, retain: true,\n    payload: {\n        device_id: p.device_id || 'esp32-water-01',\n        severity: fuga ? 'CRITICAL' : 'INFO',\n        event: fuga ? 'WATER_LEAK_TRIGGERED' : 'WATER_LEAK_CLEARED',\n        active: fuga,\n        ...(fuga ? {action_taken: 'VALVE_CLOSED_IMMEDIATELY'} : {}),\n        simulated: true,\n        timestamp: new Date().toISOString()\n    }\n};\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1200,
+    "y": 1000,
+    "wires": [
+      [
+        "0388fed67065d728"
+      ]
+    ]
+  },
+  {
+    "id": "d7393835e65dfc9b",
+    "type": "function",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_actuadores",
+    "name": "Alerta de escotilla",
+    "func": "const BASE = \"bunker/g5\";\nif (msg.topic !== BASE + '/telemetria/acceso') return null;\nconst p = msg.payload;\nif (!p || !['open', 'closed'].includes(p.hatch_state)) return null;\n\n// Por defecto arranca ARMADO (true) a menos que se haya puesto en DISARM expl\u00edcitamente\nconst modo = flow.get('modoProteccion');\nconst armado = modo !== false; \nconst anterior = context.get('estadoAnterior');\nlet alarmaActiva = context.get('alarmaActiva') === true;\ncontext.set('estadoAnterior', p.hatch_state);\n\nif (armado && p.hatch_state === 'open' && !alarmaActiva) {\n    context.set('alarmaActiva', true);\n    return {\n        topic: BASE + '/alerta/escotilla', qos: 1, retain: true,\n        payload: {\n            device_id: p.device_id || 'esp32-water-01',\n            severity: 'CRITICAL',\n            event: 'UNAUTHORIZED_HATCH_OPEN',\n            active: true,\n            simulated: true,\n            timestamp: new Date().toISOString()\n        }\n    };\n}\nif ((p.hatch_state === 'closed' || !armado) && alarmaActiva) {\n    context.set('alarmaActiva', false);\n    return {\n        topic: BASE + '/alerta/escotilla', qos: 1, retain: true,\n        payload: {\n            device_id: p.device_id || 'esp32-water-01',\n            severity: 'INFO',\n            event: 'HATCH_ALERT_CLEARED',\n            active: false,\n            simulated: true,\n            timestamp: new Date().toISOString()\n        }\n    };\n}\nreturn null;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1200,
+    "y": 940,
+    "wires": [
+      [
+        "0388fed67065d728"
+      ]
+    ]
+  },
+  {
+    "id": "0388fed67065d728",
+    "type": "mqtt out",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_actuadores",
+    "name": "Publicar alertas",
+    "topic": "",
+    "qos": "1",
+    "retain": "true",
+    "respTopic": "",
+    "contentType": "",
+    "userProps": "",
+    "correl": "",
+    "expiry": "",
+    "broker": "9f4c978c3b0727f3",
+    "x": 1500,
+    "y": 1000,
+    "wires": []
+  },
+  {
+    "id": "b01a3f6a7c100700",
+    "type": "mqtt in",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_actuadores",
+    "name": "Recibir Telemetr\u00eda",
+    "topic": "bunker/g5/telemetria/#",
+    "qos": "1",
+    "datatype": "auto-detect",
+    "broker": "9f4c978c3b0727f3",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 920,
+    "y": 800,
+    "wires": [
+      [
+        "d7393835e65dfc9b",
+        "83f269e668d2abe8",
+        "51d14cd5c1d8b32b"
+      ]
+    ]
+  },
+  {
+    "id": "83f269e668d2abe8",
+    "type": "function",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_actuadores",
+    "name": "Alerta de reserva hidrica baja",
+    "func": "const BASE = \"bunker/g5\";\nif (msg.topic !== BASE + '/telemetria/hidrico') return null;\nlet p = msg.payload;\nif (Buffer.isBuffer(p)) p = p.toString('utf8');\nif (typeof p === 'string') {try {p = JSON.parse(p);} catch (e) {return null;}}\nif (!p || typeof p !== 'object') return null;\nconst nivel = p.tank_level_pct;\nif (typeof nivel !== 'number' || !Number.isFinite(nivel) || nivel < 0 || nivel > 100) return null;\nconst alerta = nivel < 60;\nconst anterior = context.get('reservaBajaAnterior');\nif (anterior === alerta) return null;\ncontext.set('reservaBajaAnterior', alerta);\nreturn {\n    topic: BASE + '/alerta/hidrico', qos: 1, retain: true,\n    payload: {device_id: p.device_id || 'esp32-water-01',\n        severity: alerta ? 'WARNING' : 'INFO',\n        event: alerta ? 'LOW_WATER_LEVEL' : 'WATER_LEVEL_RECOVERED',\n        tank_level_pct: nivel, threshold_pct: 60, active: alerta,\n        simulated: true, timestamp: new Date().toISOString()}\n};\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1200,
+    "y": 1060,
+    "wires": [
+      [
+        "0388fed67065d728"
+      ]
+    ]
+  },
+  {
+    "id": "a911f3e54e4ce3dd",
+    "type": "inject",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_actuadores",
+    "name": "Activar proteccion",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "ARM",
+    "payloadType": "str",
+    "x": 180,
+    "y": 1020,
+    "wires": [
+      [
+        "5ec120441d06625e"
+      ]
+    ]
+  },
+  {
+    "id": "5ba714e0f53a4fd4",
+    "type": "inject",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_actuadores",
+    "name": "Desactivar proteccion",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "DISARM",
+    "payloadType": "str",
+    "x": 180,
+    "y": 1070,
+    "wires": [
+      [
+        "5ec120441d06625e"
+      ]
+    ]
+  },
+  {
+    "id": "5ec120441d06625e",
+    "type": "function",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_actuadores",
+    "name": "Modo Proteccion",
+    "func": "\nif (msg.payload === \"ARM\") {\n    flow.set(\"modoProteccion\", true);\n    node.status({\n        fill: \"green\",\n        shape: \"dot\",\n        text: \"Protecci\u00f3n activada\"\n    });\n}\n\nif (msg.payload === \"DISARM\") {\n    flow.set(\"modoProteccion\", false);\n    node.status({\n        fill: \"grey\",\n        shape: \"ring\",\n        text: \"Protecci\u00f3n desactivada\"\n    });\n}\n\nreturn null;\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 440,
+    "y": 1045,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "7ff91fea26485ed4",
+    "type": "mqtt in",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_monitor",
+    "name": "Recibir alertas",
+    "topic": "bunker/g5/alerta/#",
+    "qos": "1",
+    "datatype": "auto-detect",
+    "broker": "9f4c978c3b0727f3",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 180,
+    "y": 1200,
+    "wires": [
+      [
+        "edge_unified_debug"
+      ]
+    ]
+  },
+  {
+    "id": "51d14cd5c1d8b32b",
+    "type": "function",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_actuadores",
+    "name": "Coordinador Edge (FSM & Interbloqueo)",
+    "func": "// FASE 1: motor de actuaci\u00f3n VIRTUAL. No sustituye al interlock f\u00edsico del ESP32.\nconst BASE = \"bunker/g5\";\nlet p = msg.payload;\nif (Buffer.isBuffer(p)) p = p.toString('utf8');\nif (typeof p === 'string') {\n    try { p = JSON.parse(p); } catch (e) { node.warn('JSON no v\u00e1lido'); return null; }\n}\nif (!p || typeof p !== 'object' || Array.isArray(p)) return null;\nlet s = context.get('controlBunker') || {\n    temperatura: null, gas: null, nivel: null, fuga: null,\n    fan: 'OFF', valve: 'OPEN', fanMode: 'AUTO', valveMode: 'AUTO',\n    fanRequest: null, valveRequest: null\n};\nconst previousFan = s.fan;\nconst previousValve = s.valve;\nlet motivoFan = 'AUTO', motivoValve = 'AUTO';\nlet resultadoComando = null, valveError = null, fanError = null;\nlet hidroVerificado = null;\n\nif (msg.topic === BASE + '/telemetria/ambiente') {\n    if (typeof p.temperature_c !== 'number' || !Number.isFinite(p.temperature_c)) return null;\n    s.temperatura = p.temperature_c;\n    if (typeof p.gas_ppm === 'number' && Number.isFinite(p.gas_ppm)) s.gas = p.gas_ppm;\n} else if (msg.topic === BASE + '/telemetria/hidrico') {\n    if (typeof p.tank_level_pct !== 'number' || !Number.isFinite(p.tank_level_pct) ||\n        p.tank_level_pct < 0 || p.tank_level_pct > 100 ||\n        typeof p.leak_detected !== 'boolean') return null;\n    s.nivel = p.tank_level_pct;\n    s.fuga = p.leak_detected;\n    hidroVerificado = p;\n} else if (msg.topic === BASE + '/control/ventilacion') {\n    if (p.target !== 'fan' || !['ON','OFF','AUTO'].includes(p.action)) return null;\n    // Corte de emergencia did\u00e1ctico; umbral real del MQ-2 requiere calibraci\u00f3n.\n    const emergency = (s.temperatura !== null && s.temperatura >= 30) || (s.gas !== null && s.gas >= 350);\n    if (p.action === 'OFF' && emergency) {\n        resultadoComando = 'REJECTED_SAFETY_OVERRIDE';\n        fanError = 'safety_override';\n    } else {\n        s.fanMode = p.action === 'AUTO' ? 'AUTO' : 'MANUAL';\n        s.fanRequest = p.action === 'AUTO' ? null : p.action;\n        resultadoComando = 'ACCEPTED';\n    }\n} else if (msg.topic === BASE + '/control/seguridad') {\n    if (p.action === 'ARM') {\n        flow.set('modoProteccion', true);\n        resultadoComando = 'ACCEPTED_ARM';\n    } else if (p.action === 'DISARM') {\n        flow.set('modoProteccion', false);\n        resultadoComando = 'ACCEPTED_DISARM';\n    }\n} else if (msg.topic === BASE + '/control/valvula') {\n    if (p.target !== 'valve' || !['OPEN','CLOSE','AUTO'].includes(p.action)) return null;\n    if (p.action === 'OPEN' && (s.fuga !== false || s.nivel === null || s.nivel >= 100)) {\n        resultadoComando = 'REJECTED_INTERLOCK';\n        valveError = 'interlock_active';\n    } else {\n        s.valveMode = p.action === 'AUTO' ? 'AUTO' : 'MANUAL';\n        s.valveRequest = p.action === 'AUTO' ? null : p.action;\n        resultadoComando = 'ACCEPTED';\n    }\n} else return null;\n\nconst fanEmergency = (s.temperatura !== null && s.temperatura >= 30) || (s.gas !== null && s.gas >= 350);\nif (fanEmergency) {\n    s.fan = 'ON'; motivoFan = 'SAFETY_OVERRIDE_SIMULATED';\n} else if (s.fanMode === 'MANUAL') {\n    s.fan = s.fanRequest; motivoFan = 'MANUAL';\n} else if (s.temperatura !== null) {\n    if (s.temperatura <= 27 && (s.gas === null || s.gas < 350)) s.fan = 'OFF';\n    motivoFan = 'TEMPERATURE_CONTROL';\n}\n\nif (s.fuga === true) {\n    s.valve = 'CLOSED'; motivoValve = 'LEAK_SAFETY';\n} else if (s.fuga === false) {\n    if (s.valveMode === 'MANUAL') {\n        s.valve = s.valveRequest === 'CLOSE' ? 'CLOSED' : 'OPEN';\n        motivoValve = 'MANUAL';\n    } else if (s.nivel !== null) {\n        if (s.nivel >= 100) {s.valve = 'CLOSED'; motivoValve = 'TANK_FULL';}\n        else if (s.nivel < 80) {s.valve = 'OPEN'; motivoValve = 'TANK_LOW';}\n    }\n} else {\n    s.valve = 'CLOSED'; motivoValve = 'LEAK_STATUS_UNKNOWN';\n}\n\nconst timestamp = new Date().toISOString();\nconst eventos = [];\nfunction evento(topic, event, reason, activo, extra) {\n    // En la Wiki: ON/OPEN = QoS1 retain; OFF/CLOSED = QoS0 no retain.\n    // Borramos previamente el retained anterior para no dejar un ON/OPEN obsoleto.\n    if (!activo) eventos.push({topic, payload: '', qos: 1, retain: true});\n    eventos.push({\n        topic, qos: activo ? 1 : 0, retain: !!activo,\n        payload: Object.assign({event, reason, timestamp, simulated: true}, extra)\n    });\n}\nif (previousFan !== s.fan) {\n    evento(BASE + '/evento/ventilacion', s.fan === 'ON' ? 'FAN_ON' : 'FAN_OFF',\n        motivoFan, s.fan === 'ON', {device_id: 'esp32-env-01'});\n}\nif (previousValve !== s.valve) {\n    evento(BASE + '/evento/hidrico', s.valve === 'OPEN' ? 'VALVE_OPENED' : 'VALVE_CLOSED',\n        motivoValve, s.valve === 'OPEN', {device_id: 'esp32-water-01', tank_level_pct: s.nivel});\n}\ncontext.set('controlBunker', s);\nflow.set('actuadores_simulados', {fan_state: s.fan, valve_state: s.valve, timestamp});\nconst estado = {\n    topic: BASE + '/estado/actuadores', qos: 1, retain: true,\n    payload: {\n        device_id: 'bunkeros-cloud-simulator',\n        fan_state: s.fan, valve_state: s.valve,\n        fan_mode: s.fanMode, valve_mode: s.valveMode,\n        command_result: resultadoComando,\n        valve_error: valveError, fan_error: fanError,\n        simulated: true, timestamp\n    }\n};\nconst hidrico = hidroVerificado ? {\n    topic: BASE + '/telemetria/hidrico',\n    payload: Object.assign({}, hidroVerificado, {valve_state: s.valve})\n} : null;\nreturn [eventos.length ? eventos : null, estado, hidrico];\n",
+    "outputs": 3,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "// Estado inicial por defecto: AUTO\nlet s = context.get('controlBunker') || {\n    temperatura: null, gas: null, nivel: null, fuga: null,\n    fan: 'OFF', valve: 'OPEN', fanMode: 'AUTO', valveMode: 'AUTO',\n    fanRequest: null, valveRequest: null\n};\ns.fanMode = 'AUTO';\ns.valveMode = 'AUTO';\ncontext.set('controlBunker', s);\nflow.set('actuadores_simulados', {fan_state: s.fan, valve_state: s.valve, timestamp: new Date().toISOString()});",
+    "finalize": "",
+    "libs": [],
+    "x": 1200,
+    "y": 820,
+    "wires": [
+      [
+        "9d4cad2b41e3bc26",
+        "debug_coordinador_edge"
+      ],
+      [
+        "0ac04d4f3e21cc6d",
+        "debug_coordinador_edge"
+      ],
+      [
+        "44ca5f02e610d2cb"
+      ]
+    ]
+  },
+  {
+    "id": "9d4cad2b41e3bc26",
+    "type": "mqtt out",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_actuadores",
+    "name": "Publicar eventos",
+    "topic": "",
+    "qos": "",
+    "retain": "",
+    "respTopic": "",
+    "contentType": "",
+    "userProps": "",
+    "correl": "",
+    "expiry": "",
+    "broker": "9f4c978c3b0727f3",
+    "x": 1530,
+    "y": 740,
+    "wires": [],
+    "info": "QoS/retain din\u00e1micos mediante msg.qos/msg.retain; topic de prueba aislado."
+  },
+  {
+    "id": "0ac04d4f3e21cc6d",
+    "type": "mqtt out",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_actuadores",
+    "name": "Publicar estado de actuadores",
+    "topic": "",
+    "qos": "1",
+    "retain": "true",
+    "respTopic": "",
+    "contentType": "",
+    "userProps": "",
+    "correl": "",
+    "expiry": "",
+    "broker": "9f4c978c3b0727f3",
+    "x": 1650,
+    "y": 920,
+    "wires": []
+  },
+  {
+    "id": "1f8d8e5793f3167f",
+    "type": "mqtt in",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_monitor",
+    "name": "Recibir eventos",
+    "topic": "bunker/g5/evento/#",
+    "qos": "1",
+    "datatype": "auto-detect",
+    "broker": "9f4c978c3b0727f3",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 180,
+    "y": 1260,
+    "wires": [
+      [
+        "edge_unified_debug"
+      ]
+    ]
+  },
+  {
+    "id": "b290b2cab5a186ae",
+    "type": "mqtt in",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_monitor",
+    "name": "Recibir estados",
+    "topic": "bunker/g5/estado/actuadores",
+    "qos": "1",
+    "datatype": "auto-detect",
+    "broker": "9f4c978c3b0727f3",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 180,
+    "y": 1320,
+    "wires": [
+      [
+        "edge_unified_debug"
+      ]
+    ]
+  },
+  {
+    "id": "8311c9f791a109fa",
+    "type": "function",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_actuadores",
+    "name": "Preparar comandos manuales",
+    "func": "const BASE = \"bunker/g5\";\nconst ordenes = {\n    FAN_ON: ['ventilacion', 'fan', 'ON'],\n    FAN_OFF: ['ventilacion', 'fan', 'OFF'],\n    FAN_AUTO: ['ventilacion', 'fan', 'AUTO'],\n    VALVE_OPEN: ['valvula', 'valve', 'OPEN'],\n    VALVE_CLOSE: ['valvula', 'valve', 'CLOSE'],\n    VALVE_AUTO: ['valvula', 'valve', 'AUTO']\n};\nconst orden = ordenes[msg.payload];\nif (!orden) return null;\nreturn {\n    topic: BASE + '/control/' + orden[0], qos: 1, retain: false,\n    payload: {\n        target: orden[1], action: orden[2],\n        requested_by: msg.topic === 'bunkeros/manual' ? 'dashboard_admin' : 'node_red_test',\n        timestamp: new Date().toISOString()\n    }\n};\n",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 440,
+    "y": 810,
+    "wires": [
+      [
+        "2b92eb7d28ad63de"
+      ]
+    ]
+  },
+  {
+    "id": "2b92eb7d28ad63de",
+    "type": "mqtt out",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_actuadores",
+    "name": "Publicar comandos manuales",
+    "topic": "",
+    "qos": "1",
+    "retain": "false",
+    "respTopic": "",
+    "contentType": "",
+    "userProps": "",
+    "correl": "",
+    "expiry": "",
+    "broker": "9f4c978c3b0727f3",
+    "x": 690,
+    "y": 920,
+    "wires": []
+  },
+  {
+    "id": "a9e8f1ec9140bb0f",
+    "type": "mqtt in",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_actuadores",
+    "name": "Recibir comandos de control",
+    "topic": "bunker/g5/control/#",
+    "qos": "1",
+    "datatype": "auto-detect",
+    "broker": "9f4c978c3b0727f3",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 920,
+    "y": 700,
+    "wires": [
+      [
+        "51d14cd5c1d8b32b"
+      ]
+    ]
+  },
+  {
+    "id": "3741d3c97b2a915e",
+    "type": "inject",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_actuadores",
+    "name": "Encender ventilacion",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "FAN_ON",
+    "payloadType": "str",
+    "x": 180,
+    "y": 680,
+    "wires": [
+      [
+        "8311c9f791a109fa"
+      ]
+    ]
+  },
+  {
+    "id": "143f7e6620aa9359",
+    "type": "inject",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_actuadores",
+    "name": "Apagar ventilacion",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "FAN_OFF",
+    "payloadType": "str",
+    "x": 180,
+    "y": 730,
+    "wires": [
+      [
+        "8311c9f791a109fa"
+      ]
+    ]
+  },
+  {
+    "id": "df2cc4629ac211da",
+    "type": "inject",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_actuadores",
+    "name": "ventilacion Automatica",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "FAN_AUTO",
+    "payloadType": "str",
+    "x": 180,
+    "y": 780,
+    "wires": [
+      [
+        "8311c9f791a109fa"
+      ]
+    ]
+  },
+  {
+    "id": "37876d3343c5a38a",
+    "type": "inject",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_actuadores",
+    "name": "Abrir valvula",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "VALVE_OPEN",
+    "payloadType": "str",
+    "x": 180,
+    "y": 840,
+    "wires": [
+      [
+        "8311c9f791a109fa"
+      ]
+    ]
+  },
+  {
+    "id": "a8708dfdabf476c9",
+    "type": "inject",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_actuadores",
+    "name": "Cerrar Valvula",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "VALVE_CLOSE",
+    "payloadType": "str",
+    "x": 180,
+    "y": 890,
+    "wires": [
+      [
+        "8311c9f791a109fa"
+      ]
+    ]
+  },
+  {
+    "id": "cb3b44c44aa5bc35",
+    "type": "inject",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_actuadores",
+    "name": "Valvula automatica",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "VALVE_AUTO",
+    "payloadType": "str",
+    "x": 180,
+    "y": 940,
+    "wires": [
+      [
+        "8311c9f791a109fa"
+      ]
+    ]
+  },
+  {
+    "id": "cf00da0100000002",
+    "type": "link in",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_ensayos",
+    "name": "Ensayos desde Dashboard",
+    "links": [
+      "cf00da0100000099"
+    ],
+    "x": 180,
+    "y": 520,
+    "wires": [
+      [
+        "f1af6283ff14e9cd"
+      ]
+    ]
+  },
+  {
+    "id": "edge_unified_debug",
+    "type": "debug",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_monitor",
+    "name": "Debug Bus Eventos & Alertas",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 460,
+    "y": 1260,
+    "wires": []
+  },
+  {
+    "id": "emp_hidrico_node",
+    "type": "function",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_hidrico",
+    "name": "Empaquetar H\u00eddrico",
+    "func": "const BASE = \"bunker/g5\";\nlet datos = flow.get('sensores') || {};\nconst estado = flow.get('actuadores_simulados') || {};\n\nswitch (msg.topic) {\n    case 'sensor/ultrasonico': datos.nivel = msg.payload.tank_level_pct; break;\n    case 'sensor/fuga': datos.fuga = msg.payload.leak_detected; break;\n    default: return null;\n}\nflow.set('sensores', datos);\nconst timestamp = new Date().toISOString();\n\nif (typeof datos.nivel === 'number' && typeof datos.fuga === 'boolean') {\n    return {\n        topic: BASE + '/telemetria/hidrico', qos: 0, retain: false,\n        payload: {\n            device_id: 'esp32-water-01',\n            tank_level_pct: datos.nivel,\n            leak_detected: datos.fuga,\n            valve_state: estado.valve_state || null,\n            timestamp,\n            simulated: true\n        }\n    };\n}\nreturn null;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1300,
+    "y": 430,
+    "wires": [
+      [
+        "bb5ff57ea971bf1a",
+        "debug_hid"
+      ]
+    ]
+  },
+  {
+    "id": "debug_amb",
+    "type": "debug",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_ambiente",
+    "name": "Debug Ambiente",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1780,
+    "y": 210,
+    "wires": []
+  },
+  {
+    "id": "debug_hid",
+    "type": "debug",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_hidrico",
+    "name": "Debug H\u00eddrico",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1800,
+    "y": 430,
+    "wires": []
+  },
+  {
+    "id": "debug_coordinador_edge",
+    "type": "debug",
+    "z": "8a969cd43a7fe382",
+    "g": "group_edge_actuadores",
+    "name": "Debug Coordinador Edge",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1760,
+    "y": 840,
+    "wires": []
+  },
+  {
+    "id": "a00caaf4-9615-4d67-994e-86eca3286eda",
+    "type": "mqtt in",
+    "z": "7a124bcf-0937-4b52-8d89-7bf2cef7093f",
+    "name": "MQTT IN \u00b7 Telemetr\u00eda y Alertas",
+    "topic": "bunker/g5/#",
+    "qos": "0",
+    "datatype": "auto-detect",
+    "broker": "9f4c978c3b0727f3",
+    "inputs": 0,
+    "x": 160,
+    "y": 100,
+    "wires": [
+      [
+        "47d0942e-0b48-408e-9921-64ce3f129673"
+      ]
+    ]
+  },
+  {
+    "id": "1ba10743-7d6a-4a47-a37e-6233dca69863",
+    "type": "link in",
+    "z": "7a124bcf-0937-4b52-8d89-7bf2cef7093f",
+    "name": "Clima exterior (OpenWeatherMap)",
+    "links": [
+      "0dd04cde6924958e"
+    ],
+    "x": 160,
+    "y": 200,
+    "wires": [
+      [
+        "47d0942e-0b48-408e-9921-64ce3f129673"
+      ]
+    ]
+  },
+  {
+    "id": "e4553964-5e9f-4203-bcc7-fce4b9d50fb0",
+    "type": "link in",
+    "z": "7a124bcf-0937-4b52-8d89-7bf2cef7093f",
+    "name": "Comandos desde Dashboard",
+    "links": [
+      "cf00da0100000001"
+    ],
+    "x": 160,
+    "y": 300,
+    "wires": [
+      [
+        "967fa92d-e526-405e-9555-ad20eef8c946"
+      ]
+    ]
+  },
+  {
+    "id": "d0333426-fd2c-4f1d-b729-8366acd532d8",
+    "type": "debug",
+    "z": "7a124bcf-0937-4b52-8d89-7bf2cef7093f",
+    "name": "Debug Backend",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "x": 1140,
+    "y": 180,
+    "wires": []
+  },
+  {
+    "id": "47d0942e-0b48-408e-9921-64ce3f129673",
+    "type": "function",
+    "z": "7a124bcf-0937-4b52-8d89-7bf2cef7093f",
+    "name": "1. Ingesta y Normalizaci\u00f3n",
+    "func": "const now = Date.now();\nconst state = global.get('bunkerCore') || {\n  data: {\n    temperatura: null,\n    humedad: null,\n    nivelAgua: null,\n    puertaAbierta: null,\n    fugaAgua: false,\n    fanEstado: 'OFF',\n    valvulaEstado: 'OPEN',\n    fanMode: 'AUTO',\n    valvulaMode: 'AUTO',\n    modoSeguridad: 'ARM'\n  },\n  meteo: null,\n  history: [],\n  events: [],\n  lastUpdate: null,\n  lastCommand: null\n};\n\nif (!state.data.fanMode) state.data.fanMode = 'AUTO';\nif (!state.data.valvulaMode) state.data.valvulaMode = 'AUTO';\nif (!state.data.modoSeguridad) state.data.modoSeguridad = 'ARM';\n\nlet p = msg.payload;\nif (typeof p === 'string') {\n  try { p = JSON.parse(p); } catch (_) {}\n}\n\nconst HUMAN_EVENTS = {\n  'FAN_ON': 'Extractor de aire encendido',\n  'FAN_OFF': 'Extractor de aire apagado',\n  'VALVE_OPENED': 'V\u00e1lvula de agua abierta',\n  'VALVE_CLOSED': 'V\u00e1lvula de agua cerrada',\n  'WATER_LEAK_TRIGGERED': '\u00a1Alerta cr\u00edtica! Fuga de agua detectada en suelo',\n  'WATER_LEAK_CLEARED': 'Fuga de agua resuelta',\n  'UNAUTHORIZED_HATCH_OPEN': '\u00a1Alerta de intrusi\u00f3n! Escotilla abierta sin autorizaci\u00f3n',\n  'HATCH_ALERT_CLEARED': 'Escotilla cerrada / Per\u00edmetro asegurado',\n  'LOW_WATER_LEVEL': 'Aviso: Reserva h\u00eddrica baja (< 60 %)',\n  'WATER_LEVEL_RECOVERED': 'Reserva h\u00eddrica recuperada',\n  'REJECTED_INTERLOCK': 'Comando rechazado: Interbloqueo de seguridad por fuga activo',\n  'REJECTED_SAFETY_OVERRIDE': 'Comando rechazado: Ventilaci\u00f3n forzada por alta temperatura',\n  'ACCEPTED_ARM': 'Per\u00edmetro armado (Modo Sellado activo)',\n  'ACCEPTED_DISARM': 'Per\u00edmetro desarmado (Acceso autorizado)'\n};\n\nif (msg.topic === 'bunkeros/weather') {\n  if (p && typeof p === 'object') {\n    state.meteo = {\n      ciudad: String(p.ciudad || 'Localidad'),\n      temperatura: typeof p.temperatura === 'number' ? p.temperatura : null,\n      sensacion: typeof p.sensacion === 'number' ? p.sensacion : null,\n      humedad: typeof p.humedad === 'number' ? p.humedad : null,\n      presion: typeof p.presion === 'number' ? p.presion : null,\n      viento: typeof p.viento === 'number' ? p.viento : null,\n      descripcion: String(p.descripcion || ''),\n      icon: p.icon || '\ud83c\udf24\ufe0f',\n      lluvia: Boolean(p.lluvia),\n      tormenta: Boolean(p.tormenta),\n      observedAt: p.observedAt || null,\n      ts: now\n    };\n  }\n} else if (msg.topic && typeof msg.topic === 'string') {\n  const t = msg.topic;\n\n  // --- CANAL DE TELEMETR\u00cdA ---\n  if (t.includes('/telemetria/')) {\n    state.lastUpdate = now;\n    if (t.endsWith('/ambiente')) {\n      if (typeof p.temperature_c === 'number') state.data.temperatura = p.temperature_c;\n      if (typeof p.humidity_pct === 'number') state.data.humedad = p.humidity_pct;\n      if (p.fan_state) state.data.fanEstado = p.fan_state;\n    } else if (t.endsWith('/hidrico')) {\n      if (typeof p.tank_level_pct === 'number') state.data.nivelAgua = p.tank_level_pct;\n      if (typeof p.leak_detected === 'boolean') state.data.fugaAgua = p.leak_detected;\n      if (p.valve_state) state.data.valvulaEstado = p.valve_state;\n    } else if (t.endsWith('/acceso')) {\n      if (p.hatch_state) state.data.puertaAbierta = (p.hatch_state === 'open');\n      else if (typeof p.open === 'boolean') state.data.puertaAbierta = p.open;\n    }\n\n    if (state.data.temperatura !== null && state.data.nivelAgua !== null) {\n      state.history.push({ ts: now, temperatura: state.data.temperatura, humedad: state.data.humedad, nivelAgua: state.data.nivelAgua });\n      state.history = state.history.slice(-50);\n    }\n  }\n\n  // --- CANAL DE ESTADOS DE ACTUADORES ---\n  else if (t.endsWith('/estado/actuadores')) {\n    state.lastUpdate = now;\n    if (p.fan_state) state.data.fanEstado = p.fan_state;\n    if (p.valve_state) state.data.valvulaEstado = p.valve_state;\n    if (p.fan_mode) state.data.fanMode = p.fan_mode;\n    if (p.valve_mode) state.data.valvulaMode = p.valve_mode;\n    if (p.command_result) {\n      state.lastCommand = { ts: now, result: p.command_result, error: p.valve_error || p.fan_error };\n      if (p.command_result.startsWith('REJECT')) {\n        const key = p.valve_error === 'interlock_active' ? 'REJECTED_INTERLOCK' : p.command_result;\n        const texto = HUMAN_EVENTS[key] || ('Comando rechazado: ' + p.command_result);\n        state.events.unshift({ ts: now, text: texto, level: 'warning' });\n      }\n    }\n  }\n\n  // --- CANAL FORMAL DE AUDITOR\u00cdA: EVENTOS Y ALERTAS MQTT ---\n  else if (t.includes('/evento/') || t.includes('/alerta/')) {\n    if (p && p.event) {\n      const eventTs = p.timestamp ? Date.parse(p.timestamp) : now;\n      const severity = String(p.severity || (t.includes('/alerta/') ? 'critical' : 'info')).toLowerCase();\n      const rawEvent = p.event;\n      const humanText = HUMAN_EVENTS[rawEvent] || rawEvent;\n      \n      const existe = state.events.some(e => e.text === humanText && Math.abs(e.ts - eventTs) < 1000);\n      if (!existe) {\n        state.events.unshift({\n          ts: Number.isFinite(eventTs) ? eventTs : now,\n          text: humanText,\n          level: severity === 'critical' ? 'critical' : severity === 'warning' ? 'warning' : 'info'\n        });\n      }\n    }\n  }\n}\n\nstate.events = state.events.slice(0, 25);\nglobal.set('bunkerCore', state);\n\nmsg.state = state;\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "x": 480,
+    "y": 180,
+    "wires": [
+      [
+        "f8d2fb9f-318b-4e78-8052-803b9ef94193"
+      ]
+    ]
+  },
+  {
+    "id": "5356c917-e77b-4cae-a036-a3bc2d29e33b",
+    "type": "link out",
+    "z": "7a124bcf-0937-4b52-8d89-7bf2cef7093f",
+    "name": "Estado Consolidado \u2192 Dashboard",
+    "mode": "link",
+    "links": [
+      "96bcb067-3585-4953-844f-feca2e7de5e0"
+    ],
+    "x": 1085,
+    "y": 100,
+    "wires": []
+  },
+  {
+    "id": "f8d2fb9f-318b-4e78-8052-803b9ef94193",
+    "type": "function",
+    "z": "7a124bcf-0937-4b52-8d89-7bf2cef7093f",
+    "name": "2. Correlaci\u00f3n de Contexto & Estado",
+    "func": "const { state } = msg;\nif (!state || !state.data) return null;\n\nconst d = state.data;\nconst meteo = state.meteo || {};\nconst armado = (d.modoSeguridad || 'ARM') === 'ARM';\n\nconst POLICIES = [\n  {\n    id: 'calor',\n    level: 'warning',\n    text: 'Temperatura elevada (>= 30 \u00b0C)',\n    active: d.temperatura !== null && d.temperatura >= 30\n  },\n  {\n    id: 'humedad',\n    level: 'warning',\n    text: 'Humedad elevada (>= 70 %)',\n    active: d.humedad !== null && d.humedad >= 70\n  },\n  {\n    id: 'agua',\n    level: 'warning',\n    text: 'Reserva h\u00eddrica baja (< 60 %)',\n    active: d.nivelAgua !== null && d.nivelAgua < 60\n  },\n  {\n    id: 'puerta_no_autorizada',\n    level: 'critical',\n    text: '\u00a1Intrusi\u00f3n! Escotilla abierta con per\u00edmetro ARMADO',\n    active: d.puertaAbierta === true && armado\n  },\n  {\n    id: 'fuga',\n    level: 'critical',\n    text: 'Fuga de agua detectada en suelo',\n    active: d.fugaAgua === true\n  },\n  {\n    id: 'correlacion_lluvia_escotilla',\n    level: 'critical',\n    text: '\u00a1Riesgo de inundaci\u00f3n! Escotilla abierta durante lluvia exterior',\n    active: d.puertaAbierta === true && meteo.lluvia === true\n  }\n];\n\nconst alerts = POLICIES\n  .filter(p => p.active)\n  .map(({ id, level, text }) => ({ id, level, text }));\n\nmsg.payload = {\n  mode: 'live',\n  data: d,\n  alerts,\n  events: state.events,\n  history: state.history,\n  meteo: state.meteo,\n  lastUpdate: state.lastUpdate,\n  lastCommand: state.lastCommand,\n  complete: d.temperatura !== null && d.humedad !== null && d.nivelAgua !== null && d.puertaAbierta !== null\n};\nmsg.topic = 'bunkeros/state';\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "x": 810,
+    "y": 180,
+    "wires": [
+      [
+        "5356c917-e77b-4cae-a036-a3bc2d29e33b",
+        "d0333426-fd2c-4f1d-b729-8366acd532d8"
+      ]
+    ]
+  },
+  {
+    "id": "967fa92d-e526-405e-9555-ad20eef8c946",
+    "type": "function",
+    "z": "7a124bcf-0937-4b52-8d89-7bf2cef7093f",
+    "name": "3. Despacho de Comandos Remotos",
+    "func": "const action = String(msg.payload || '');\nconst state = global.get('bunkerCore') || { events: [] };\nconst now = Date.now();\n\nconst ACTION_MAP = {\n  'FAN_ON':     { topic: 'bunker/g5/control/ventilacion', payload: { target: 'fan', action: 'ON' } },\n  'FAN_OFF':    { topic: 'bunker/g5/control/ventilacion', payload: { target: 'fan', action: 'OFF' } },\n  'FAN_AUTO':   { topic: 'bunker/g5/control/ventilacion', payload: { target: 'fan', action: 'AUTO' } },\n  'VALVE_OPEN': { topic: 'bunker/g5/control/valvula',     payload: { target: 'valve', action: 'OPEN' } },\n  'VALVE_CLOSE':{ topic: 'bunker/g5/control/valvula',     payload: { target: 'valve', action: 'CLOSE' } },\n  'VALVE_AUTO': { topic: 'bunker/g5/control/valvula',     payload: { target: 'valve', action: 'AUTO' } },\n  'SEC_ARM':    { topic: 'bunker/g5/control/seguridad',   payload: { target: 'security', action: 'ARM' } },\n  'SEC_DISARM': { topic: 'bunker/g5/control/seguridad',   payload: { target: 'security', action: 'DISARM' } }\n};\n\nconst cmd = ACTION_MAP[action];\nif (!cmd) return null;\n\ncmd.payload.requested_by = 'dashboard_admin';\ncmd.payload.timestamp = new Date(now).toISOString();\n\nif (action === 'SEC_ARM') state.data = Object.assign(state.data || {}, { modoSeguridad: 'ARM' });\nif (action === 'SEC_DISARM') state.data = Object.assign(state.data || {}, { modoSeguridad: 'DISARM' });\n\nstate.lastCommand = { ts: now, action, status: 'DISPATCHED_TO_EDGE' };\n// Intenci\u00f3n despachada: el log de auditor\u00eda se registrar\u00e1 cuando el Edge confirme por MQTT\nglobal.set('bunkerCore', state);\n\nreturn { topic: cmd.topic, payload: cmd.payload };",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "x": 450,
+    "y": 280,
+    "wires": [
+      [
+        "f051e180-3bd0-43b1-a03f-58c35a824f11"
+      ]
+    ]
+  },
+  {
+    "id": "f051e180-3bd0-43b1-a03f-58c35a824f11",
+    "type": "mqtt out",
+    "z": "7a124bcf-0937-4b52-8d89-7bf2cef7093f",
+    "name": "MQTT OUT \u00b7 Comandos Validados",
+    "topic": "",
+    "qos": "1",
+    "retain": "false",
+    "broker": "9f4c978c3b0727f3",
+    "x": 780,
+    "y": 280,
+    "wires": []
+  }
+]
