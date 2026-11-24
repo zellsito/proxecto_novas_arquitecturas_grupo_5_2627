@@ -12,10 +12,10 @@ Sistema de soporte vital, supervisión ambiental preventiva y gestión automáti
 
 | Integrante | Rol | Responsabilidad Principal |
 | :--- | :--- | :--- |
-| **Luciano Ezequiel Salgado Bucco** (DNI: 43944385X) | **Software Architect** | Diseño arquitectónico global, balance Edge-Cloud y especificación técnica |
-| **Ulviyya Hasanova** (NIE: Z3546129V) | **UX / UI** | Diseño e implementación de Dashboards (Node-RED Dashboard 2.0 y WebServer local) |
-| **Daniel Pérez Pérez** (DNI: 35666868D) | **DevOps** | Entornos de despliegue, CI/CD y gestión de Brokers MQTT |
-| **Rubén Fernández Bastos** (DNI: 39494438B) | **Data Engineer** | Modelado de datos JSON, ingestión de telemetría y reglas de procesamiento |
+| **Luciano Ezequiel Salgado Bucco** | **Software Architect** | Diseño arquitectónico global, balance Edge-Cloud y especificación técnica |
+| **Ulviyya Hasanova** | **UX / UI** | Diseño e implementación de Dashboards (Node-RED Dashboard 2.0 y WebServer local) |
+| **Daniel Pérez Pérez** | **DevOps** | Entornos de despliegue, CI/CD y gestión de Brokers MQTT |
+| **Rubén Fernández Bastos** | **Data Engineer** | Modelado de datos JSON, ingestión de telemetría y reglas de procesamiento |
 
 ---
 
