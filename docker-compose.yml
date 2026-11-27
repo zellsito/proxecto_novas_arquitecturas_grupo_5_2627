@@ -1,0 +1,16 @@
+services:
+  nodered:
+    image: nodered/node-red:latest
+    container_name: bunkeros-nodered
+    restart: unless-stopped
+    ports:
+      - "1880:1880"
+    environment:
+      - TZ=${TZ:-Europe/Madrid}
+      - MQTT_BASE_TOPIC=${MQTT_BASE_TOPIC:-bunker/g5}
+      - SIMULATION_INTERVAL_SEC=${SIMULATION_INTERVAL_SEC:-10}
+      - OPENWEATHER_CITY=${OPENWEATHER_CITY:-Vigo,ES}
+      - OPENWEATHER_API_KEY=${OPENWEATHER_API_KEY:-}
+    volumes:
+      - ./node_red_data:/data
+      - ./settings.js:/data/settings.js:ro

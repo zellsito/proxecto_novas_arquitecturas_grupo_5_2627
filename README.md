@@ -33,6 +33,8 @@ Toda la especificación técnica, justificaciones de arquitectura, contratos MQT
 proxecto_novas_arquitecturas_grupo_5_2627/
 ├── README.md                     # Ficha técnica oficial del proyecto
 ├── flows.json                    # Flujos finales integrados de Node-RED (P1)
+├── settings.js                   # Configuración de Node-RED y derivación de tópicos MQTT
+├── docker-compose.yml            # Despliegue local opcional con Docker
 ├── danielperez/                  # Módulos y entregables DevOps / Despliegue
 ├── lucianosalgado/               # Diagramas de arquitectura y especificación
 ├── rubenfernandez/               # Módulos Data Engineer / Modelado de telemetría
